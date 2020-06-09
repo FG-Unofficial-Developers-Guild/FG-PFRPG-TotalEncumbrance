@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<!-- <root>
+	<template name="button_char_inv_carried">
+		<buttonfield>
+			<state icon="button_char_inv_none" tooltipres="char_tooltip_inv_none" />
+			<state icon="button_char_inv_carried" tooltipres="char_tooltip_inv_carried" />
+			<state icon="button_char_inv_equipped" tooltipres="char_tooltip_inv_equipped" />
+			<default>1</default>
+			<script file="campaign/scripts/real_encumbrance.lua" />
+		</buttonfield>
+	</template>
+</root> -->
