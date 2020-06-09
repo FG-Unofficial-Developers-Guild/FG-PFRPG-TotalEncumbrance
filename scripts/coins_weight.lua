@@ -7,10 +7,11 @@
 function onInit()
 	if User.isHost() then
 		Comm.registerSlashHandler("ccweight", computeCoinsWeight);
+		-- computeCoinsWeight();
 	end
 end
 
--- This function recomputes the total weight field
+-- This function recompute the total weight field
 function recomputeTotalWeight( nodeWin )
 	local rActor = ActorManager.getActor("pc", nodeWin );
 	local nodePC = DB.findNode(rActor['sCreatureNode']);
@@ -48,12 +49,11 @@ end
 function computePCCoinsWeigh( nodePC )
 	local weight = 0;
 	for _,coin in pairs(DB.getChildren(nodePC, "coins")) do
-		weight = weight + DB.getValue(coin, "amount", 0);
+		weight = weight + DB.getValue(coin, "amount", "")	;
 	end
 
 	-- We have now computed the coins weight for this PC
-	-- CHANGE WEIGHT HERE, Change coinsperunit to the number of coins that equals 1 weight
-	local coinsperunit = 50
-	weight = math.floor( weight / coinsperunit );
+	-- CHANGE WEIGHT HERE, Change the 1 to the fractional weight you desire, for example 10 is 10 coins = 1 weight
+	weight = math.floor( weight / 50 );
 	DB.setValue( nodePC.getPath() .. '.encumbrance.treasure', 'number', weight );
 end
