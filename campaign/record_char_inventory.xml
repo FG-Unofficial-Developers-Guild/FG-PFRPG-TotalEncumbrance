@@ -6,9 +6,8 @@
 
 <root>
 	<windowclass name="charsheet_inventory" merge="join">
-		<script file="campaign/scripts/real_encumbrance.lua" />
 		<sheetdata>
-		
+
 	<!--Armor-->
 			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
 				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
@@ -27,7 +26,6 @@
 			</label>
 			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
 				<anchored to="encumbranceframe" position="insidetopleft" offset="20,40" width="55" height="20" />
-				<script file="campaign/scripts/real_encumbrance.lua" />
 			</simplenumber>
 			<simplenumber name="encumbrancemediumload" source="encumbrance.mediumload" insertbefore="coinframe">
 				<anchored to="encumbrancelightload" position="right" offset="15,0" width="55" />
@@ -40,12 +38,11 @@
 				<frame name="fieldlight" offset="7,5,7,5" />
 			</simplenumber>
 
-		<!--Coin Weight Total Field-->
+		<!--Equipment Total Field-->
 			<simplenumber name="encumbranceload" source="encumbrance.load">
 				<anchored to="encumbranceframe" position="insidebottomright" offset="94,11" width="55" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<readonly />
-				<script file="campaign/scripts/real_encumbrance.lua" />
 			</simplenumber>
 			<label_fieldtop name="encumbranceload_label">
 				<anchored to="encumbranceload" />
@@ -54,12 +51,12 @@
 			<simplenumber name="encumbranceload" source="encumbrance.load">
 				<script>
 					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight( window.getDatabaseNode() );
+						CoinsWeight.recomputeTotalWeight( window.getDatabaseNode() )
 					end
 				</script>
 			</simplenumber>
 
-		<!--Equipment Total Field-->
+		<!--Coin Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
 				<anchored to="encumbranceliftoverhead" position="below" offset="0,15" width="55" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
@@ -109,7 +106,7 @@
 			</frame_char>
 
 		<!--Carried Coin of Coin Type 1-->
-			<number_dropadd name="coinamount1">
+			<number_dropadd name="coinamount1" >
 				<tooltip textres="char_tooltip_carriedcoin" />
 				<anchored to="coinframe" position="insidetopleft" offset="20,30" width="40" height="20" />
 				<script>
