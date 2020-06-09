@@ -3,7 +3,7 @@
 
 	<properties>
 		<name>PFRPG Coin Weight</name>
-		<version>1.0</version>
+		<version>1.1</version>
 		<author>PFRPG conversion by bmos</author>
 		<description>An extension that computes and displays the weight of carried coins.</description>
 		<ruleset>

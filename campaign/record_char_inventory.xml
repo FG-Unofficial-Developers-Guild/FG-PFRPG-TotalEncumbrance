@@ -10,12 +10,25 @@
 
 	<!--Encumbrance Frame-->
 			<frame_char name="encumbranceframe">
-				<bounds>15,-205,240,200</bounds>
+				<bounds>15,-147,240,142</bounds>
 			</frame_char>
+			<label name="encumbrance_label">
+				<anchored offset="15,10" />
+			</label>
+			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
+				<anchored to="encumbranceframe" position="insidetopleft" offset="20,41" width="55" height="20" />
+				<frame name="fieldlight" offset="7,5,7,5" />
+				<readonly />
+			</simplenumber>
+			<simplenumber name="encumbranceliftoverhead" source="encumbrance.liftoverhead" insertbefore="coinframe">
+				<anchored to="encumbrancelightload" position="below" offset="0,15" height="20" />
+				<frame name="fieldlight" offset="7,5,7,5" />
+				<readonly />
+			</simplenumber>
 
 		<!--Coin Weight Total Field-->
 			<simplenumber name="encumbranceload" source="encumbrance.load">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="20,140" width="55" height="20" />
+				<anchored to="encumbranceframe" position="insidebottomright" offset="94,11" width="55" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<readonly />
 			</simplenumber>
@@ -33,7 +46,8 @@
 
 		<!--Equipment Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="90,140" width="55" height="20" />
+				<anchored to="encumbranceliftoverhead" position="below" offset="0,15" width="55" height="20" />
+				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
@@ -50,7 +64,8 @@
 
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="160,25" width="55" height="20" />
+				<anchored to="encumbrancepushordrag" position="below" offset="0,15" width="55" height="20" />
+				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
@@ -60,7 +75,7 @@
 				<static textres="char_label_totalload" />
 			</label_fieldtop>
 
-		<!--Speed Field-->
+		<!--Speed Field
 			<simplenumber name="encumbrancespeed">
 				<anchored to="encumbranceframe" position="insidetopleft" offset="160,139" width="55" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
@@ -71,6 +86,7 @@
 				<anchored to="encumbrancespeed" />
 				<static textres="char_label_encumbrancespeed" />
 			</label_fieldtop>
+		-->
 
 	<!--Coin Frame-->
 			<frame_char name="coinframe">
@@ -91,20 +107,20 @@
 		<!--Non Carried Coin of Coin Type 1-->
 			<simplenumber name="coinamount1a" source="coins.slot1.amountA">
 				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount1" position="right" offset="10,0" width="40" height="20" />
+				<anchored to="coinamount1" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 			</simplenumber>
 
 		<!--Label of Coin Type 1-->
 			<stringu name="coinname1" source="coins.slot1.name">
-				<anchored to="coinamount1" position="right" offset="60,0" width="20" height="20" />
+				<anchored to="coinamount1" position="righthigh" offset="60,0" width="20" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 2-->
 			<number_dropadd name="coinamount2">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount1" position="below" offset="0,6" height="20" />
+				<anchored to="coinamount1" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
@@ -115,20 +131,20 @@
 		<!--Non Carried Coin of Coin Type 2-->
 			<simplenumber name="coinamount2a" source="coins.slot2.amountA">
 				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount2" position="right" offset="10,0" width="40" height="20" />
+				<anchored to="coinamount2" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 			</simplenumber>
 
 		<!--Label of Coin Type 2-->
 			<stringu name="coinname2" source="coins.slot2.name">
-				<anchored to="coinamount2" position="right" offset="60,0" width="20" height="20" />
+				<anchored to="coinamount2" position="righthigh" offset="60,0" width="20"/>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 3-->
 			<number_dropadd name="coinamount3">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount2" position="below" offset="0,6" height="20" />
+				<anchored to="coinamount2" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
@@ -146,13 +162,13 @@
 
 		<!--Label of Coin Type 3-->
 			<stringu name="coinname3" source="coins.slot3.name">
-				<anchored to="coinamount3" position="right" offset="60,0" width="20" height="20" />
+				<anchored to="coinamount3" position="right" offset="60,0" width="20" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 4-->
 			<number_dropadd name="coinamount4">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount3" position="below" offset="0,6" height="20" />
+				<anchored to="coinamount3" position="below" offset="0,6" width="40" height="20" />
 				<script>
 				function onValueChanged()
 					CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
@@ -163,19 +179,19 @@
 		<!--Non Carried Coin of Coin Type 4-->
 			<simplenumber name="coinamount4a" source="coins.slot4.amountA">
 				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount4" position="right" offset="10,0" width="40" height="20" />
+				<anchored to="coinamount4" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 			</simplenumber>
 		<!--Label of Coin Type 4-->
 			<stringu name="coinname4" source="coins.slot4.name">
-				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" height="20" />
+				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 5-->
 			<number_dropadd name="coinamount5">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount4" position="below" offset="0,6" height="20" />
+				<anchored to="coinamount4" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
@@ -186,20 +202,20 @@
 		<!--Non Carried Coin of Coin Type 5-->
 			<simplenumber name="coinamount5a" source="coins.slot5.amountA">
 				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount5" position="right" offset="10,0" width="40" height="20" />
+				<anchored to="coinamount5" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 			</simplenumber>
 
 		<!--Label of Coin Type 5-->
 			<stringu name="coinname5" source="coins.slot5.name">
-				<anchored to="coinamount5" position="righthigh" offset="60,0" width="20" height="20" />
+				<anchored to="coinamount5" position="righthigh" offset="60,0" width="20" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 6-->
 			<number_dropadd name="coinamount6">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount5" position="below" offset="0,6" height="20" />
+				<anchored to="coinamount5" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
@@ -210,14 +226,14 @@
 		<!--Non Carried Coin of Coin Type 6-->
 			<simplenumber name="coinamount6a" source="coins.slot6.amountA">
 				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount6" position="right" offset="10,0" width="40" height="20" />
+				<anchored to="coinamount6" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 			</simplenumber>
 
 		<!--Label of Coin Type 6-->
 			<stringu name="coinname6" source="coins.slot6.name">
-				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" height="20" />
+				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
 			</stringu>
 
 		<!--Other/Notes Section
