@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for attribution and copyright information.
+-->
+
+<root>
+	<!-- Extension -->
+		<string name="char_label_encumbrancespeed">Speed</string>
+		<string name="char_label_treasureload">Coins</string>
+		<string name="char_label_totalload">Total</string>
+		<string name="char_label_totalweight"></string>
+		<string name="char_label_totalweight2">Equipment</string>
+		<string name="char_tooltip_noncarriedcoin">Coins in the bank or carried by a pack animal etc.</string>
+		<string name="char_tooltip_carriedcoin">Carried coin - counted against encumbrance.</string>
+		<string name="header_coinweight">Coin Weight</string>
+		<string name="char_tooltip_encumbrance">Speed by Encumbrance: Medium Load 30>20ft (Run x4) | Heavy Load 30>20ft (Run x3) | Medium Load 20>15ft (Run x4) | Heavy Load 20>15ft (Run x3)</string>
+
+</root>
