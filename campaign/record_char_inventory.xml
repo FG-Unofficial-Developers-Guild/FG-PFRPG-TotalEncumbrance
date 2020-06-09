@@ -5,20 +5,8 @@
 -->
 
 <root>
-	<windowclass name="char_invitem" merge="join">
-		<margins control="0,0,0,2" />
-		<sheetdata>
-			<button_char_inv_carried name="carried">
-				<anchored width="20" height="20">
-					<top offset="2" />
-					<right parent="rightanchor" anchor="left" relation="relative" offset="-5" />
-				</anchored>
-				<script file="campaign/scripts/real_encumbrance.lua" />
-			</button_char_inv_carried>
-		</sheetdata>
-	</windowclass>
-
 	<windowclass name="charsheet_inventory" merge="join">
+		<script file="campaign/scripts/real_encumbrance.lua" />
 		<sheetdata>
 		
 	<!--Armor-->
@@ -28,38 +16,28 @@
 			<basicnumber name="armorcheckpenalty" source="encumbrance.armorcheckpenalty" insertbefore="encumbranceframe">
 				<anchored to="armormaxstatbonus" position="right" offset="15,0" width="35" />
 			</basicnumber>
-			<label_fieldtop insertbefore="encumbranceframe">
-				<anchored to="armorcheckpenalty" offset="6,1" />
-				<static textres="char_label_invarmorskillcheckpenalty" />
-			</label_fieldtop>
 
 	<!--Encumbrance Frame-->
 			<frame_char name="encumbranceframe">
 				<bounds>15,-147,240,142</bounds>
 			</frame_char>
 			<label name="encumbrance_label">
-				<anchored offset="15,10" />
+				<anchored to="encumbranceframe" position="insidetopleft" offset="15,10" />
+				<static textres="char_label_totalweight" />
 			</label>
-			<simplenumber name="encumbrancelightload" source="encumbrance.mediumload" insertbefore="coinframe">
+			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
 				<anchored to="encumbranceframe" position="insidetopleft" offset="20,40" width="55" height="20" />
 				<script file="campaign/scripts/real_encumbrance.lua" />
 			</simplenumber>
 			<simplenumber name="encumbrancemediumload" source="encumbrance.mediumload" insertbefore="coinframe">
 				<anchored to="encumbrancelightload" position="right" offset="15,0" width="55" />
-				<frame name="fieldlight" offset="7,5,7,5" />
-				<!-- <script file="campaign/scripts/real_encumbrance.lua" /> -->
-				<readonly />
 			</simplenumber>
 			<simplenumber name="encumbranceheavyload" source="encumbrance.heavyload" insertbefore="coinframe">
 				<anchored to="encumbrancemediumload" position="right" offset="15,0" width="55" />
-				<frame name="fieldlight" offset="7,5,7,5" />
-				<readonly />
-				<!-- <script file="campaign/scripts/real_encumbrance.lua" /> -->
 			</simplenumber>
 			<simplenumber name="encumbranceliftoverhead" source="encumbrance.liftoverhead" insertbefore="coinframe">
 				<anchored to="encumbrancelightload" position="below" offset="0,15" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
-				<readonly />
 			</simplenumber>
 
 		<!--Coin Weight Total Field-->
@@ -67,6 +45,7 @@
 				<anchored to="encumbranceframe" position="insidebottomright" offset="94,11" width="55" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<readonly />
+				<script file="campaign/scripts/real_encumbrance.lua" />
 			</simplenumber>
 			<label_fieldtop name="encumbranceload_label">
 				<anchored to="encumbranceload" />
@@ -105,7 +84,6 @@
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
-				<script file="campaign/scripts/real_encumbrance.lua" />
 			</simplenumber>
 			<label_fieldtop name="totalload_label">
 				<anchored to="totalload" />
