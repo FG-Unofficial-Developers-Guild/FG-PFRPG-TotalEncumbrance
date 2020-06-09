@@ -12,14 +12,6 @@ function onClose()
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'coins.*.amount'), 'onUpdate', applyPenalties)
 end
 
-local function notEmpty(s)
-	return s ~= nil
-end
-
-local function isEmpty(s)
-	return s == nil
-end
-
 --Summary: Recomputes penalties and updates max stat and check penalty
 --Arguments: nodeField - node of 'carried' when called from handler
 function applyPenalties(nodeField)
