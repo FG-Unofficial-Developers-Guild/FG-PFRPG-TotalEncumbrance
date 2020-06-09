@@ -13,7 +13,8 @@
 				<bounds>15,-147,240,142</bounds>
 			</frame_char>
 			<label name="encumbrance_label">
-				<anchored offset="15,10" />
+				<anchored to="encumbranceframe" position="insidetopleft" offset="15,10" />
+				<static textres="char_label_totalweight" />
 			</label>
 			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
 				<anchored to="encumbranceframe" position="insidetopleft" offset="20,41" width="55" height="20" />
