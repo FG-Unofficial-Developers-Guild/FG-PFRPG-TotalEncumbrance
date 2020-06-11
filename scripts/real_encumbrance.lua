@@ -13,7 +13,9 @@ end
 local function handleApplyPenaltiesArgs(nodeField)
 	local nodePC
 
-	if nodeField ~= nil then
+	if nodeField.getParent().getName() == 'charsheet' then
+		nodePC = nodeField
+	elseif nodeField ~= nil then
 		nodePC = nodeField.getChild( '....' )
 	else
 		local nodeWin = window.getDatabaseNode()

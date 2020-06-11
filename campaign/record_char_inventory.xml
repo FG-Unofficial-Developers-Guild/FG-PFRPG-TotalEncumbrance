@@ -26,6 +26,11 @@
 			</label>
 			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
 				<anchored to="encumbranceframe" position="insidetopleft" offset="20,40" width="55" height="20" />
+				<script>
+					function onValueChanged()
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+					end
+				</script>
 			</simplenumber>
 			<simplenumber name="encumbrancemediumload" source="encumbrance.mediumload" insertbefore="coinframe">
 				<anchored to="encumbrancelightload" position="right" offset="15,0" width="55" />
@@ -66,6 +71,7 @@
 				<script>
 					function onValueChanged()
 						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 			</simplenumber>
