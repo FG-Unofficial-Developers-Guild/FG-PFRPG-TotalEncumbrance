@@ -51,7 +51,7 @@
 			<simplenumber name="encumbranceload" source="encumbrance.load">
 				<script>
 					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight( window.getDatabaseNode() )
+						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
 					end
 				</script>
 			</simplenumber>
@@ -65,7 +65,7 @@
 				<readonly />
 				<script>
 					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight( window.getDatabaseNode() );
+						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
 					end
 				</script>
 			</simplenumber>
@@ -87,19 +87,6 @@
 				<static textres="char_label_totalload" />
 			</label_fieldtop>
 
-		<!--Speed Field
-			<simplenumber name="encumbrancespeed">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="160,139" width="55" height="20" />
-				<frame name="fielddark" offset="7,5,7,5" />
-				<font>sheetlabel</font>
-				<tooltip textres="char_tooltip_encumbrance" />
-			</simplenumber>
-			<label_fieldtop name="encumbrancespeed_label">
-				<anchored to="encumbrancespeed" />
-				<static textres="char_label_encumbrancespeed" />
-			</label_fieldtop>
-		-->
-
 	<!--Coin Frame-->
 			<frame_char name="coinframe">
 				<bounds>255,-205,-29,200</bounds>
@@ -111,7 +98,7 @@
 				<anchored to="coinframe" position="insidetopleft" offset="20,30" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				</number_dropadd>
@@ -134,7 +121,7 @@
 				<anchored to="coinamount1" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -157,7 +144,7 @@
 				<anchored to="coinamount2" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -180,7 +167,7 @@
 				<anchored to="coinamount3" position="below" offset="0,6" width="40" height="20" />
 				<script>
 				function onValueChanged()
-					CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+					CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 				end
 				</script>
 			</number_dropadd>
@@ -202,7 +189,7 @@
 				<anchored to="coinamount4" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -225,7 +212,7 @@
 				<anchored to="coinamount5" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -242,17 +229,6 @@
 				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
 			</stringu>
 
-		<!--Other/Notes Section
-			<basicstring name="coinother">
-				<anchored>
-					<left parent="coinframe" offset="5" />
-					<right parent="coinframe" offset="-5" />
-					<top parent="coinamount6" anchor="below" offset="5"/>
-					<bottom parent="coinframe"  offset="-5"/>
-				</anchored>
-				<multilinespacing>20</multilinespacing>
-			</basicstring>
-		-->
 		</sheetdata>
 	</windowclass>
 </root>
