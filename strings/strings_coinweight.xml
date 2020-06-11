@@ -14,5 +14,4 @@
 		<string name="char_tooltip_noncarriedcoin">"Owned" Coins in a bank, bag of holding, carried by a pack animal, etc.</string>
 		<string name="char_tooltip_carriedcoin">"Carried" Coins counted against encumbrance.</string>
 		<string name="char_label_totalweight">Total Encumbrance</string>
-		<string name="char_tooltip_encumbrance">Speed by Encumbrance: Medium Load 30>20ft (Run x4) | Heavy Load 30>20ft (Run x3) | Medium Load 20>15ft (Run x4) | Heavy Load 20>15ft (Run x3)</string>
 </root>
