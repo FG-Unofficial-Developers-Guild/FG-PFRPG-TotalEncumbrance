@@ -35,8 +35,6 @@ function applyPenalties(nodeField)
 
 	maxstattoset, checkpenaltytoset, spellfailuretoset = computePenalties(nodePC)
 
-	Debug.chat('applyPenalties', maxstattoset, checkpenaltytoset, spellfailuretoset)
-
 	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', maxstattoset)
 	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', checkpenaltytoset)
 	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', spellfailuretoset)
@@ -154,6 +152,7 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	if checkpenaltyfromenc ~= nil then
 		table.insert(checkpenaltytable, checkpenaltyfromenc)
 	end
+
 	--[[
 	I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
 	For now, it can be removed
