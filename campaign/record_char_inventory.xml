@@ -8,6 +8,14 @@
 	<windowclass name="charsheet_inventory" merge="join">
 		<sheetdata>
 
+	<!--Armor-->
+			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
+				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
+			</basicnumber>
+			<basicnumber name="armorcheckpenalty" source="encumbrance.armorcheckpenalty" insertbefore="encumbranceframe">
+				<anchored to="armormaxstatbonus" position="right" offset="15,0" width="35" />
+			</basicnumber>
+
 	<!--Encumbrance Frame-->
 			<frame_char name="encumbranceframe">
 				<bounds>15,-147,240,142</bounds>
@@ -17,17 +25,20 @@
 				<static textres="char_label_totalweight" />
 			</label>
 			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="20,41" width="55" height="20" />
-				<frame name="fieldlight" offset="7,5,7,5" />
-				<readonly />
+				<anchored to="encumbranceframe" position="insidetopleft" offset="20,40" width="55" height="20" />
+			</simplenumber>
+			<simplenumber name="encumbrancemediumload" source="encumbrance.mediumload" insertbefore="coinframe">
+				<anchored to="encumbrancelightload" position="right" offset="15,0" width="55" />
+			</simplenumber>
+			<simplenumber name="encumbranceheavyload" source="encumbrance.heavyload" insertbefore="coinframe">
+				<anchored to="encumbrancemediumload" position="right" offset="15,0" width="55" />
 			</simplenumber>
 			<simplenumber name="encumbranceliftoverhead" source="encumbrance.liftoverhead" insertbefore="coinframe">
 				<anchored to="encumbrancelightload" position="below" offset="0,15" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
-				<readonly />
 			</simplenumber>
 
-		<!--Coin Weight Total Field-->
+		<!--Equipment Total Field-->
 			<simplenumber name="encumbranceload" source="encumbrance.load">
 				<anchored to="encumbranceframe" position="insidebottomright" offset="94,11" width="55" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
@@ -40,12 +51,12 @@
 			<simplenumber name="encumbranceload" source="encumbrance.load">
 				<script>
 					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight( window.getDatabaseNode() );
+						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
 					end
 				</script>
 			</simplenumber>
 
-		<!--Equipment Total Field-->
+		<!--Coin Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
 				<anchored to="encumbranceliftoverhead" position="below" offset="0,15" width="55" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
@@ -54,7 +65,8 @@
 				<readonly />
 				<script>
 					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight( window.getDatabaseNode() );
+						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 			</simplenumber>
@@ -65,7 +77,7 @@
 
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbrancepushordrag" position="below" offset="0,15" width="55" height="20" />
+				<anchored to="encumbrancepushordrag" position="below" offset="0,14" width="55" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
@@ -76,31 +88,18 @@
 				<static textres="char_label_totalload" />
 			</label_fieldtop>
 
-		<!--Speed Field
-			<simplenumber name="encumbrancespeed">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="160,139" width="55" height="20" />
-				<frame name="fielddark" offset="7,5,7,5" />
-				<font>sheetlabel</font>
-				<tooltip textres="char_tooltip_encumbrance" />
-			</simplenumber>
-			<label_fieldtop name="encumbrancespeed_label">
-				<anchored to="encumbrancespeed" />
-				<static textres="char_label_encumbrancespeed" />
-			</label_fieldtop>
-		-->
-
 	<!--Coin Frame-->
 			<frame_char name="coinframe">
 				<bounds>255,-205,-29,200</bounds>
 			</frame_char>
 
 		<!--Carried Coin of Coin Type 1-->
-			<number_dropadd name="coinamount1">
+			<number_dropadd name="coinamount1" >
 				<tooltip textres="char_tooltip_carriedcoin" />
 				<anchored to="coinframe" position="insidetopleft" offset="20,30" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				</number_dropadd>
@@ -123,7 +122,7 @@
 				<anchored to="coinamount1" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -146,7 +145,7 @@
 				<anchored to="coinamount2" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -169,7 +168,7 @@
 				<anchored to="coinamount3" position="below" offset="0,6" width="40" height="20" />
 				<script>
 				function onValueChanged()
-					CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+					CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 				end
 				</script>
 			</number_dropadd>
@@ -191,7 +190,7 @@
 				<anchored to="coinamount4" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -214,7 +213,7 @@
 				<anchored to="coinamount5" position="below" offset="0,6" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged( window.getDatabaseNode() );
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 			</number_dropadd>
@@ -231,17 +230,6 @@
 				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
 			</stringu>
 
-		<!--Other/Notes Section
-			<basicstring name="coinother">
-				<anchored>
-					<left parent="coinframe" offset="5" />
-					<right parent="coinframe" offset="-5" />
-					<top parent="coinamount6" anchor="below" offset="5"/>
-					<bottom parent="coinframe"  offset="-5"/>
-				</anchored>
-				<multilinespacing>20</multilinespacing>
-			</basicstring>
-		-->
 		</sheetdata>
 	</windowclass>
 </root>

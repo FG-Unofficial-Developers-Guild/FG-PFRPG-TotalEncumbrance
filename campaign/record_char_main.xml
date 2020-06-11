@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charsheet_main" merge="join">
+		<sheetdata>
+			<number_charabilityscore name="strength" source="abilities.strength.score">
+				<script>
+					function onValueChanged()
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+					end
+				</script>
+			</number_charabilityscore>
+		</sheetdata>
+	</windowclass>	
+</root>
