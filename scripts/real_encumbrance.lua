@@ -52,10 +52,10 @@ end
 --Summary: Finds max stat / check penalty tables with appropriate nonzero values
 --Argument: databasenode nodePC is the PC node
 --Argument: table maxstattable is empty table to represent max stat penalties
---Argument: table checkpenaltytable is empty table to represent check penalty penalties
+--Argument: table eqcheckpenaltytable is empty table to represent check penalty penalties
 --Argument: table spellfailuretable is empty table to represent spell failure penalties
 --Return: nil, however table arguments are directly updated
-local function rawArmorPenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
+local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spellfailuretable)
 	local itemcarried
 	local itemsubtype
 	local itemslot
@@ -76,7 +76,7 @@ local function rawArmorPenalties(nodePC, maxstattable, checkpenaltytable, spellf
 
 		if itemcarried == 2 and itemsubtype == 'Shield' then
 			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(checkpenaltytable, itemcheckpenalty)
+				table.insert(eqcheckpenaltytable, itemcheckpenalty)
 			end
 			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
 				table.insert(shieldspellfailuretable, itemspellfailure)
@@ -86,7 +86,7 @@ local function rawArmorPenalties(nodePC, maxstattable, checkpenaltytable, spellf
 				table.insert(maxstattable, itemmaxstat)
 			end
 			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(checkpenaltytable, itemcheckpenalty)
+				table.insert(eqcheckpenaltytable, itemcheckpenalty)
 			end
 			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
 				table.insert(spellfailuretable, itemspellfailure)
@@ -95,7 +95,7 @@ local function rawArmorPenalties(nodePC, maxstattable, checkpenaltytable, spellf
 		--]]
 		if itemcarried == 2 and (itemsubtype == 'Shield' and (itemslot == 'Armor' or itemslot == 'shield')) then
 			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(checkpenaltytable, itemcheckpenalty)
+				table.insert(eqcheckpenaltytable, itemcheckpenalty)
 			end
 			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
 				table.insert(spellfailuretable, itemspellfailure)
@@ -105,7 +105,7 @@ local function rawArmorPenalties(nodePC, maxstattable, checkpenaltytable, spellf
 				table.insert(maxstattable, itemmaxstat)
 			end
 			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(checkpenaltytable, itemcheckpenalty)
+				table.insert(eqcheckpenaltytable, itemcheckpenalty)
 			end
 			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
 				table.insert(spellfailuretable, itemspellfailure)
@@ -151,6 +151,7 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	if maxstatfromenc ~= nil then
 		table.insert(maxstattable, maxstatfromenc)
 	end
+	
 	if checkpenaltyfromenc ~= nil then
 		table.insert(checkpenaltytable, checkpenaltyfromenc)
 	end
@@ -201,14 +202,19 @@ function computePenalties(nodePC)
 	You should see these ideas reflected in changes to rawArmorPenalties as well.
 	--]]
 	local maxstattable = {}
-	local checkpenaltytable	= {}
+	local eqcheckpenaltytable	= {}
+	local checkpenaltytable = {}
 	local spellfailuretable = {}
 
 	local maxstattoset
 	local checkpenaltytoset
 	local spellfailuretoset
 
-	rawArmorPenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
+	rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spellfailuretable)
+
+	if table.getn(eqcheckpenaltytable) ~= 0 then
+		table.insert(checkpenaltytable, tableSum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
+	end
 
 	rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
 
@@ -219,7 +225,7 @@ function computePenalties(nodePC)
 	end
 
 	if table.getn(checkpenaltytable) ~= 0 then
-		checkpenaltytoset = tableSum(checkpenaltytable) -- this would sum penalties on multi-equipped shields / armor & encumbrance
+		checkpenaltytoset = math.min(unpack(checkpenaltytable)) -- this would sum penalties on multi-equipped shields / armor & encumbrance
 	else
 		checkpenaltytoset = 0
 	end
