@@ -5,7 +5,6 @@
 --Summary: you know
 function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
-	DB.addHandler(DB.getPath('charsheet.*.coins.*.amount'), 'onUpdate', applyPenalties)
 end
 
 --Summary: Handles arguments of applyPenalties()
