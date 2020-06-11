@@ -11,7 +11,7 @@
 		</ruleset>
 	</properties>
 
-	<announcement text="PFRPG Total Encumbrance Extension: This extension applies any applicable encumbrance penalties including coin weight in your total. Original CoinWeight Extension by Cedric Zuger and damned; intermediate conversion by AiurJordan." font="emotefont" />
+	<announcement text="PFRPG Total Encumbrance Extension: This extension applies any applicable encumbrance penalties including coin weight in your total." />
 
 	<base>
 		<includefile source="campaign/record_char_inventory.xml" />
