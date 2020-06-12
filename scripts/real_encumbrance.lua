@@ -15,6 +15,8 @@ local function handleApplyPenaltiesArgs(nodeField)
 
 	if nodeField.getParent().getName() == 'charsheet' then
 		nodePC = nodeField
+	elseif nodeField.getParent().getName() == 'inventorylist' then
+		nodePC = nodeField.getChild( '...' )
 	elseif nodeField ~= nil then
 		nodePC = nodeField.getChild( '....' )
 	else

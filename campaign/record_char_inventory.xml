@@ -236,4 +236,16 @@
 
 		</sheetdata>
 	</windowclass>
+	
+	<windowclass name="char_invitem" merge="join">
+		<sheetdata>
+			<number_charinv name="weight">
+				<script>
+					function onValueChanged()
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+					end
+				</script>
+			</number_charinv>
+		</sheetdata>
+	</windowclass>
 </root>
