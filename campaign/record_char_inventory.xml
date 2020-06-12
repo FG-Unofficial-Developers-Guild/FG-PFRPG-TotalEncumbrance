@@ -9,6 +9,10 @@
 		<sheetdata>
 
 	<!--Armor-->
+			<label insertbefore="encumbranceframe">
+				<anchored to="armorpenaltyframe" position="insidetopleft" offset="15,24" />
+				<static textres="char_label_invarmor" />
+			</label>
 			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
 				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
 			</basicnumber>
