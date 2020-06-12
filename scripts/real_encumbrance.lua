@@ -73,9 +73,6 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 		itemcheckpenalty = DB.getValue(v, 'checkpenalty')
 		itemspellfailure = DB.getValue(v, 'spellfailure')
 
-		--[[
-		Would it make sense to do the following instead of the current if-elseif block?
-
 		if itemcarried == 2 and itemsubtype == 'Shield' then
 			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
 				table.insert(eqcheckpenaltytable, itemcheckpenalty)
@@ -84,25 +81,6 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 				table.insert(shieldspellfailuretable, itemspellfailure)
 			end
 		elseif itemcarried == 2 then
-			if itemmaxstat ~= nil and itemmaxstat ~= 0 then
-				table.insert(maxstattable, itemmaxstat)
-			end
-			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(eqcheckpenaltytable, itemcheckpenalty)
-			end
-			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
-				table.insert(spellfailuretable, itemspellfailure)
-			end
-		end
-		--]]
-		if itemcarried == 2 and (itemsubtype == 'Shield' and (itemslot == 'Armor' or itemslot == 'shield')) then
-			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(eqcheckpenaltytable, itemcheckpenalty)
-			end
-			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
-				table.insert(spellfailuretable, itemspellfailure)
-			end
-		elseif itemcarried == 2 and (itemsubtype ~= 'Shield' and itemslot == 'Armor') then
 			if itemmaxstat ~= nil and itemmaxstat ~= 0 then
 				table.insert(maxstattable, itemmaxstat)
 			end
