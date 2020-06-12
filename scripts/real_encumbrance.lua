@@ -5,6 +5,7 @@
 --Summary: you know
 function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
+	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
 end
 
 --Summary: Handles arguments of applyPenalties()
@@ -15,14 +16,13 @@ local function handleApplyPenaltiesArgs(nodeField)
 
 	if nodeField.getParent().getName() == 'charsheet' then
 		nodePC = nodeField
+	elseif nodeField.getName() == 'inventorylist' then
+		nodePC = nodeField.getChild( '..' )
 	elseif nodeField.getParent().getName() == 'inventorylist' then
 		nodePC = nodeField.getChild( '...' )
-	elseif nodeField ~= nil then
+	elseif nodeField.getName() == 'carried' then
 		nodePC = nodeField.getChild( '....' )
-	else
-		local nodeWin = window.getDatabaseNode()
-		local rActor = ActorManager.getActor('pc', nodeWin)
-		nodePC = DB.findNode(rActor['sCreatureNode'])
+
 	end
 
 	return nodePC
