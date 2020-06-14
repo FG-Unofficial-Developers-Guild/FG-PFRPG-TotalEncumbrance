@@ -41,7 +41,6 @@
 					<script>
 						function onInit()
 							onValueChanged()
-							Debug.chat('xml',getDatabaseNode().getParent())
 						end
 
 						function onValueChanged()
