@@ -84,21 +84,19 @@
 
 		<!--Equipment Total Field-->
 			<simplenumber name="encumbranceload" source="encumbrance.load">
-				<anchored to="encumbranceframe" position="insidebottomright" offset="94,11" width="55" height="20" />
+				<anchored to="encumbranceframe" position="insidebottomright" offset="94,12" width="55" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<readonly />
-			</simplenumber>
-			<label_fieldtop name="encumbranceload_label">
-				<anchored to="encumbranceload" />
-				<static textres="char_label_totalweight2" />
-			</label_fieldtop>
-			<simplenumber name="encumbranceload" source="encumbrance.load">
 				<script>
 					function onValueChanged()
 						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
 					end
 				</script>
 			</simplenumber>
+			<label_fieldtop name="encumbranceload_label">
+				<anchored to="encumbranceload" />
+				<static textres="char_label_totalweight2" />
+			</label_fieldtop>
 
 		<!--Coin Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
@@ -121,7 +119,7 @@
 
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbrancepushordrag" position="below" offset="0,14" width="55" height="20" />
+				<anchored to="encumbrancepushordrag" position="below" offset="0,15" width="55" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
