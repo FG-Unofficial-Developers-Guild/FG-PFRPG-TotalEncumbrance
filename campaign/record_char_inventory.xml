@@ -15,9 +15,49 @@
 			</label>
 			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
 				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
+					<script>
+						function onInit()
+							onValueChanged()
+						end
+
+						function onValueChanged()
+							local nodePC = getDatabaseNode().getParent()
+							local maxstatbonusfromenc = DB.getValue(nodePC, 'maxstatbonusfromenc')
+							local maxstattoset = getValue()
+							local armormaxstatactive = DB.getValue(nodePC, 'armormaxstatbonusactive')
+
+							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
+								window.armormaxstatbonus.setColor('FFb22929')
+							elseif armormaxstatactive == 0 then
+								window.armormaxstatbonus.setColor('7F000000')
+							else
+								window.armormaxstatbonus.setColor('FF000000')
+							end
+						end
+					</script>
 			</basicnumber>
 			<basicnumber name="armorcheckpenalty" source="encumbrance.armorcheckpenalty" insertbefore="encumbranceframe">
 				<anchored to="armormaxstatbonus" position="right" offset="15,0" width="35" />
+					<script>
+						function onInit()
+							onValueChanged()
+						end
+
+						function onValueChanged()
+							local nodePC = getDatabaseNode().getParent()
+							local checkpenaltyfromenc = DB.getValue(nodePC, 'checkpenaltyfromenc')
+							local checkpenaltytoset = getValue()
+							local armormaxstatbonusactive = DB.getValue(nodePC, 'armormaxstatbonusactive')
+
+							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
+								window.armorcheckpenalty.setColor('FFb22929')
+							elseif armormaxstatbonusactive == 0 then
+								window.armorcheckpenalty.setColor('7F000000')
+							else
+								window.armorcheckpenalty.setColor('FF000000')
+							end
+						end
+					</script>
 			</basicnumber>
 
 	<!--Encumbrance Frame-->
@@ -44,21 +84,19 @@
 
 		<!--Equipment Total Field-->
 			<simplenumber name="encumbranceload" source="encumbrance.load">
-				<anchored to="encumbranceframe" position="insidebottomright" offset="94,11" width="55" height="20" />
+				<anchored to="encumbranceframe" position="insidebottomright" offset="94,12" width="55" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<readonly />
-			</simplenumber>
-			<label_fieldtop name="encumbranceload_label">
-				<anchored to="encumbranceload" />
-				<static textres="char_label_totalweight2" />
-			</label_fieldtop>
-			<simplenumber name="encumbranceload" source="encumbrance.load">
 				<script>
 					function onValueChanged()
 						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
 					end
 				</script>
 			</simplenumber>
+			<label_fieldtop name="encumbranceload_label">
+				<anchored to="encumbranceload" />
+				<static textres="char_label_totalweight2" />
+			</label_fieldtop>
 
 		<!--Coin Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
@@ -81,7 +119,7 @@
 
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbrancepushordrag" position="below" offset="0,14" width="55" height="20" />
+				<anchored to="encumbrancepushordrag" position="below" offset="0,15" width="55" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
