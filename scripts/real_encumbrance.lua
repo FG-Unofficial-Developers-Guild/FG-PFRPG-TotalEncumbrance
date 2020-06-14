@@ -58,16 +58,12 @@ end
 --Return: nil, however table arguments are directly updated
 local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spellfailuretable)
 	local itemcarried
-	local itemsubtype
-	local itemslot
 	local itemmaxstat
 	local itemcheckpenalty
 	local itemspellfailure
 
 	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
 		itemcarried = DB.getValue(v, 'carried', 0)
-		itemsubtype = DB.getValue(v, 'subtype')
-		itemslot = DB.getValue(v, 'slot')
 		itemmaxstat = DB.getValue(v, 'maxstatbonus')
 		itemcheckpenalty = DB.getValue(v, 'checkpenalty')
 		itemspellfailure = DB.getValue(v, 'spellfailure')
