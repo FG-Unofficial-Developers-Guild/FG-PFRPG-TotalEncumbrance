@@ -64,8 +64,6 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 	local itemcheckpenalty
 	local itemspellfailure
 
-	Debug.chat('nodePC',nodePC)
-
 	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
 		itemcarried = DB.getValue(v, 'carried', 0)
 		itemsubtype = DB.getValue(v, 'subtype')
@@ -73,20 +71,8 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 		itemmaxstat = DB.getValue(v, 'maxstatbonus')
 		itemcheckpenalty = DB.getValue(v, 'checkpenalty')
 		itemspellfailure = DB.getValue(v, 'spellfailure')
-		
-		Debug.chat(DB.getValue(v, 'name'))
-		Debug.chat('itemcarried',itemcarried)
-		Debug.chat('itemmaxstat',itemmaxstat)
-		Debug.chat('itemcheckpenalty',itemcheckpenalty)
 
-		if itemcarried == 2 and itemsubtype == 'Shield' then
-			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(eqcheckpenaltytable, itemcheckpenalty)
-			end
-			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
-				table.insert(spellfailuretable, itemspellfailure)
-			end
-		elseif itemcarried == 2 then
+		if itemcarried == 2 then
 			if itemmaxstat ~= nil and itemmaxstat ~= 0 then
 				table.insert(maxstattable, itemmaxstat)
 			end
@@ -98,8 +84,6 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 			end
 		end
 	end		
-
-	Debug.chat('maxstattable',maxstattable)
 end
 
 --Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
