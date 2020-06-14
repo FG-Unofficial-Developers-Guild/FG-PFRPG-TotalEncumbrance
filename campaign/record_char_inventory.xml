@@ -21,10 +21,10 @@
 						end
 
 						function onValueChanged()
-							local nodePC = window.getDatabaseNode()
-							local maxstatbonusfromenc = DB.getValue(nodePC, 'encumbrance.maxstatbonusfromenc')
+							local nodePC = getDatabaseNode().getParent()
+							local maxstatbonusfromenc = DB.getValue(nodePC, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
-							local armormaxstatactive = DB.getValue(nodePC, 'encumbrance.armormaxstatbonusactive')
+							local armormaxstatactive = DB.getValue(nodePC, 'armormaxstatbonusactive')
 
 							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
 								window.armormaxstatbonus.setColor('FFb22929')
@@ -41,14 +41,14 @@
 					<script>
 						function onInit()
 							onValueChanged()
-							Debug.chat('xml',getDatabaseNode())
+							Debug.chat('xml',getDatabaseNode().getParent())
 						end
 
 						function onValueChanged()
-							local nodePC = window.getDatabaseNode()
-							local checkpenaltyfromenc = DB.getValue(nodePC, 'encumbrance.checkpenaltyfromenc')
+							local nodePC = getDatabaseNode().getParent()
+							local checkpenaltyfromenc = DB.getValue(nodePC, 'checkpenaltyfromenc')
 							local checkpenaltytoset = getValue()
-							local armormaxstatbonusactive = DB.getValue(nodePC, 'encumbrance.armormaxstatbonusactive')
+							local armormaxstatbonusactive = DB.getValue(nodePC, 'armormaxstatbonusactive')
 
 							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
 								window.armorcheckpenalty.setColor('FFb22929')
