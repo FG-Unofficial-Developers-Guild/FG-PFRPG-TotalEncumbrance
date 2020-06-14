@@ -39,16 +39,16 @@ function applyPenalties(nodeField)
 
 	maxstattoset, checkpenaltytoset, spellfailuretoset = computePenalties(nodePC)
 
-	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', maxstattoset)
-	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', checkpenaltytoset)
-	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', spellfailuretoset)
-
 	--enable armor encumbrance when needed
 	if maxstattoset ~= 0 or checkpenaltytoset ~= 0 or spellfailuretoset ~= 0 then
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 	else
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 	end
+	
+	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', maxstattoset)
+	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', checkpenaltytoset)
+	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', spellfailuretoset)
 end
 
 --Summary: Finds max stat / check penalty tables with appropriate nonzero values
@@ -122,14 +122,14 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	local medium = DB.getValue(nodePC, 'encumbrance.mediumload')
 	local total = DB.getValue(nodePC, 'encumbrance.total')
 
-	local maxstatfromenc
+	local maxstatbonusfromenc
 	local checkpenaltyfromenc
 	local spellfailurefromenc
 
-	maxstatfromenc, checkpenaltyfromenc, spellfailurefromenc = encumbrancePenalties(light, medium, total)
+	maxstatbonusfromenc, checkpenaltyfromenc, spellfailurefromenc = encumbrancePenalties(light, medium, total)
 
-	if maxstatfromenc ~= nil then
-		table.insert(maxstattable, maxstatfromenc)
+	if maxstatbonusfromenc ~= nil then
+		table.insert(maxstattable, maxstatbonusfromenc)
 	end
 	
 	if checkpenaltyfromenc ~= nil then
@@ -145,7 +145,7 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	end
 	--]]
 
-	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', maxstatfromenc ~= nil and maxstatfromenc or 0)
+	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', maxstatbonusfromenc ~= nil and maxstatbonusfromenc or 0)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', checkpenaltyfromenc ~= nil and checkpenaltyfromenc or 0)
 	DB.setValue(nodePC, 'encumbrance.spellfailurefromenc', 'number', spellfailurefromenc ~= nil and spellfailurefromenc or 0) -- always zero due to comment above
 end

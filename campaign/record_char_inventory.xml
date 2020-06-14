@@ -15,9 +15,39 @@
 			</label>
 			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
 				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
+					<script>
+						function onInit()
+							onValueChanged()
+						end
+
+						function onValueChanged()
+							local nodePC = window.getDatabaseNode()
+							local maxstatbonusfromenc = DB.getValue(nodePC, 'encumbrance.maxstatbonusfromenc')
+							local maxstattoset = getValue()
+
+							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
+								window.armormaxstatbonus.setColor("FFb22929")
+							end
+						end
+					</script>
 			</basicnumber>
 			<basicnumber name="armorcheckpenalty" source="encumbrance.armorcheckpenalty" insertbefore="encumbranceframe">
 				<anchored to="armormaxstatbonus" position="right" offset="15,0" width="35" />
+					<script>
+						function onInit()
+							onValueChanged()
+						end
+
+						function onValueChanged()
+							local nodePC = window.getDatabaseNode()
+							local checkpenaltyfromenc = DB.getValue(nodePC, 'encumbrance.checkpenaltyfromenc')
+							local checkpenaltytoset = getValue()
+
+							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
+								window.armorcheckpenalty.setColor("FFb22929")
+							end
+						end
+					</script>
 			</basicnumber>
 
 	<!--Encumbrance Frame-->
