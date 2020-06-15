@@ -14,4 +14,7 @@ function registerOptions()
 
 	OptionsManager.registerOption2('ENCUMBRANCE_COLORS', false, 'option_header_game', 'opt_lab_enc_color', 'option_entry_cycler', 
 		{ labels = 'enc_opt_color_on|enc_opt_color_off', values = 'on|off', baselabel = 'enc_opt_color_off', baseval = 'on', default = 'on' })
+
+	OptionsManager.registerOption2('AUTO_SPELL_FAILURE', false, 'option_header_game', 'opt_lab_spell_fail', 'option_entry_cycler', 
+		{ labels = 'enc_opt_fail_on|enc_opt_fail_off', values = 'on|off', baselabel = 'enc_opt_fail_on', baseval = 'on', default = 'on' })
 end
