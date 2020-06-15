@@ -25,7 +25,7 @@ end
 
 --Determine if the spell is from a spellset that is on the arcane casters list
 function isArcaneCaster(nodeSpellset)
-	-- classes that should roll arcane failure if encumbered by armor/shields
+	-- these are the classes that should roll arcane failure chance when encumbered by these types of armor/shields
 	local arcaneclass_heavyarmor = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Bloodrager', 'Skald', 'Unchained Summoner'}
 	local arcaneclass_medarmor = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Unchained Summoner'}
 	local arcaneclass_ltarmor = {'Sorcerer', 'Wizard', 'Witch', 'Arcanist'}
