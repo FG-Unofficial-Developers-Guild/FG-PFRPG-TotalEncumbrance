@@ -18,7 +18,11 @@ function recomputeTotalWeight(nodeWin)
 	local treasure = DB.getValue(nodePC.getPath() .. '.encumbrance.treasure')
 	local eqload = DB.getValue(nodePC.getPath() .. '.encumbrance.load')
 
-	DB.setValue(nodePC.getPath() .. '.encumbrance.total', 'number', treasure+eqload)
+	local coinweightactivated = OptionsManager.getOption('COIN_WEIGHT')
+	
+	if coinweightactivated == 1 then
+		DB.setValue(nodePC.getPath() .. '.encumbrance.total', 'number', treasure+eqload)
+	end
 end
 
 -- This function is manualy called with the command /ccweight (DM only)

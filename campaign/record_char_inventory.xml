@@ -25,9 +25,9 @@
 							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
 							local armormaxstatactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
-							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'colorcodedpenalties', 0)
+							local colorsactivated = OptionsManager.getOption('ENCUMBRANCE_COLORS')
 
-							if colorcodedpenalties == 1 then
+							if colorsactivated == 1 then
 								if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
 									window.armormaxstatbonus.setColor('FFb22929')
 								elseif armormaxstatactive == 0 then
@@ -51,9 +51,9 @@
 							local checkpenaltyfromenc = DB.getValue(nodepcencumbrance, 'checkpenaltyfromenc')
 							local checkpenaltytoset = getValue()
 							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
-							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'colorcodedpenalties', 0)
+							local colorsactivated = OptionsManager.getOption('ENCUMBRANCE_COLORS')
 
-							if colorcodedpenalties == 1 then
+							if colorsactivated == 1 then
 								if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
 									window.armorcheckpenalty.setColor('FFb22929')
 								elseif armormaxstatbonusactive == 0 then
