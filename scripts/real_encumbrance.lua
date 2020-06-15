@@ -92,8 +92,8 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 				table.insert(ltarmortable, '1')
 				elseif itemsubtype == 'Medium' or itemsubtype == 'medium' then
 				table.insert(medarmortable, '2')
--				elseif itemsubtype == 'Heavy' or itemsubtype = 'heavy' then
--				table.insert(heavyarmortable, '3')
+				elseif itemsubtype == 'Heavy' or itemsubtype == 'heavy' then
+				table.insert(heavyarmortable, '3')
 				end
 			end
 		end
