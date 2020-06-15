@@ -117,8 +117,10 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	local checkpenaltyfromenc
 	local spellfailurefromenc
 
-	maxstatbonusfromenc, checkpenaltyfromenc, spellfailurefromenc = encumbrancePenalties(light, medium, total)
-	
+	if light ~= nil then
+		maxstatbonusfromenc, checkpenaltyfromenc, spellfailurefromenc = encumbrancePenalties(light, medium, total)
+	end
+
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', maxstatbonusfromenc ~= nil and maxstatbonusfromenc or 0)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', checkpenaltyfromenc ~= nil and checkpenaltyfromenc or 0)
 
