@@ -124,7 +124,7 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', maxstatbonusfromenc ~= nil and maxstatbonusfromenc or 0)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', checkpenaltyfromenc ~= nil and checkpenaltyfromenc or 0)
 
-	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') then -- if weight encumbrance penalties are enabled
+	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') then -- if weight encumbrance penalties are enabled in options
 		if maxstatbonusfromenc ~= nil then
 			table.insert(maxstattable, maxstatbonusfromenc)
 		end

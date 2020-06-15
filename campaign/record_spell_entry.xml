@@ -11,7 +11,9 @@
 			<anchored position="insidetopleft" offset="2,2" />
 			<script>
 				function onClickRelease(button, x, y)
-					SpellFailure.arcaneSpellFailure(window.getDatabaseNode().getChild('...'))
+					if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'on') then
+						SpellFailure.arcaneSpellFailure(window.getDatabaseNode().getChild('...'))
+					end
 				end 
 			</script>
 		</button_spellaction>
