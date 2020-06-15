@@ -40,12 +40,33 @@ function isArcaneCaster(nodeSpellset)
 	return arcanemagic
 end
 
+-- Convert from CSV string to table (converts a single line of a CSV file)
+function fromCSV(s)
+	s = s .. ','        -- ending comma
+	local t = {}        -- table to collect fields
+	local fieldstart = 1
+	repeat
+		local nexti = string.find(s, ',', fieldstart)
+		table.insert(t, string.sub(s, fieldstart, nexti-1))
+		fieldstart = nexti + 1
+	until fieldstart > string.len(s)
+
+	return t
+end
+
 --Determine if the spell requires somatic compenents
 function isSomaticSpell(nodeSpell)
+	local componentstable = {}
 	local components = DB.getValue(nodeSpell,'components')
-	Debug.chat('components',components)
-
-	stillspell = false
-
+	componentstable = fromCSV(components)
 	
+	stillspell = true
+
+	for _,v in pairs(componentstable) do
+		if v == 'S' or v == ' S' then
+			stillspell = false
+		end
+	end
+
+	return stillspell
 end
