@@ -26,13 +26,16 @@
 							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
 							local armormaxstatactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
+							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'encumbrancepenaltiesenabled', 0)
 
-							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
-								window.armormaxstatbonus.setColor('FFb22929')
-							elseif armormaxstatactive == 0 then
-								window.armormaxstatbonus.setColor('7F000000')
-							else
-								window.armormaxstatbonus.setColor('FF000000')
+							if colorcodedpenalties == 1 then
+								if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
+									window.armormaxstatbonus.setColor('FFb22929')
+								elseif armormaxstatactive == 0 then
+									window.armormaxstatbonus.setColor('7F000000')
+								else
+									window.armormaxstatbonus.setColor('FF000000')
+								end
 							end
 						end
 					</script>
@@ -49,13 +52,16 @@
 							local checkpenaltyfromenc = DB.getValue(nodepcencumbrance, 'checkpenaltyfromenc')
 							local checkpenaltytoset = getValue()
 							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
+							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'encumbrancepenaltiesenabled', 0)
 
-							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
-								window.armorcheckpenalty.setColor('FFb22929')
-							elseif armormaxstatbonusactive == 0 then
-								window.armorcheckpenalty.setColor('7F000000')
-							else
-								window.armorcheckpenalty.setColor('FF000000')
+							if colorcodedpenalties == 1 then
+								if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
+									window.armorcheckpenalty.setColor('FFb22929')
+								elseif armormaxstatbonusactive == 0 then
+									window.armorcheckpenalty.setColor('7F000000')
+								else
+									window.armorcheckpenalty.setColor('FF000000')
+								end
 							end
 						end
 					</script>
