@@ -68,6 +68,7 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 	local ltarmortable = {}
 	local medarmortable = {}
 	local heavyarmortable = {}
+	local shieldtable = {}
 
 	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
 		itemcarried = DB.getValue(v, 'carried', 0)
@@ -75,6 +76,7 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 		itemcheckpenalty = DB.getValue(v, 'checkpenalty')
 		itemspellfailure = DB.getValue(v, 'spellfailure')
 		itemtype = DB.getValue(v, 'type')
+		itemname = DB.getValue(v, 'name')
 		itemsubtype = DB.getValue(v, 'subtype')
 
 		if itemcarried == 2 then
@@ -89,23 +91,25 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 			end
 			if itemtype == 'Armor' then
 				if itemsubtype == 'Light' or itemsubtype == 'light' then
-				table.insert(ltarmortable, '1')
+					table.insert(ltarmortable, '1')
 				elseif itemsubtype == 'Medium' or itemsubtype == 'medium' then
-				table.insert(medarmortable, '2')
+					table.insert(medarmortable, '2')
 				elseif itemsubtype == 'Heavy' or itemsubtype == 'heavy' then
-				table.insert(heavyarmortable, '3')
+					table.insert(heavyarmortable, '3')
+				end
+				if itemname == 'Tower' then
+					table.insert(heavyarmortable, '3')
+				elseif itemsubtype == 'Shield' or itemsubtype == 'Magic Shield' then
+					table.insert(shieldtable, 'i like turtles')
 				end
 			end
 		end
 	end
 
-	local heavyarmorcount
-	local medarmorcount
-	local ltarmorcount
-
-	heavyarmorcount = table.getn(heavyarmortable)
-	medarmorcount = table.getn(medarmortable)
-	ltarmorcount = table.getn(ltarmortable)
+	local heavyarmorcount = table.getn(heavyarmortable)
+	local medarmorcount = table.getn(medarmortable)
+	local ltarmorcount = table.getn(ltarmortable)
+	local shieldcount = table.getn(shieldtable)
 
 	if heavyarmorcount ~= 0 and heavyarmorcount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 3)
@@ -113,6 +117,13 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 2)
 	elseif ltarmorcount ~= 0 and ltarmorcount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 1)
+	else 
+		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 0)
+	end
+	if shieldcount ~= 0 and shieldcount ~= nil then
+		DB.setValue(nodePC, 'encumbrance.shieldequipped', 'number', 1)
+	else
+		DB.setValue(nodePC, 'encumbrance.shieldequipped', 'number', 0)
 	end
 end
 
