@@ -24,7 +24,7 @@
 							local nodepcencumbrance = getDatabaseNode().getParent()
 							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
-							local armormaxstatactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
+							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
 
 							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
 								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
@@ -32,7 +32,7 @@
 								else
 									window.armormaxstatbonus.setColor('FF000000')
 								end
-							elseif armormaxstatactive == 0 then
+							elseif armormaxstatbonusactive == 0 then
 								window.armormaxstatbonus.setColor('7F000000')
 							else
 								window.armormaxstatbonus.setColor('FF000000')
@@ -59,7 +59,7 @@
 								else
 									window.armorcheckpenalty.setColor('FF000000')
 								end
-							elseif armormaxstatactive == 0 then
+							elseif armormaxstatbonusactive == 0 then
 								window.armorcheckpenalty.setColor('7F000000')
 							else
 								window.armorcheckpenalty.setColor('FF000000')
