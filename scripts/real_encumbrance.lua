@@ -157,18 +157,6 @@ end
 --Return: number holding armor check penalty
 --Return: number holding armor spell failure penalty
 function computePenalties(nodePC)
-	--[[
-	You may notice that there's no shield max stat table... because accoridng to: https://www.d20srd.org/srd/equipment/armor.htm
-	"Shields do not affect a character’s maximum Dexterity bonus."
-	Hence, there's no defined operation for computing the equipment (shield & armor) max stat penalty if shields have max stat penalties.
-	Ostensibly, we could use a min if we wanted to support that? Seems the most reasonable? TODO
-
-	Related, shields can have have check penalties and spell failures.
-	However, their penalties add to armor penalties so there's no sense in distinguishing between the shield / armor components when
-	finding the penalty contributions due to equipment.
-
-	You should see these ideas reflected in changes to rawArmorPenalties as well.
-	--]]
 	local maxstattable = {}
 	local eqcheckpenaltytable	= {}
 	local checkpenaltytable = {}
