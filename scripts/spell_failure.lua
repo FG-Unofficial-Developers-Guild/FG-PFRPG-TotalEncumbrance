@@ -29,7 +29,7 @@ end
 --Determine if the spell is from a spellset that is on the arcane casters list
 function isArcaneCaster(nodeSpellset)
 	-- classes that should roll arcane failure if encumbered by armor/shields
-	local arcaneclasses = {'Bard', 'Sorcerer', 'Wizard'}
+	local arcaneclasses = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Bloodrager', 'Skald', 'Unchained Summoner'}
 
 	local playerspellset = DB.getValue(nodeSpellset, 'label')
 	
