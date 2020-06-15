@@ -173,6 +173,8 @@ function computePenalties(nodePC)
 	local eqcheckpenaltytable	= {}
 	local checkpenaltytable = {}
 	local spellfailuretable = {}
+	
+	local encumbrancepenaltiesenabled = DB.getValue(nodePC, 'encumbrance.encumbrancepenaltiesenabled', 1)
 
 	local maxstattoset
 	local checkpenaltytoset
@@ -184,7 +186,9 @@ function computePenalties(nodePC)
 		table.insert(checkpenaltytable, tableSum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
-	rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
+	if 	encumbrancepenaltiesenabled = 0 then -- if weight encumbrance penalties are disabled
+		rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
+	end
 
 	if table.getn(maxstattable) ~= 0 then
 		maxstattoset = math.min(unpack(maxstattable))
