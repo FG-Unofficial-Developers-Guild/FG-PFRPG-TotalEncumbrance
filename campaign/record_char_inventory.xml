@@ -26,7 +26,7 @@
 							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
 							local armormaxstatactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
-							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'encumbrancepenaltiesenabled', 0)
+							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'colorcodedpenalties', 0)
 
 							if colorcodedpenalties == 1 then
 								if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
@@ -52,7 +52,7 @@
 							local checkpenaltyfromenc = DB.getValue(nodepcencumbrance, 'checkpenaltyfromenc')
 							local checkpenaltytoset = getValue()
 							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
-							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'encumbrancepenaltiesenabled', 0)
+							local colorcodedpenalties = DB.getValue(nodepcencumbrance, 'colorcodedpenalties', 0)
 
 							if colorcodedpenalties == 1 then
 								if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
