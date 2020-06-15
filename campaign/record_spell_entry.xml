@@ -6,16 +6,8 @@
 -->
 
 <root>
-	<template name="spell_action_castbutton" merge="join">
-		<button_spellaction name="castbutton">
-			<anchored position="insidetopleft" offset="2,2" />
-			<script>
-				function onClickRelease(button, x, y)
-					if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'on') then
-						SpellFailure.arcaneSpellFailure(window.getDatabaseNode().getChild('...'))
-					end
-				end 
-			</script>
-		</button_spellaction>
-	</template>
+	<windowclass name="spell_item" merge="join">
+		<margins control="0,0,0,2" />
+		<script file="campaign/scripts/spell_with_failure.lua" />
+	</windowclass>
 </root>
