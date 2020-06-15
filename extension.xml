@@ -3,7 +3,7 @@
 
 	<properties>
 		<name>Total Encumbrance</name>
-		<version>1.2.7.1</version>
+		<version>1.2.8</version>
 		<author>bmos</author>
 		<description>An extension that computes and displays the weight of carried coins.</description>
 		<ruleset>
@@ -21,6 +21,7 @@
 		<script name="CoinsWeight" file="scripts/coins_weight.lua" />
 		<script name="RealEncumbrance" file="scripts/real_encumbrance.lua" />
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
+		<script name="SpellFailure" file="scripts/spell_failure.lua" />		
 	</base>
 
 </root>
