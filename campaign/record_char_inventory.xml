@@ -25,16 +25,17 @@
 							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
 							local armormaxstatactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
-							local colorsactivated = OptionsManager.getOption('ENCUMBRANCE_COLORS')
 
-							if colorsactivated == 1 then
-								if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
+							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
+								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
 									window.armormaxstatbonus.setColor('FFb22929')
-								elseif armormaxstatactive == 0 then
-									window.armormaxstatbonus.setColor('7F000000')
 								else
 									window.armormaxstatbonus.setColor('FF000000')
 								end
+							elseif armormaxstatactive == 0 then
+								window.armormaxstatbonus.setColor('7F000000')
+							else
+								window.armormaxstatbonus.setColor('FF000000')
 							end
 						end
 					</script>
@@ -51,16 +52,17 @@
 							local checkpenaltyfromenc = DB.getValue(nodepcencumbrance, 'checkpenaltyfromenc')
 							local checkpenaltytoset = getValue()
 							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
-							local colorsactivated = OptionsManager.getOption('ENCUMBRANCE_COLORS')
 
-							if colorsactivated == 1 then
-								if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
+							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
+								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
 									window.armorcheckpenalty.setColor('FFb22929')
-								elseif armormaxstatbonusactive == 0 then
-									window.armorcheckpenalty.setColor('7F000000')
 								else
 									window.armorcheckpenalty.setColor('FF000000')
 								end
+							elseif armormaxstatactive == 0 then
+								window.armorcheckpenalty.setColor('7F000000')
+							else
+								window.armorcheckpenalty.setColor('FF000000')
 							end
 						end
 					</script>

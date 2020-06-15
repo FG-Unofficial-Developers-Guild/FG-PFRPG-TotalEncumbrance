@@ -17,12 +17,8 @@ function recomputeTotalWeight(nodeWin)
 
 	local treasure = DB.getValue(nodePC.getPath() .. '.encumbrance.treasure')
 	local eqload = DB.getValue(nodePC.getPath() .. '.encumbrance.load')
-
-	local coinweightactivated = OptionsManager.getOption('COIN_WEIGHT')
 	
-	if coinweightactivated == 1 then
-		DB.setValue(nodePC.getPath() .. '.encumbrance.total', 'number', treasure+eqload)
-	end
+	DB.setValue(nodePC.getPath() .. '.encumbrance.total', 'number', treasure+eqload)
 end
 
 -- This function is manualy called with the command /ccweight (DM only)
@@ -50,14 +46,20 @@ end
 
 -- This function really compute the weight of the coins
 function computePCCoinsWeigh(nodePC)
-	local weight = 0;
+	local totalcoins = 0;
 	for _,coin in pairs(DB.getChildren(nodePC, "coins")) do
-		weight = weight + DB.getValue(coin, "amount", 0)
+		totalcoins = totalcoins + DB.getValue(coin, "amount", 0)
 	end
 
 	-- We have now computed the coins weight for this PC
 	-- CHANGE WEIGHT HERE, Change coinsperunit to the number of coins that equals 1 weight
 	local coinsperunit = 50
-	weight = math.floor(weight / coinsperunit)
-	DB.setValue(nodePC.getPath() .. '.encumbrance.treasure', 'number', weight)
+	
+	if OptionsManager.isOption('COIN_WEIGHT', 'on') then -- if coin weight calculation is enabled
+		totalcoins = math.floor(totalcoins / coinsperunit)
+	else
+		totalcoins = 0
+	end
+
+	DB.setValue(nodePC.getPath() .. '.encumbrance.treasure', 'number', totalcoins)
 end

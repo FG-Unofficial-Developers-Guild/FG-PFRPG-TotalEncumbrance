@@ -22,6 +22,9 @@ local function handleApplyPenaltiesArgs(nodeField)
 		nodePC = nodeField.getChild( '...' )
 	elseif nodeField.getName() == 'carried' then
 		nodePC = nodeField.getChild( '....' )
+	else
+		local rActor = ActorManager.getActor("pc", nodeWin)
+		local nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 	
 	return nodePC
@@ -115,27 +118,25 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	local spellfailurefromenc
 
 	maxstatbonusfromenc, checkpenaltyfromenc, spellfailurefromenc = encumbrancePenalties(light, medium, total)
-
-	if maxstatbonusfromenc ~= nil then
-		table.insert(maxstattable, maxstatbonusfromenc)
-	end
 	
-	if checkpenaltyfromenc ~= nil then
-		table.insert(checkpenaltytable, checkpenaltyfromenc)
-	end
-
-	--[[
-	I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
-	For now, it can be removed
-
-	if spellfailurefromenc ~= nil then
-		table.insert(spellfailuretable, spellfailurefromenc)
-	end
-	--]]
-
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', maxstatbonusfromenc ~= nil and maxstatbonusfromenc or 0)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', checkpenaltyfromenc ~= nil and checkpenaltyfromenc or 0)
-	DB.setValue(nodePC, 'encumbrance.spellfailurefromenc', 'number', spellfailurefromenc ~= nil and spellfailurefromenc or 0) -- always zero due to comment above
+
+	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') then -- if weight encumbrance penalties are enabled
+		if maxstatbonusfromenc ~= nil then
+			table.insert(maxstattable, maxstatbonusfromenc)
+		end
+		
+		if checkpenaltyfromenc ~= nil then
+			table.insert(checkpenaltytable, checkpenaltyfromenc)
+		end
+		--[[ I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
+		For now, it can be removed
+
+		if spellfailurefromenc ~= nil then
+			table.insert(spellfailuretable, spellfailurefromenc)
+		end --]]
+	end
 end
 
 --Summary: Sums table values
@@ -172,11 +173,7 @@ function computePenalties(nodePC)
 		table.insert(checkpenaltytable, tableSum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
-	local encumbranceactivated = OptionsManager.getOption('WEIGHT_ENCUMBRANCE')
-	
-	if encumbranceactivated == 1 then  -- if weight encumbrance penalties are enabled
-		rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
-	end
+	rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
 
 	if table.getn(maxstattable) ~= 0 then
 		maxstattoset = math.min(unpack(maxstattable))
