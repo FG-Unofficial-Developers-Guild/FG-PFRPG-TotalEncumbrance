@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<template name="spell_action_castbutton" merge="join">
+		<button_spellaction name="castbutton">
+			<anchored position="insidetopleft" offset="2,2" />
+			<script>
+				function onClickRelease(button, x, y)
+					SpellFailure.arcaneSpellFailure(window.getDatabaseNode().getChild('.......'))
+				end 
+			</script>
+		</button_spellaction>
+	</template>
+</root>
