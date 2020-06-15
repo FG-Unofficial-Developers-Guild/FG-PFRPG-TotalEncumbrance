@@ -47,7 +47,7 @@ function applyPenalties(nodeField)
 	else
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 	end
-	
+
 	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', maxstattoset)
 	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', checkpenaltytoset)
 	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', spellfailuretoset)
@@ -64,12 +64,18 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 	local itemmaxstat
 	local itemcheckpenalty
 	local itemspellfailure
+	
+	local ltarmortable = {}
+	local medarmortable = {}
+	local heavyarmortable = {}
 
 	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
 		itemcarried = DB.getValue(v, 'carried', 0)
 		itemmaxstat = DB.getValue(v, 'maxstatbonus')
 		itemcheckpenalty = DB.getValue(v, 'checkpenalty')
 		itemspellfailure = DB.getValue(v, 'spellfailure')
+		itemtype = DB.getValue(v, 'type')
+		itemsubtype = DB.getValue(v, 'subtype')
 
 		if itemcarried == 2 then
 			if itemmaxstat ~= nil and itemmaxstat ~= 0 then
@@ -81,8 +87,33 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
 				table.insert(spellfailuretable, itemspellfailure)
 			end
+			if itemtype == 'Armor' then
+				if itemsubtype == 'Light' or itemsubtype == 'light' then
+				table.insert(ltarmortable, '1')
+				elseif itemsubtype == 'Medium' or itemsubtype == 'medium' then
+				table.insert(medarmortable, '2')
+-				elseif itemsubtype == 'Heavy' or itemsubtype = 'heavy' then
+-				table.insert(heavyarmortable, '3')
+				end
+			end
 		end
-	end		
+	end
+
+	local heavyarmorcount
+	local medarmorcount
+	local ltarmorcount
+
+	heavyarmorcount = table.getn(heavyarmortable)
+	medarmorcount = table.getn(medarmortable)
+	ltarmorcount = table.getn(ltarmortable)
+
+	if heavyarmorcount ~= 0 and heavyarmorcount ~= nil then
+		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 3)
+	elseif medarmorcount ~= 0 and medarmorcount ~= nil then
+		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 2)
+	elseif ltarmorcount ~= 0 and ltarmorcount ~= nil then
+		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 1)
+	end
 end
 
 --Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
