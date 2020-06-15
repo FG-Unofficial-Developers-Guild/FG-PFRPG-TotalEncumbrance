@@ -5,21 +5,25 @@
 --Automatically determine if arcane failure chance should be rolled when a spell's cast button is clicked
 function arcaneSpellFailure(nodeSpell)
 	local nodeSpellset = nodeSpell.getChild('.....')
+	local spellfailurechance
+	spellfailurechance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
 
-	-- if true, roll failure chance
-	local arcanemagic
-	arcanemagic = isArcaneCaster(nodeSpellset)
+	if spellfailurechance ~= 0 then
+		-- if true, roll failure chance
+		local arcanemagic
+		arcanemagic = isArcaneCaster(nodeSpellset)
 
-	-- if true, don't roll failure chance
-	local stillspell
-	stillspell = isSomaticSpell(nodeSpell)
+		-- if true, don't roll failure chance
+		local stillspell
+		stillspell = isSomaticSpell(nodeSpell)
 
-	if arcanemagic == true and stillspell == false then
-		Debug.chat('spell failure!')
+		if arcanemagic == true and stillspell == false then
+			ChatManager.SystemMessage('Arcane Spell Failure: '..spellfailurechance..'%')
+		end
+
+		-- roll percentile dice for arcane failure and parse result based on encumbrance.spellfailure
+		-- output result to chat
 	end
-
-	-- roll percentile dice for arcane failure and parse result based on encumbrance.spellfailure
-	-- output result to chat
 end
 
 --Determine if the spell is from a spellset that is on the arcane casters list
