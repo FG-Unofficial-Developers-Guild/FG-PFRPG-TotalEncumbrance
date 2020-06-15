@@ -5,8 +5,7 @@
 --Automatically determine if arcane failure chance should be rolled when a spell's cast button is clicked
 function arcaneSpellFailure(nodeSpell)
 	local nodeSpellset = nodeSpell.getChild('.....')
-	local spellfailurechance
-	spellfailurechance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
+	local spellfailurechance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
 
 	if spellfailurechance ~= 0 then
 		-- if true, roll failure chance
@@ -60,9 +59,8 @@ end
 
 --Determine if the spell requires somatic compenents
 function isSomaticSpell(nodeSpell)
-	local componentstable = {}
 	local components = DB.getValue(nodeSpell,'components')
-	componentstable = fromCSV(components)
+	local componentstable = fromCSV(components)
 	
 	stillspell = true
 
