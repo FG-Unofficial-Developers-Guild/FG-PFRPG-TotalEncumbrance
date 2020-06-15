@@ -22,6 +22,9 @@ local function handleApplyPenaltiesArgs(nodeField)
 		nodePC = nodeField.getChild( '...' )
 	elseif nodeField.getName() == 'carried' then
 		nodePC = nodeField.getChild( '....' )
+	else
+		local rActor = ActorManager.getActor("pc", nodeWin)
+		local nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 	
 	return nodePC
@@ -115,27 +118,25 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	local spellfailurefromenc
 
 	maxstatbonusfromenc, checkpenaltyfromenc, spellfailurefromenc = encumbrancePenalties(light, medium, total)
-
-	if maxstatbonusfromenc ~= nil then
-		table.insert(maxstattable, maxstatbonusfromenc)
-	end
 	
-	if checkpenaltyfromenc ~= nil then
-		table.insert(checkpenaltytable, checkpenaltyfromenc)
-	end
-
-	--[[
-	I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
-	For now, it can be removed
-
-	if spellfailurefromenc ~= nil then
-		table.insert(spellfailuretable, spellfailurefromenc)
-	end
-	--]]
-
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', maxstatbonusfromenc ~= nil and maxstatbonusfromenc or 0)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', checkpenaltyfromenc ~= nil and checkpenaltyfromenc or 0)
-	DB.setValue(nodePC, 'encumbrance.spellfailurefromenc', 'number', spellfailurefromenc ~= nil and spellfailurefromenc or 0) -- always zero due to comment above
+
+	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') then -- if weight encumbrance penalties are enabled
+		if maxstatbonusfromenc ~= nil then
+			table.insert(maxstattable, maxstatbonusfromenc)
+		end
+		
+		if checkpenaltyfromenc ~= nil then
+			table.insert(checkpenaltytable, checkpenaltyfromenc)
+		end
+		--[[ I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
+		For now, it can be removed
+
+		if spellfailurefromenc ~= nil then
+			table.insert(spellfailuretable, spellfailurefromenc)
+		end --]]
+	end
 end
 
 --Summary: Sums table values
@@ -157,23 +158,11 @@ end
 --Return: number holding armor check penalty
 --Return: number holding armor spell failure penalty
 function computePenalties(nodePC)
-	--[[
-	You may notice that there's no shield max stat table... because accoridng to: https://www.d20srd.org/srd/equipment/armor.htm
-	"Shields do not affect a character’s maximum Dexterity bonus."
-	Hence, there's no defined operation for computing the equipment (shield & armor) max stat penalty if shields have max stat penalties.
-	Ostensibly, we could use a min if we wanted to support that? Seems the most reasonable? TODO
-
-	Related, shields can have have check penalties and spell failures.
-	However, their penalties add to armor penalties so there's no sense in distinguishing between the shield / armor components when
-	finding the penalty contributions due to equipment.
-
-	You should see these ideas reflected in changes to rawArmorPenalties as well.
-	--]]
 	local maxstattable = {}
 	local eqcheckpenaltytable	= {}
 	local checkpenaltytable = {}
 	local spellfailuretable = {}
-
+	
 	local maxstattoset
 	local checkpenaltytoset
 	local spellfailuretoset

@@ -21,13 +21,17 @@
 						end
 
 						function onValueChanged()
-							local nodePC = getDatabaseNode().getParent()
-							local maxstatbonusfromenc = DB.getValue(nodePC, 'maxstatbonusfromenc')
+							local nodepcencumbrance = getDatabaseNode().getParent()
+							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
-							local armormaxstatactive = DB.getValue(nodePC, 'armormaxstatbonusactive')
+							local armormaxstatactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
 
 							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
-								window.armormaxstatbonus.setColor('FFb22929')
+								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
+									window.armormaxstatbonus.setColor('FFb22929')
+								else
+									window.armormaxstatbonus.setColor('FF000000')
+								end
 							elseif armormaxstatactive == 0 then
 								window.armormaxstatbonus.setColor('7F000000')
 							else
@@ -44,14 +48,18 @@
 						end
 
 						function onValueChanged()
-							local nodePC = getDatabaseNode().getParent()
-							local checkpenaltyfromenc = DB.getValue(nodePC, 'checkpenaltyfromenc')
+							local nodepcencumbrance = getDatabaseNode().getParent()
+							local checkpenaltyfromenc = DB.getValue(nodepcencumbrance, 'checkpenaltyfromenc')
 							local checkpenaltytoset = getValue()
-							local armormaxstatbonusactive = DB.getValue(nodePC, 'armormaxstatbonusactive')
+							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
 
 							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
-								window.armorcheckpenalty.setColor('FFb22929')
-							elseif armormaxstatbonusactive == 0 then
+								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
+									window.armorcheckpenalty.setColor('FFb22929')
+								else
+									window.armorcheckpenalty.setColor('FF000000')
+								end
+							elseif armormaxstatactive == 0 then
 								window.armorcheckpenalty.setColor('7F000000')
 							else
 								window.armorcheckpenalty.setColor('FF000000')
