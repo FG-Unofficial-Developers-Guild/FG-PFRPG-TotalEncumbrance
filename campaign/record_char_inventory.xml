@@ -22,7 +22,6 @@
 
 						function onValueChanged()
 							local nodepcencumbrance = getDatabaseNode().getParent()
-							Debug.chat(nodepcencumbrance)
 							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
 							local armormaxstatactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
