@@ -24,6 +24,7 @@
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
 		<script name="SpellFailure" file="scripts/spell_failure.lua" />
 		<script name="StrengthEffects" file="scripts/strength_effects.lua" />
+		<script name="TotalEncumbranceLib" file="scripts/total_encumbrance_lib.lua" />
 	</base>
 
 </root>
