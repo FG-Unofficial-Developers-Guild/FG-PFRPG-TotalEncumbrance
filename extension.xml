@@ -22,7 +22,8 @@
 		<script name="CoinsWeight" file="scripts/coins_weight.lua" />
 		<script name="RealEncumbrance" file="scripts/real_encumbrance.lua" />
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
-		<script name="SpellFailure" file="scripts/spell_failure.lua" />		
+		<script name="SpellFailure" file="scripts/spell_failure.lua" />
+		<script name="StrengthEffects" file="scripts/strength_effects.lua" />
 	</base>
 
 </root>
