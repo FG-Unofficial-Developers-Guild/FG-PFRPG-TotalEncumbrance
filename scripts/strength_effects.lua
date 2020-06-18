@@ -10,62 +10,48 @@ function onInit()
 end
 
 --Summary: Handles arguments of applyStrengthEffects()
---Argument: databasenode nodeField representing effects or label
+--Argument: databasenode nodeWin representing effects or label
 --Return: appropriate object databasenode - should represent effects
-local function handleApplyStrengthEffectsArgs(nodeField)
+local function handleApplyStrengthEffectsArgs(nodeWin)
 	local nodeEffects
 
-	if nodeField.getName() == 'effects' then
-		nodeEffects = nodeField
+	if nodeWin.getName() == 'effects' then
+		nodeEffects = nodeWin
 	else
-		nodeEffects = nodeField.getChild('...') -- 3 dots or 2 for the onUpdate call on label / isactive?
+		nodeEffects = nodeWin.getChild('...') -- 3 dots or 2 for the onUpdate call on label / isactive?
 	end
 
 	return nodeEffects
 end
 
 --Summary: Recomputes bonuses from effects and writes them to stradj
---Argument: databasenode nodeField representing effects or label
-function applyStrengthEffects(nodeField)
-	local nodeEffects = handleApplyStrengthEffectsArgs(nodeField)
-	local strengthBonus = computeStrengthEffects(nodeEffects)
+--Argument: databasenode nodeWin representing effects or label
+function applyStrengthEffects(nodeWin)
+	local nodeEffects = handleApplyStrengthEffectsArgs(nodeWin)
+	
+	Debug.chat(nodeEffects)
 
-	DB.setValue(nodeEffects.getParent(), 'encumbrance.manualstradj') -- Just to write some code without knowing the xml stuff
-	DB.setValue(nodeEffects.getParent(), 'encumbrance.stradj') -- Just to write some code without knowing the xml stuff
+	local rActor = ActorManager.getActor('pc', nodeEffects)
+	Debug.chat(rActor)
+	nAbility = ActorManager2.getAbilityEffectsBonus(rActor, 'strength')
+	Debug.chat('effects mod',nAbility)
+	local nEffectMod, nAbilityEffects = EffectManager35E.getEffectsBonus(rActor, sAbilityEffect, true)
+	Debug.chat('nEffectMod and nAbilityEffects',nEffectMod, nAbilityEffects)
+
+--	DB.setValue(nodeEffects.getParent(), 'encumbrance.manualstradj') -- Just to write some code without knowing the xml stuff
+--	DB.setValue(nodeEffects.getParent(), 'encumbrance.stradj_fromeffects') -- Just to write some code without knowing the xml stuff
 end
 
---Summary: Will populate the table for strength effects (normalized population)
---Argument: databasenode nodeEffects pointing to DB node of effects
---Argument: table strengthEffectsTable will be populated with strength effects
-local function gatherStrengthEffects(nodeEffects, strengthEffectsTable)
-	local isactive
-	local label
-	local effecttype
-	local effectcontribution
+function combineSTRCarryModifiers(nodeWin)
+	Debug.chat('combine str!')
 
-	for _,v in pairs(DB.getChildren(nodeEffects)) do
-		isactive = DB.getValue(v, 'isactive', 0)
-
-		if isactive == 1 then
-			label = DB.getValue(v, 'label')
-		end
-	end
-end
-
---Summary: Will compute the total adjustment to strength due to effects
---Return: Strength adjustment due to effects
-function computeStrengthEffects(nodeEffects)
-	local strengthEffectsTable = {}
-
-	local strengthBonus
-
-	gatherStrengthEffects(nodeEffects, strengthEffectsTable)
-
-	if table.getn(strengthEffectsTable) ~= 0 then
-		strengthBonus = TotalEncumbranceLib.tableSum(strengthEffectsTable)
+	if nodeWin.getParent().getName() == 'encumbrance' then
+		nodePC = nodeWin
 	else
-		strengthBonus = 0
+		Debug.chat('Node error. Unrecognized Node '..nodeWin)
 	end
 
-	return strengthBonus
+	local light = DB.getValue(nodePC, 'encumbrance.lightload')
+	local medium = DB.getValue(nodePC, 'encumbrance.mediumload')
+
 end
