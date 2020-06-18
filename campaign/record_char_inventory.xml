@@ -317,4 +317,72 @@
 			</number_charinv>
 		</sheetdata>
 	</windowclass>
+
+	<!-- Encumbrance pop-up for strength score modification via effect or manual box -->
+	<windowclass name="charsheet_encumbrance" merge="join">
+		<frame>charsheethelper</frame>
+		<placement>
+			<size width="300" height="150" />
+		</placement>
+		<sizelimits>
+			<minimum width="300" height="150" />
+			<dynamic />
+		</sizelimits>
+		<nodelete />
+		<playercontrol />
+		<sheetdata>
+			<windowtitlebar_char name="title">
+				<prefix>char_encumbrance_title</prefix>
+			</windowtitlebar_char>
+			<anchor_title_charsheethelper name="contentanchor" />
+
+			<frame_char name="encadjframe">
+				<anchored to="contentanchor" height="60">
+					<top anchor="bottom" relation="relative" offset="0" />
+					<left />
+					<right />
+				</anchored>
+			</frame_char>
+			<basicnumber name="encstradj" source="encumbrance.manualstradj">
+				<anchored to="encadjframe" width="60" height="20">
+					<top offset="25" />
+					<right anchor="center" offset="-50" />
+				</anchored>
+				<script>
+					function onValueChanged()
+						StrengthEffects.combineSTRCarryModifiers(window.getDatabaseNode())
+					end
+				<script>
+			</basicnumber>
+			<label_fieldtop>
+				<anchored to="encstradj" />
+				<static textres="char_label_encstradj" />
+			</label_fieldtop>
+			<basicnumber name="encstr_fromeffects" source="encumbrance.strbonusfromeffects">
+				<anchored to="encadjframe" width="60" height="20">
+					<top offset="25" />
+					<right anchor="center" offset="30" />
+				</anchored>
+			</basicnumber>
+			<label_fieldtop>
+				<anchored to="encstr_fromeffects" />
+				<static textres="char_label_encstr_fromeffects" />
+			</label_fieldtop>
+			<basicnumber name="enccarrymult" source="encumbrance.carrymult">
+				<anchored to="encadjframe" width="60" height="20">
+					<top offset="25" />
+					<left anchor="center" offset="50" />
+				</anchored>
+				<min>0</min>
+				<default>1</default>
+			</basicnumber>
+			<label_fieldtop>
+				<anchored to="enccarrymult" />
+				<static textres="char_label_enccarrymult" />
+			</label_fieldtop>
+
+			<close_charsheethelper />
+			<resize_charsheethelper />
+		</sheetdata>
+	</windowclass>
 </root>
