@@ -6,8 +6,32 @@
 -->
 
 <root>
-	<windowclass name="spell_item" merge="join">
+	<windowclass name="spell_header" merge="join">
 		<margins control="0,0,0,2" />
-		<script file="campaign/scripts/spell_with_failure.lua" />
+		<script>
+			function onInit()
+				if not ActorManager.isPC(getDatabaseNode().getChild('.......')) then
+					shortdescription.setVisible(false)
+					actionsmini.setVisible(true)
+				end
+			end
+
+			function activatePower()
+				parentcontrol.window.activatePower()
+			end
+
+			function usePower()
+				parentcontrol.window.usePower()
+
+				if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'on') then
+					Debug.chat(getDatabaseNode())
+					SpellFailure.arcaneSpellFailure(getDatabaseNode())
+				end
+			end
+
+			function onSpellCounterUpdate()
+				parentcontrol.window.windowlist.window.onSpellCounterUpdate()
+			end
+		</script>
 	</windowclass>
 </root>
