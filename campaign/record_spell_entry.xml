@@ -23,9 +23,7 @@
 			function usePower()
 				parentcontrol.window.usePower()
 
-				if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'on') then
-					SpellFailure.arcaneSpellFailure(getDatabaseNode())
-				end
+				SpellFailure.arcaneSpellFailure(getDatabaseNode())
 			end
 
 			function onSpellCounterUpdate()

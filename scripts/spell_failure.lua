@@ -23,7 +23,9 @@ function arcaneSpellFailure(nodeSpell)
 
 		-- set up and roll percentile dice for arcane failure
 		if arcanecaster == true and notstillspell == false then
-			rollDice(nodeChar, rActor, spellfailurechance)
+			if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'on') then
+				rollDice(nodeChar, rActor, spellfailurechance)
+			end
 		end
 	end
 end
