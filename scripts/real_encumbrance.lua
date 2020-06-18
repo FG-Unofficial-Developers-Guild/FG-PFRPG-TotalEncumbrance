@@ -183,19 +183,6 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 	end
 end
 
---Summary: Sums table values
---Argument: table t to sum values within
---Return: sum of values in table t
-local function tableSum(t)
-	local sum = 0
-
-	for _,v in pairs(t) do
-		sum = sum + v
-	end
-
-	return sum
-end
-
 --Summary: Finds max stat and check penalty based on current enc / armor / shield data
 --Argument: databasenode nodePC is the PC node
 --Return: number holding armor max stat penalty
@@ -214,7 +201,7 @@ function computePenalties(nodePC)
 	rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spellfailuretable)
 
 	if table.getn(eqcheckpenaltytable) ~= 0 then
-		table.insert(checkpenaltytable, tableSum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
+		table.insert(checkpenaltytable, LibTotalEncumbrance.tablesum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
 	rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
@@ -232,7 +219,7 @@ function computePenalties(nodePC)
 	end
 
 	if table.getn(spellfailuretable) ~= 0 then
-		spellfailuretoset = tableSum(spellfailuretable) -- this would sum penalties on multi-equipped armor
+		spellfailuretoset = LibTotalEncumbrance.tablesum(spellfailuretable) -- this would sum penalties on multi-equipped armor
 	else
 		spellfailuretoset = 0
 	end
