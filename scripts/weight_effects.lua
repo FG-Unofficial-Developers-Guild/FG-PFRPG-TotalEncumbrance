@@ -28,14 +28,17 @@ function combineCarryModifiers(node)
 	local nodePC, rActor = handleApplyStrengthEffectsArgs(node)
 	local nEffectMod = getEffectsBonus(rActor, 'strength')
 	local nManualStrAdj = DB.getValue(nodePC, 'encumbrance.manualstradj')
+	local tStrAdj = {}
 	local nStrAdjToSet = 0
 
 	if nEffectMod then
-		nStrAdjToSet = nStrAdjToSet + nEffectMod
+		table.insert(tStrAdj, nEffectMod)
 	end
 	if nManualStrAdj then
-		nStrAdjToSet = nStrAdjToSet + nManualStrAdj
+		table.insert(tStrAdj, nManualStrAdj)
 	end
+
+	nStrAdjToSet = LibTotalEncumbrance.tableSum(tStrAdj)
 
 	DB.setValue(nodePC, 'encumbrance.stradj', 'number', nStrAdjToSet)
 	DB.setValue(nodePC, 'encumbrance.strbonusfromeffects', 'number', nEffectMod)
