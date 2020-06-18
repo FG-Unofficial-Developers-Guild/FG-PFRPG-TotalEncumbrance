@@ -15,4 +15,5 @@
 		<string name="char_tooltip_carriedcoin">"Carried" Coins counted against encumbrance.</string>
 		<string name="char_label_totalweight">Total Encumbrance</string>
 		<string name="char_label_invarmor">Penalties</string>
+		<string name="char_label_encstr_fromeffects">Str Effects</string>
 </root>
