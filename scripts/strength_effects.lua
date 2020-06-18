@@ -9,11 +9,11 @@ end
 
 --Summary: Handles arguments of applyStrengthEffects()
 --Argument: databasenode nodeWin representing effects or PC sheet
---Return: appropriate object databasenodes - nodeEffects and nodePC
-local function handleApplyStrengthEffectsArgs(nodeWin)
+--Return: nodeEffects and nodePC databasenodes if provided with either. If input is neither, return what it sees.
+local function nodeConcierge(nodeWin)
 	local nodeEffects
-	local playerid
 	local nodePC
+	local playerid
 
 	if nodeWin.getName() == 'effects' then
 		nodeEffects = nodeWin
@@ -22,10 +22,7 @@ local function handleApplyStrengthEffectsArgs(nodeWin)
 	elseif nodeWin.getParent().getName() == 'charsheet' then
 		nodePC = nodeWin
 		playerid = nodeWin.getName()
-		nodeEffects = nodeWin.getChild('..').getChild('combattracker').getChild('list').getChild(playerid).getChild('effects')
-		Debug.chat(nodeEffects)
---	elseif nodeWin.getName() == 'encumbrance' then
---		nodePC = nodeWin.getParent()
+		nodeEffects = nodeWin.getChild('...').getChild('combattracker').getChild('list').getChild(playerid).getChild('effects')
 	else
 		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
@@ -36,7 +33,7 @@ end
 --Summary: Recomputes bonuses from effects and writes them to stradj
 --Argument: databasenode nodeWin representing effects or label
 function applyStrengthEffects(nodeWin)
-	local nodeEffects, nodePC = handleApplyStrengthEffectsArgs(nodeWin)
+	local nodeEffects, nodePC = nodeConcierge(nodeWin)
 	
 	local rActor = ActorManager.getActor('pc', nodeEffects)
 	nAbility = ActorManager2.getAbilityEffectsBonus(rActor, 'strength')
@@ -46,7 +43,7 @@ function applyStrengthEffects(nodeWin)
 end
 
 function combineSTRCarryModifiers(nodeWin)
-	local nodeEffects, nodePC = handleApplyStrengthEffectsArgs(nodeWin)
+	local nodeEffects, nodePC = nodeConcierge(nodeWin)
 
 	local manualstradj = DB.getValue(nodePC, 'encumbrance.manualstradj')
 	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.strbonusfromeffects')
