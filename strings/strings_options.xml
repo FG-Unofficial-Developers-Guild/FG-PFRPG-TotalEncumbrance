@@ -11,8 +11,9 @@
 	<string name="enc_opt_coin_off">Disabled</string>
 	<string name="enc_opt_color_on">Enabled</string>
 	<string name="enc_opt_color_off">Disabled</string>
-	<string name="enc_opt_fail_on">Enabled</string>
+	<string name="enc_opt_fail_on">Auto Roll</string>
 	<string name="enc_opt_fail_off">Disabled</string>
+	<string name="enc_opt_fail_prompt">Prompt Roll</string>
 	
 	<!-- options titles -->
 	<string name="opt_lab_weight_enc">Encumbrance: Weight Penalties</string>

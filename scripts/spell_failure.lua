@@ -25,6 +25,8 @@ function arcaneSpellFailure(nodeSpell)
 		if arcanecaster == true and notstillspell == false then
 			if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'on') then
 				rollDice(nodeChar, rActor, spellfailurechance)
+			elseif OptionsManager.isOption('AUTO_SPELL_FAILURE', 'prompt') then
+				ChatManager.SystemMessage('Arcane Spell Failure: '..spellfailurechance..'%')
 			end
 		end
 	end
