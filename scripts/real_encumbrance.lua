@@ -201,7 +201,7 @@ function computePenalties(nodePC)
 	rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spellfailuretable)
 
 	if table.getn(eqcheckpenaltytable) ~= 0 then
-		table.insert(checkpenaltytable, LibTotalEncumbrance.tablesum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
+		table.insert(checkpenaltytable, LibTotalEncumbrance.tableSum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
 	rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
@@ -219,7 +219,7 @@ function computePenalties(nodePC)
 	end
 
 	if table.getn(spellfailuretable) ~= 0 then
-		spellfailuretoset = LibTotalEncumbrance.tablesum(spellfailuretable) -- this would sum penalties on multi-equipped armor
+		spellfailuretoset = LibTotalEncumbrance.tableSum(spellfailuretable) -- this would sum penalties on multi-equipped armor
 	else
 		spellfailuretoset = 0
 	end
