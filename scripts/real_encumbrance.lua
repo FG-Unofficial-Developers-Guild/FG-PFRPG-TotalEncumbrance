@@ -23,7 +23,7 @@ local function handleApplyPenaltiesArgs(nodeWin)
 	elseif nodeWin.getName() == 'carried' then
 		nodePC = nodeWin.getChild('....')
 	else
-		Debug.chat('Node error. Unrecognized Node '..nodeWin)
+		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
 
 	return nodePC

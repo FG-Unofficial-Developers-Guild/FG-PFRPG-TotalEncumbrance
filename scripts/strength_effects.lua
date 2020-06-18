@@ -48,7 +48,7 @@ function combineSTRCarryModifiers(nodeWin)
 	if nodeWin.getParent().getName() == 'encumbrance' then
 		nodePC = nodeWin
 	else
-		Debug.chat('Node error. Unrecognized Node '..nodeWin)
+		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
 
 	local light = DB.getValue(nodePC, 'encumbrance.lightload')
