@@ -1,29 +1,38 @@
 -- 
--- Please see the license.html file included with this distribution for attribution and copyright information.
+--	Please see the license.html file included with this distribution for attribution and copyright information.
 --
 
---Automatically determine if arcane failure chance should be rolled when a spell's cast button is clicked
+function onInit()
+	ActionsManager.registerResultHandler("spellfailure", onRoll)
+end
+
+--	Automatically determine if arcane failure chance should be rolled when a spell's cast button is clicked
 function arcaneSpellFailure(nodeSpell)
 	local nodeSpellset = nodeSpell.getChild('.....')
 	local spellfailurechance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
 
+	local nodeChar = nodeSpellset.getChild('...')
+	local rActor = ActorManager.getActor('pc', nodeChar);
+
 	if spellfailurechance ~= 0 then
-		-- if true, roll failure chance
+		-- if true, rolls failure chance
 		local arcanecaster = isArcaneCaster(nodeSpellset)
 
-		-- if true, don't roll failure chance
-		local stillspell = isSomaticSpell(nodeSpell)
+		-- if true, doesn't roll failure chance
+		local notstillspell = isSomaticSpell(nodeSpell)
 
-		if arcanecaster == true and stillspell == false then
-			ChatManager.SystemMessage('Arcane Spell Failure: '..spellfailurechance..'%')
+		-- set up and roll percentile dice for arcane failure
+		if arcanecaster == true and notstillspell == false then
+			if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'auto') then
+				rollDice(nodeChar, rActor, spellfailurechance)
+			elseif OptionsManager.isOption('AUTO_SPELL_FAILURE', 'prompt') then
+				ChatManager.SystemMessage(spellfailurechance..'% '..'Arcane Spell Failure Chance')
+			end
 		end
-
-		-- roll percentile dice for arcane failure and parse result based on encumbrance.spellfailure
-		-- output result to chat
 	end
 end
 
---Determine if the spell is from a spellset that is on the arcane casters list
+--	Determine if the spell is from a spellset that is on the arcane casters list
 function isArcaneCaster(nodeSpellset)
 	-- these are the classes that should roll arcane failure chance when encumbered by these types of armor/shields
 	local arcaneclass_heavyarmor = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Bloodrager', 'Skald', 'Unchained Summoner'}
@@ -73,7 +82,7 @@ function isArcaneCaster(nodeSpellset)
 	return arcanecaster
 end
 
--- Convert from CSV string to table (converts a single line of a CSV file)
+--	Convert from CSV string to table (converts a single line of a CSV file)
 function fromCSV(s)
 	s = s .. ','        -- ending comma
 	local t = {}        -- table to collect fields
@@ -87,11 +96,11 @@ function fromCSV(s)
 	return t
 end
 
---Determine if the spell requires somatic compenents
+--	Determine if the spell requires somatic compenents
 function isSomaticSpell(nodeSpell)
 	local components = DB.getValue(nodeSpell,'components')
 	local componentstable = fromCSV(components)
-	
+
 	stillspell = true
 
 	for _,v in pairs(componentstable) do
@@ -101,4 +110,38 @@ function isSomaticSpell(nodeSpell)
 	end
 
 	return stillspell
+end
+
+--	Rolls percentile dice
+--	sType: unique identifier
+--	aDice: 2d10, one tens column and one ones column
+--	sDesc: title of roll to be output to chat
+--	nTarget: number to roll against (current spellfailurechance)
+function rollDice(nodeChar, rActor, spellfailurechance)
+	local rRoll = {}
+	rRoll.sType = 'spellfailure'
+	rRoll.aDice = {'d100','d10'}
+	rRoll.sDesc = 'Spell Failure Chance'
+	rRoll.nTarget = spellfailurechance -- set DC to currently active spell failure chance
+
+	ActionsManager.roll(nodeChar, rActor, rRoll)
+end
+
+--	Determines success/failure and outputs to chat
+function onRoll(rSource, rTarget, rRoll)
+	local rMessage = ActionsManager.createActionMessage(rSource, rRoll);
+
+	if rRoll.nTarget then
+		local nTotal = ActionsManager.total(rRoll);
+		local nTargetDC = tonumber(rRoll.nTarget) or 0;
+		
+		rMessage.text = rMessage.text .. " (vs. DC " .. nTargetDC .. ")";
+		if nTotal >= nTargetDC then
+			rMessage.text = rMessage.text .. " [SUCCESS]";
+		else
+			rMessage.text = rMessage.text .. " [FAILURE]";
+		end
+	end
+	
+	Comm.deliverChatMessage(rMessage);
 end
