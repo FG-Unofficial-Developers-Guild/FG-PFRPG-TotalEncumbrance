@@ -22,8 +22,8 @@ local function handleApplyStrengthEffectsArgs(nodeWin)
 	elseif nodeWin.getParent().getName() == 'charsheet' then
 		nodePC = nodeWin
 		playerid = nodeWin.getName()
-		nodePC = nodeWin.getChild('..').getChild('combattracker.list').getChild(playerid).getChild('effects')
-		Debug.chat(nodePC)
+		nodeEffects = nodeWin.getChild('..').getChild('combattracker').getChild('list').getChild(playerid).getChild('effects')
+		Debug.chat(nodeEffects)
 --	elseif nodeWin.getName() == 'encumbrance' then
 --		nodePC = nodeWin.getParent()
 	else
