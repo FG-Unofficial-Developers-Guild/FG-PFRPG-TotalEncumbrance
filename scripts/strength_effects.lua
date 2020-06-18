@@ -43,15 +43,18 @@ function applyStrengthEffects(nodeWin)
 end
 
 function combineSTRCarryModifiers(nodeWin)
-	Debug.chat('combine str!')
-
 	if nodeWin.getParent().getName() == 'encumbrance' then
-		nodePC = nodeWin
+		nodeEncumbrance = nodeWin.getParent()
 	else
 		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
 
-	local light = DB.getValue(nodePC, 'encumbrance.lightload')
-	local medium = DB.getValue(nodePC, 'encumbrance.mediumload')
+	local manualstradj = DB.getValue(nodeEncumbrance, 'manualstradj')
+	local strbonusfromeffects = DB.getValue(nodeEncumbrance, 'strbonusfromeffects')
 
+	Debug.chat('manualstradj,strbonusfromeffects',manualstradj,strbonusfromeffects)
+
+	if totalencstradj = ~= nil then
+		DB.setValue(nodeEncumbrance, 'encstradj', totalencstradj)
+	end
 end
