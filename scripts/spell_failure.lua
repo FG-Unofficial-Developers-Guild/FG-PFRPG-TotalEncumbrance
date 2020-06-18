@@ -3,9 +3,7 @@
 --
 
 function onInit()
-	OOBManager.registerOOBMsgHandler(OOB_MSGTYPE_APPLYSAVE, handleApplySave)
-
-	ActionsManager.registerResultHandler('spellfailure', onRoll)
+	ActionsManager.registerResultHandler("spellfailure", onRoll)
 end
 
 --	Automatically determine if arcane failure chance should be rolled when a spell's cast button is clicked
@@ -17,15 +15,15 @@ function arcaneSpellFailure(nodeSpell)
 	local rActor = ActorManager.getActor('pc', nodeChar);
 
 	if spellfailurechance ~= 0 then
-		-- if true, roll failure chance
+		-- if true, rolls failure chance
 		local arcanecaster = isArcaneCaster(nodeSpellset)
 
-		-- if true, don't roll failure chance
-		local stillspell = isSomaticSpell(nodeSpell)
+		-- if true, doesn't roll failure chance
+		local notstillspell = isSomaticSpell(nodeSpell)
 
 		-- roll percentile dice for arcane failure and parse result based on encumbrance.spellfailure
-		if arcanecaster == true and stillspell == false then
-			performRoll(draginfo, rActor, )
+		if arcanecaster == true and notstillspell == false then
+			rollDice(nodeChar, spellfailurechance)
 		end
 	end
 end
@@ -110,41 +108,36 @@ function isSomaticSpell(nodeSpell)
 	return stillspell
 end
 
---	roll percentile when in danger of spell failure
-function getRoll()
+--	Rolls percentile dice
+--	sType: unique identifier
+--	aDice: 2d10, one tens column and one ones column
+--	sDesc: title of roll to be output to chat
+--	nTarget: number to roll against (current spellfailurechance)
+function rollDice(nodeChar, spellfailurechance)
 	local rRoll = {}
 	rRoll.sType = 'spellfailure'
 	rRoll.aDice = {'d100','d10'}
-	rRoll.sDesc = nil
+	rRoll.sDesc = 'Spell Failure Chance'
 	rRoll.nMod = 0
-
-	return rRoll
-end
-
-function performRoll(draginfo, rActor, rAction)
-	local rRoll = getRoll()
-
-	rRoll.nTarget = nTargetDC
+	rRoll.nTarget = spellfailurechance -- set DC to currently active spell failure chance
 
 	ActionsManager.roll(draginfo, rActor, rRoll)
 end
 
 function onRoll(rSource, rTarget, rRoll)
-	Debug.chat('onRoll',onRoll)
-	local rMessage = 'Spell Failure Roll: '
-	local nTotal = ActionsManager.total(rRoll)
-	local nTargetDC = tonumber(rRoll.nTarget) or 0
+	local rMessage = ActionsManager.createActionMessage(rSource, rRoll);
 
-	rMessage = rMessage .. nTotal ..' (vs. DC ' .. nTargetDC .. ')'
-	if nTotal >= nTargetDC then
-		rMessage.text = rMessage .. '[PASSED]'
-	else
-		rMessage.text = rMessage .. '[FAILED]'
+	if rRoll.nTarget then
+		local nTotal = ActionsManager.total(rRoll);
+		local nTargetDC = tonumber(rRoll.nTarget) or 0;
+		
+		rMessage.text = rMessage.text .. " (vs. DC " .. nTargetDC .. ")";
+		if nTotal >= nTargetDC then
+			rMessage.text = rMessage.text .. " [SUCCESS]";
+		else
+			rMessage.text = rMessage.text .. " [FAILURE]";
+		end
 	end
-
-	Comm.deliverChatMessage(rMessage)
-end
-
-function getMirrorImageHitPercent(nMirrorImageCount)
-	local spellfailurechance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
+	
+	Comm.deliverChatMessage(rMessage);
 end
