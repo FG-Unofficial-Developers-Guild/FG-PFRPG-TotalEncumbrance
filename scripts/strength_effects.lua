@@ -12,31 +12,34 @@ end
 --Return: appropriate object databasenode - should represent effects
 local function handleApplyStrengthEffectsArgs(nodeWin)
 	local nodeEffects
+	local playerid
+	local nodePC
 
 	if nodeWin.getName() == 'effects' then
 		nodeEffects = nodeWin
+		playerid = nodeWin.getParent().getName()
+		nodePC = nodeWin.getChild('.....').getChild('charsheet').getChild(playerid)
 	else
 		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
 
-	return nodeEffects
+	return nodeEffects, nodePC
 end
 
 --Summary: Recomputes bonuses from effects and writes them to stradj
 --Argument: databasenode nodeWin representing effects or label
 function applyStrengthEffects(nodeWin)
-	local nodeEffects = handleApplyStrengthEffectsArgs(nodeWin)
+	local nodeEffects, nodePC = handleApplyStrengthEffectsArgs(nodeWin)
 	
 	Debug.chat(nodeEffects)
+	Debug.chat(nodePC)
 
 	local rActor = ActorManager.getActor('pc', nodeEffects)
-	Debug.chat(rActor)
 	nAbility = ActorManager2.getAbilityEffectsBonus(rActor, 'strength')
 	Debug.chat('effects mod',nAbility)
 	local nEffectMod, nAbilityEffects = EffectManager35E.getEffectsBonus(rActor, sAbilityEffect, true)
 	Debug.chat('nEffectMod and nAbilityEffects',nEffectMod, nAbilityEffects)
 
---	DB.setValue(nodeEffects.getParent(), 'encumbrance.manualstradj') -- Just to write some code without knowing the xml stuff
 --	DB.setValue(nodeEffects.getParent(), 'encumbrance.stradj_fromeffects') -- Just to write some code without knowing the xml stuff
 end
 
