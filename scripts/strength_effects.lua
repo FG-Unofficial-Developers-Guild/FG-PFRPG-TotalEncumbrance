@@ -61,9 +61,9 @@ function combineSTRCarryModifiers(nodeWin)
 	Debug.chat(totalencstradj)
 
 	if totalencstradj == nil then
-		DB.setValue(nodePC, 'encumbrance.encstradj', 0)
+		DB.setValue(nodePC, 'encumbrance.stradj', 'number', 0)
 	end
 	if totalencstradj ~= nil then
-		DB.setValue(nodePC, 'encumbrance.encstradj', totalencstradj)
+		DB.setValue(nodePC, 'encumbrance.stradj', 'number', totalencstradj)
 	end
 end
