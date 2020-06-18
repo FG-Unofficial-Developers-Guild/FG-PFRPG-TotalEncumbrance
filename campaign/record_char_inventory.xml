@@ -350,7 +350,7 @@
 				</anchored>
 				<script>
 					function onValueChanged()
-						StrengthEffects.combineSTRCarryModifiers(window.getDatabaseNode())
+						StrengthEffects.applyStrengthEffects(window.getDatabaseNode())
 					end
 				</script>
 			</basicnumber>
@@ -363,6 +363,7 @@
 					<top offset="25" />
 					<right anchor="center" offset="30" />
 				</anchored>
+				<readonly />
 			</basicnumber>
 			<label_fieldtop>
 				<anchored to="encstr_fromeffects" />

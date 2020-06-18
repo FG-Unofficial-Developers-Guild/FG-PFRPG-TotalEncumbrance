@@ -17,12 +17,12 @@ local function nodeConcierge(nodeWin)
 
 	if nodeWin.getName() == 'effects' then
 		nodeEffects = nodeWin
-		playerid = nodeWin.getParent().getName()
+		playerid = nodeEffects.getParent().getName()
 		nodePC = nodeWin.getChild('.....').getChild('charsheet').getChild(playerid)
 	elseif nodeWin.getParent().getName() == 'charsheet' then
 		nodePC = nodeWin
 		playerid = nodeWin.getName()
-		nodeEffects = nodeWin.getChild('...').getChild('combattracker').getChild('list').getChild(playerid).getChild('effects')
+		nodeEffects = nodePC.getChild('...').getChild('combattracker').getChild('list').getChild(playerid).getChild('effects')
 	else
 		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
@@ -39,7 +39,7 @@ function applyStrengthEffects(nodeWin)
 	nAbility = ActorManager2.getAbilityEffectsBonus(rActor, 'strength')
 	Debug.chat('effects mod',nAbility)
 
-	DB.setValueDB.setValue(nodePC, 'encumbrance.stradj_fromeffects', 'number', )
+	DB.setValue(nodePC, 'encumbrance.stradj_fromeffects', 'number', nAbility)
 
 	local totalencstradj = combineSTRCarryModifiers(nodePC)
 
@@ -52,7 +52,7 @@ function applyStrengthEffects(nodeWin)
 end
 
 function combineSTRCarryModifiers(nodePC)
-	local nodeEffects, nodePC = nodeConcierge(nodeWin)
+	local nodeEffects, nodePC = nodeConcierge(nodePC)
 
 	local manualstradj = DB.getValue(nodePC, 'encumbrance.manualstradj')
 	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.stradj_fromeffects')
