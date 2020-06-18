@@ -50,9 +50,22 @@ function combineSTRCarryModifiers(nodeWin)
 
 	local manualstradj = DB.getValue(nodePC, 'encumbrance.manualstradj')
 	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.strbonusfromeffects')
+	local stradjtable = {}
+	
+	if manualstradj ~= nil and manualstradj ~= 0 then
+		table.insert(stradjtable, manualstradj)
+	end
+	if strbonusfromeffects ~= nil and strbonusfromeffects ~= 0 then
+		table.insert(stradjtable, strbonusfromeffects)
+	end
+	
+	local totalencstradj = TotalEncumbranceLib.tableSum(stradjtable)
+	
+	Debug.chat(totalencstradj)
 
-	Debug.chat('manualstradj,strbonusfromeffects',manualstradj,strbonusfromeffects)
-
+	if totalencstradj == nil then
+		DB.setValue(nodePC, 'encumbrance.encstradj', 0)
+	end
 	if totalencstradj ~= nil then
 		DB.setValue(nodePC, 'encumbrance.encstradj', totalencstradj)
 	end
