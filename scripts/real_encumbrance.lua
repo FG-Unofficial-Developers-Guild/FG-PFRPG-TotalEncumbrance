@@ -26,7 +26,7 @@ local function handleApplyPenaltiesArgs(nodeField)
 		local rActor = ActorManager.getActor("pc", nodeWin)
 		local nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
-	
+
 	return nodePC
 end
 
@@ -64,7 +64,7 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 	local itemmaxstat
 	local itemcheckpenalty
 	local itemspellfailure
-	
+
 	local ltarmortable = {}
 	local medarmortable = {}
 	local heavyarmortable = {}
@@ -170,7 +170,7 @@ local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, 
 		if maxstatbonusfromenc ~= nil then
 			table.insert(maxstattable, maxstatbonusfromenc)
 		end
-		
+
 		if checkpenaltyfromenc ~= nil then
 			table.insert(checkpenaltytable, checkpenaltyfromenc)
 		end
@@ -190,10 +190,10 @@ end
 --Return: number holding armor spell failure penalty
 function computePenalties(nodePC)
 	local maxstattable = {}
-	local eqcheckpenaltytable	= {}
+	local eqcheckpenaltytable = {}
 	local checkpenaltytable = {}
 	local spellfailuretable = {}
-	
+
 	local maxstattoset
 	local checkpenaltytoset
 	local spellfailuretoset

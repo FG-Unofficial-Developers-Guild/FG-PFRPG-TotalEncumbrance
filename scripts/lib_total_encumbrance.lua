@@ -5,7 +5,7 @@
 --Summary: Sums table values
 --Argument: table t to sum values within
 --Return: sum of values in table t
-local function tableSum(t)
+function tableSum(t)
 	local sum = 0
 
 	for _,v in pairs(t) do
