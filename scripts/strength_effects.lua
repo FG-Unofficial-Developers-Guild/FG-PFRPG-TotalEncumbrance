@@ -8,8 +8,8 @@ function onInit()
 end
 
 --Summary: Handles arguments of applyStrengthEffects()
---Argument: databasenode nodeWin representing effects or label
---Return: appropriate object databasenode - should represent effects
+--Argument: databasenode nodeWin representing effects or PC sheet
+--Return: appropriate object databasenodes - nodeEffects and nodePC
 local function handleApplyStrengthEffectsArgs(nodeWin)
 	local nodeEffects
 	local playerid
@@ -19,6 +19,13 @@ local function handleApplyStrengthEffectsArgs(nodeWin)
 		nodeEffects = nodeWin
 		playerid = nodeWin.getParent().getName()
 		nodePC = nodeWin.getChild('.....').getChild('charsheet').getChild(playerid)
+	elseif nodeWin.getParent().getName() == 'charsheet' then
+		nodePC = nodeWin
+		playerid = nodeWin.getName()
+		nodePC = nodeWin.getChild('..').getChild('combattracker.list').getChild(playerid).getChild('effects')
+		Debug.chat(nodePC)
+--	elseif nodeWin.getName() == 'encumbrance' then
+--		nodePC = nodeWin.getParent()
 	else
 		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
@@ -31,26 +38,15 @@ end
 function applyStrengthEffects(nodeWin)
 	local nodeEffects, nodePC = handleApplyStrengthEffectsArgs(nodeWin)
 	
-	Debug.chat(nodeEffects)
-	Debug.chat(nodePC)
-
 	local rActor = ActorManager.getActor('pc', nodeEffects)
 	nAbility = ActorManager2.getAbilityEffectsBonus(rActor, 'strength')
 	Debug.chat('effects mod',nAbility)
-	local nEffectMod, nAbilityEffects = EffectManager35E.getEffectsBonus(rActor, sAbilityEffect, true)
-	Debug.chat('nEffectMod and nAbilityEffects',nEffectMod, nAbilityEffects)
 
 --	DB.setValue(nodeEffects.getParent(), 'encumbrance.stradj_fromeffects') -- Just to write some code without knowing the xml stuff
 end
 
 function combineSTRCarryModifiers(nodeWin)
-	if nodeWin.getParent().getName() == 'charsheet' then
-		nodePC = nodeWin
-	elseif nodeWin.getName() == 'encumbrance' then
-		nodePC = nodeWin.getParent()
-	else
-		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
-	end
+	local nodeEffects, nodePC = handleApplyStrengthEffectsArgs(nodeWin)
 
 	local manualstradj = DB.getValue(nodePC, 'encumbrance.manualstradj')
 	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.strbonusfromeffects')
