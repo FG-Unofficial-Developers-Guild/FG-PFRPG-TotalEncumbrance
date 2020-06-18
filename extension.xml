@@ -3,7 +3,7 @@
 
 	<properties>
 		<name>Total Encumbrance</name>
-		<version>1.2.8</version>
+		<version>1.3.1.0</version>
 		<author>bmos</author>
 		<description>An extension that computes and displays the weight of carried coins.</description>
 		<ruleset>
