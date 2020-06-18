@@ -17,10 +17,10 @@
 						end
 
 						function onValueChanged()
-							local nodepcencumbrance = getDatabaseNode().getParent()
-							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
+							local nodeEncumbrance = getDatabaseNode().getParent()
+							local maxstatbonusfromenc = DB.getValue(nodeEncumbrance, 'maxstatbonusfromenc')
 							local maxstattoset = getValue()
-							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
+							local armormaxstatbonusactive = DB.getValue(nodeEncumbrance, 'armormaxstatbonusactive')
 
 							if maxstatbonusfromenc ~= 0 and maxstattoset == maxstatbonusfromenc then
 								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
@@ -44,10 +44,10 @@
 						end
 
 						function onValueChanged()
-							local nodepcencumbrance = getDatabaseNode().getParent()
-							local checkpenaltyfromenc = DB.getValue(nodepcencumbrance, 'checkpenaltyfromenc')
+							local nodeEncumbrance = getDatabaseNode().getParent()
+							local checkpenaltyfromenc = DB.getValue(nodeEncumbrance, 'checkpenaltyfromenc')
 							local checkpenaltytoset = getValue()
-							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
+							local armormaxstatbonusactive = DB.getValue(nodeEncumbrance, 'armormaxstatbonusactive')
 
 							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
 								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
@@ -69,12 +69,12 @@
 				<state icon="button_checkon" tooltipres="char_tooltip_armormodon" />
 				<script>
 						function onValueChanged()
-							local nodepcencumbrance = getDatabaseNode().getParent()
-							local checkpenaltyfromenc = DB.getValue(nodepcencumbrance, 'checkpenaltyfromenc')
-							local checkpenaltytoset = DB.getValue(nodepcencumbrance, 'armorcheckpenalty')
-							local maxstatbonusfromenc = DB.getValue(nodepcencumbrance, 'maxstatbonusfromenc')
-							local maxstattoset = DB.getValue(nodepcencumbrance, 'armormaxstatbonus')
-							local armormaxstatbonusactive = DB.getValue(nodepcencumbrance, 'armormaxstatbonusactive')
+							local nodeEncumbrance = getDatabaseNode().getParent()
+							local checkpenaltyfromenc = DB.getValue(nodeEncumbrance, 'checkpenaltyfromenc')
+							local checkpenaltytoset = DB.getValue(nodeEncumbrance, 'armorcheckpenalty')
+							local maxstatbonusfromenc = DB.getValue(nodeEncumbrance, 'maxstatbonusfromenc')
+							local maxstattoset = DB.getValue(nodeEncumbrance, 'armormaxstatbonus')
+							local armormaxstatbonusactive = DB.getValue(nodeEncumbrance, 'armormaxstatbonusactive')
 
 							if checkpenaltyfromenc ~= 0 and checkpenaltytoset == checkpenaltyfromenc then
 								if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') then
