@@ -9,31 +9,30 @@ function onInit()
 end
 
 --Summary: Handles arguments of applyPenalties()
---Argument: potentially nil nodeField representing carried databasenode on newly carried / equipped / dropped item
+--Argument: potentially nil nodeWin representing carried databasenode on newly carried / equipped / dropped item
 --Return: appropriate object databasenode - should represent node of PC
-local function handleApplyPenaltiesArgs(nodeField)
+local function handleApplyPenaltiesArgs(nodeWin)
 	local nodePC
 
-	if nodeField.getParent().getName() == 'charsheet' then
-		nodePC = nodeField
-	elseif nodeField.getName() == 'inventorylist' then
-		nodePC = nodeField.getParent()
-	elseif nodeField.getParent().getName() == 'inventorylist' then
-		nodePC = nodeField.getChild( '...' )
-	elseif nodeField.getName() == 'carried' then
-		nodePC = nodeField.getChild( '....' )
+	if nodeWin.getParent().getName() == 'charsheet' then
+		nodePC = nodeWin
+	elseif nodeWin.getName() == 'inventorylist' then
+		nodePC = nodeWin.getParent()
+	elseif nodeWin.getParent().getName() == 'inventorylist' then
+		nodePC = nodeWin.getChild('...')
+	elseif nodeWin.getName() == 'carried' then
+		nodePC = nodeWin.getChild('....')
 	else
-		local rActor = ActorManager.getActor("pc", nodeWin)
-		local nodePC = DB.findNode(rActor['sCreatureNode'])
+		Debug.chat('Node error. Unrecognized Node '..nodeWin)
 	end
 
 	return nodePC
 end
 
 --Summary: Recomputes penalties and updates max stat and check penalty
---Arguments: nodeField - node of 'carried' when called from handler
-function applyPenalties(nodeField)
-	local nodePC = handleApplyPenaltiesArgs(nodeField)
+--Arguments: nodeWin - node of 'carried' when called from handler
+function applyPenalties(nodeWin)
+	local nodePC = handleApplyPenaltiesArgs(nodeWin)
 
 	local maxstattoset
 	local checkpenaltytoset
