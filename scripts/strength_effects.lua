@@ -33,20 +33,29 @@ end
 --Summary: Recomputes bonuses from effects and writes them to stradj
 --Argument: databasenode nodeWin representing effects or label
 function applyStrengthEffects(nodeWin)
-	local nodeEffects, nodePC = nodeConcierge(nodeWin)
-	
+	local nodeEffects, nodePC = nodeConcierge(nodeWin)	
 	local rActor = ActorManager.getActor('pc', nodeEffects)
+	
 	nAbility = ActorManager2.getAbilityEffectsBonus(rActor, 'strength')
 	Debug.chat('effects mod',nAbility)
 
---	DB.setValue(nodeEffects.getParent(), 'encumbrance.stradj_fromeffects') -- Just to write some code without knowing the xml stuff
+	DB.setValueDB.setValue(nodePC, 'encumbrance.stradj_fromeffects', 'number', )
+
+	local totalencstradj = combineSTRCarryModifiers(nodePC)
+
+	if totalencstradj == nil then
+		DB.setValue(nodePC, 'encumbrance.stradj', 'number', 0)
+	end
+	if totalencstradj ~= nil then
+		DB.setValue(nodePC, 'encumbrance.stradj', 'number', totalencstradj)
+	end
 end
 
-function combineSTRCarryModifiers(nodeWin)
+function combineSTRCarryModifiers(nodePC)
 	local nodeEffects, nodePC = nodeConcierge(nodeWin)
 
 	local manualstradj = DB.getValue(nodePC, 'encumbrance.manualstradj')
-	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.strbonusfromeffects')
+	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.stradj_fromeffects')
 	local stradjtable = {}
 	
 	if manualstradj ~= nil and manualstradj ~= 0 then
@@ -58,12 +67,5 @@ function combineSTRCarryModifiers(nodeWin)
 	
 	local totalencstradj = TotalEncumbranceLib.tableSum(stradjtable)
 	
-	Debug.chat(totalencstradj)
-
-	if totalencstradj == nil then
-		DB.setValue(nodePC, 'encumbrance.stradj', 'number', 0)
-	end
-	if totalencstradj ~= nil then
-		DB.setValue(nodePC, 'encumbrance.stradj', 'number', totalencstradj)
-	end
+	return totalencstradj
 end
