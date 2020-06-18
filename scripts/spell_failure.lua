@@ -21,9 +21,9 @@ function arcaneSpellFailure(nodeSpell)
 		-- if true, doesn't roll failure chance
 		local notstillspell = isSomaticSpell(nodeSpell)
 
-		-- roll percentile dice for arcane failure and parse result based on encumbrance.spellfailure
+		-- set up and roll percentile dice for arcane failure
 		if arcanecaster == true and notstillspell == false then
-			rollDice(nodeChar, spellfailurechance)
+			rollDice(nodeChar, rActor, spellfailurechance)
 		end
 	end
 end
@@ -113,17 +113,17 @@ end
 --	aDice: 2d10, one tens column and one ones column
 --	sDesc: title of roll to be output to chat
 --	nTarget: number to roll against (current spellfailurechance)
-function rollDice(nodeChar, spellfailurechance)
+function rollDice(nodeChar, rActor, spellfailurechance)
 	local rRoll = {}
 	rRoll.sType = 'spellfailure'
 	rRoll.aDice = {'d100','d10'}
 	rRoll.sDesc = 'Spell Failure Chance'
-	rRoll.nMod = 0
 	rRoll.nTarget = spellfailurechance -- set DC to currently active spell failure chance
 
-	ActionsManager.roll(draginfo, rActor, rRoll)
+	ActionsManager.roll(nodeChar, rActor, rRoll)
 end
 
+--	Determines success/failure and outputs to chat
 function onRoll(rSource, rTarget, rRoll)
 	local rMessage = ActionsManager.createActionMessage(rSource, rRoll);
 
