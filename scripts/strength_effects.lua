@@ -34,12 +34,12 @@ end
 --Argument: databasenode nodeWin representing effects or label
 function applyStrengthEffects(nodeWin)
 	local nodeEffects, nodePC = nodeConcierge(nodeWin)	
-	local rActor = ActorManager.getActor('pc', nodeEffects)
+	local rActor = ActorManager.getActor('pc', nodePC)
 	
 	nAbility = ActorManager2.getAbilityEffectsBonus(rActor, 'strength')
 	Debug.chat('effects mod',nAbility)
 
-	DB.setValue(nodePC, 'encumbrance.stradj_fromeffects', 'number', nAbility)
+	DB.setValue(nodePC, 'encumbrance.strbonusfromeffects', 'number', nAbility)
 
 	local totalencstradj = combineSTRCarryModifiers(nodePC)
 
@@ -55,7 +55,7 @@ function combineSTRCarryModifiers(nodePC)
 	local nodeEffects, nodePC = nodeConcierge(nodePC)
 
 	local manualstradj = DB.getValue(nodePC, 'encumbrance.manualstradj')
-	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.stradj_fromeffects')
+	local strbonusfromeffects = DB.getValue(nodePC, 'encumbrance.strbonusfromeffects')
 	local stradjtable = {}
 	
 	if manualstradj ~= nil and manualstradj ~= 0 then
