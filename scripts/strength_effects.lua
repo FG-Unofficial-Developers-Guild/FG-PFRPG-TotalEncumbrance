@@ -4,9 +4,7 @@
 
 --Summary: you know
 function onInit()
-	DB.addHandler(DB.getPath('charsheet.*.effects.*.label'), 'onUpdate', applyStrengthEffects)
-	DB.addHandler(DB.getPath('charsheet.*.effects.*.isactive'), 'onUpdate', applyStrengthEffects)
-	DB.addHandler(DB.getPath('charsheet.*.effects'), 'onChildDeleted', applyStrengthEffects)
+	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyStrengthEffects)
 end
 
 --Summary: Handles arguments of applyStrengthEffects()
@@ -18,7 +16,7 @@ local function handleApplyStrengthEffectsArgs(nodeWin)
 	if nodeWin.getName() == 'effects' then
 		nodeEffects = nodeWin
 	else
-		nodeEffects = nodeWin.getChild('...') -- 3 dots or 2 for the onUpdate call on label / isactive?
+		Debug.chat('Node error. Unrecognized Node '..nodeWin.getPath())
 	end
 
 	return nodeEffects
