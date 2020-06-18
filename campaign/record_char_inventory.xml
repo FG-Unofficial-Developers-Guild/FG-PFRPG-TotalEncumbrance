@@ -352,7 +352,7 @@
 					function onValueChanged()
 						StrengthEffects.combineSTRCarryModifiers(window.getDatabaseNode())
 					end
-				<script>
+				</script>
 			</basicnumber>
 			<label_fieldtop>
 				<anchored to="encstradj" />
