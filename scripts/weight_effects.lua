@@ -10,22 +10,25 @@ end
 --Summary: Handles arguments of applyStrengthEffects()
 --Argument: databasenode nodeField representing effects or label
 --Return: appropriate object databasenode - should represent effects
-local function handleApplyStrengthEffectsArgs(node)
+local function handleCombineCarryModifiersArgs(node)
+	local rActor
 
 	if node.getName() == 'effects' then
+		rActor = ActorManager.getActor('pc', node.getParent())
 	elseif node.getParent().getName() == 'charsheet' then
+		rActor = ActorManager.getActor('pc', node)
 		nodePC = node
 	else
 		Debug.chat('Node error. Unrecognized Node '..node.getPath())
 	end
 
-	local rActor = ActorManager.getActor('pc', nodePC)
-
+	Debug.chat(rActor)
+	
 	return nodePC, rActor
 end
 
 function combineCarryModifiers(node)
-	local nodePC, rActor = handleApplyStrengthEffectsArgs(node)
+	local nodePC, rActor = handleCombineCarryModifiersArgs(node)
 	local nEffectMod = getEffectsBonus(rActor, 'strength')
 	local nManualStrAdj = DB.getValue(nodePC, 'encumbrance.manualstradj')
 	local tStrAdj = {}
