@@ -352,11 +352,6 @@
 					<top offset="25" />
 					<right anchor="center" offset="-50" />
 				</anchored>
-				<script>
-					function onValueChanged()
-						CarryWeightEffects.combineCarryModifiers(window.getDatabaseNode())
-					end
-				</script>
 			</basicnumber>
 			<label_fieldtop>
 				<anchored to="encstradj" />

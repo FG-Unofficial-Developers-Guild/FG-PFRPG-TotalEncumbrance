@@ -2,9 +2,23 @@
 -- Please see the license.html file included with this distribution for attribution and copyright information.
 --
 
---Summary: you know
 function onInit()
-	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', combineCarryModifiers)
+	recalcCarryWeight()
+	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', getStrEffectsBonus)
+	DB.addHandler(DB.getPath(getDatabaseNode(), "abilities.strength.score"), "onUpdate", recalcCarryWeight)
+	DB.addHandler(DB.getPath(getDatabaseNode(), "size"), "onUpdate", recalcCarryWeight)
+	DB.addHandler(DB.getPath(getDatabaseNode(), "encumbrance.stradj"), "onUpdate", recalcCarryWeight)
+	DB.addHandler(DB.getPath(getDatabaseNode(), "encumbrance.manualstradj"), "onUpdate", recalcCarryWeight)
+	DB.addHandler(DB.getPath(getDatabaseNode(), "encumbrance.carrymult"), "onUpdate", recalcCarryWeight)
+end
+
+function onClose()
+	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', getStrEffectsBonus)
+	DB.removeHandler(DB.getPath(getDatabaseNode(), "abilities.strength.score"), "onUpdate", recalcCarryWeight)
+	DB.removeHandler(DB.getPath(getDatabaseNode(), "size"), "onUpdate", recalcCarryWeight)
+	DB.removeHandler(DB.getPath(getDatabaseNode(), "encumbrance.stradj"), "onUpdate", recalcCarryWeight)
+	DB.removeHandler(DB.getPath(getDatabaseNode(), "encumbrance.manualstradj"), "onUpdate", recalcCarryWeight)
+	DB.removeHandler(DB.getPath(getDatabaseNode(), "encumbrance.carrymult"), "onUpdate", recalcCarryWeight)
 end
 
 --Summary: Handles arguments of applyStrengthEffects()
@@ -27,7 +41,7 @@ local function handleCombineCarryModifiersArgs(node)
 	return nodePC, rActor
 end
 
-function combineCarryModifiers(node)
+function getStrEffectsBonus(node)
 	local nodePC, rActor = handleCombineCarryModifiersArgs(node)
 	local nEffectMod = getEffectsBonus(rActor, 'strength')
 	local nManualStrAdj = DB.getValue(nodePC, 'encumbrance.manualstradj')
@@ -62,4 +76,65 @@ function getEffectsBonus(rActor, sAbility)
 	end
 
 	return nEffectMod
+end
+
+function recalcCarryWeight()
+	local nodeChar = getDatabaseNode()
+
+	local nHeavy = 0
+	local nStrength = DB.getValue(nodeChar, "abilities.strength.score", 10)
+	nStrength = nStrength + DB.getValue(nodeChar, "encumbrance.stradj", 0)
+	nStrength = nStrength + DB.getValue(nodeChar, "encumbrance.strbonusfromeffects", 0)
+	if nStrength > 0 then
+		if nStrength <= 10 then
+			nHeavy = nStrength * 10
+		else
+			nHeavy = 1.25 * math.pow(2, math.floor(nStrength / 5)) * math.floor((20 * math.pow(2, math.fmod(nStrength, 5) / 5)) + 0.5)
+		end
+	end
+	
+	nHeavy = nHeavy * DB.getValue(nodeChar, "encumbrance.carrymult", 1)
+	
+	local nLight = math.floor(nHeavy / 3)
+	local nMedium = math.floor((nHeavy / 3) * 2)
+	local nLiftOver = nHeavy
+	local nLiftOff = nHeavy * 2
+	local nPushDrag = nHeavy * 5
+	
+	local nSize = ActorManager2.getSize(ActorManager.getActor("pc", nodeChar))
+	if (nSize < 0) then
+		local nMult = 0
+		if (nSize == -1) then
+			nMult = 0.75
+		elseif (nSize == -2) then
+			nMult = 0.5
+		elseif (nSize == -3) then
+			nMult = .25
+		elseif (nSize == -4) then
+			nMult = .125
+		end
+			
+		nLight = math.floor(((nLight * nMult) * 100) + 0.5) / 100
+		nMedium = math.floor(((nMedium * nMult) * 100) + 0.5) / 100
+		nHeavy = math.floor(((nHeavy * nMult) * 100) + 0.5) / 100
+		nLiftOver = math.floor(((nLiftOver * nMult) * 100) + 0.5) / 100
+		nLiftOff = math.floor(((nLiftOff * nMult) * 100) + 0.5) / 100
+		nPushDrag = math.floor(((nPushDrag * nMult) * 100) + 0.5) / 100
+	elseif (nSize > 0) then
+		local nMult = math.pow(2, nSize)
+		
+		nLight = nLight * nMult
+		nMedium = nMedium * nMult
+		nHeavy = nHeavy * nMult
+		nLiftOver = nLiftOver * nMult
+		nLiftOff = nLiftOff * nMult
+		nPushDrag = nPushDrag * nMult
+	end
+
+	DB.setValue(nodeChar, "encumbrance.lightload", "number", nLight)
+	DB.setValue(nodeChar, "encumbrance.mediumload", "number", nMedium)
+	DB.setValue(nodeChar, "encumbrance.heavyload", "number", nHeavy)
+	DB.setValue(nodeChar, "encumbrance.liftoverhead", "number", nLiftOver)
+	DB.setValue(nodeChar, "encumbrance.liftoffground", "number", nLiftOff)
+	DB.setValue(nodeChar, "encumbrance.pushordrag", "number", nPushDrag)
 end
