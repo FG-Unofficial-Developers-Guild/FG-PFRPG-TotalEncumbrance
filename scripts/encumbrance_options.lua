@@ -18,6 +18,6 @@ function registerOptions()
 	OptionsManager.registerOption2('AUTO_SPELL_FAILURE', false, 'option_header_game', 'opt_lab_spell_fail', 'option_entry_cycler', 
 		{ labels = 'enc_opt_fail_off|enc_opt_fail_prompt', values = 'off|prompt', baselabel = 'enc_opt_fail_on', baseval = 'auto', default = 'auto' })
 
-	OptionsManager.registerOption2('CARRY_CAPACITY_FROME_FFECTS', false, 'option_header_game', 'opt_lab_carry_effects', 'option_entry_cycler', 
+	OptionsManager.registerOption2('CARRY_CAPACITY_FROM_EFFECTS', false, 'option_header_game', 'opt_lab_carry_effects', 'option_entry_cycler', 
 		{ labels = 'enc_opt_carry_effects_off', values = 'off', baselabel = 'enc_opt_carry_effects_on', baseval = 'on', default = 'on' })
 end
