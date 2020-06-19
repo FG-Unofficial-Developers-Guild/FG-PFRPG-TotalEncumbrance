@@ -14,10 +14,13 @@
 	<string name="enc_opt_fail_on">Auto Roll</string>
 	<string name="enc_opt_fail_off">Disabled</string>
 	<string name="enc_opt_fail_prompt">Prompt Roll</string>
+	<string name="enc_opt_carry_effects_on">Enabled</string>
+	<string name="enc_opt_carry_effects_off">Disabled</string>
 	
 	<!-- options titles -->
 	<string name="opt_lab_weight_enc">Encumbrance: Weight Penalties</string>
 	<string name="opt_lab_coin_weight">Encumbrance: Coin Weight</string>
 	<string name="opt_lab_enc_color">Encumbrance: Color-Coded</string>
 	<string name="opt_lab_spell_fail">Encumbrance: Spell Failure</string>
+	<string name="opt_lab_carry_effects">Encumbrance: STR Effects Change Carry Capacity</string>
 </root>

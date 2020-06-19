@@ -30,7 +30,7 @@
 		<script name="RealEncumbrance" file="scripts/real_encumbrance.lua" />
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
 		<script name="SpellFailure" file="scripts/spell_failure.lua" />
-		<script name="CarryWeightEffects" file="scripts/weight_effects.lua" />
+		<script name="CarryWeightEffects" file="scripts/carry_effects.lua" />
 	</base>
 
 </root>

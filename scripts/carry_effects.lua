@@ -34,7 +34,7 @@ function combineCarryModifiers(node)
 	local tStrAdj = {}
 	local nStrAdjToSet = 0
 
-	if nEffectMod then
+	if nEffectMod and OptionsManager.isOption('CARRY_CAPACITY_FROME_FFECTS', 'on') then -- if carrying capacity penalties from effects are enabled in options
 		table.insert(tStrAdj, nEffectMod)
 	end
 	if nManualStrAdj then
