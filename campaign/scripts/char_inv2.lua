@@ -35,7 +35,7 @@ function onEncumbranceChanged()
 	nStrength = nStrength + DB.getValue(nodeChar, 'encumbrance.stradj', 0)
 	
 	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then -- if Carry Capacity from Effects is enabled in options
-		local nStrEffectMod = getStrEffectBonus(rActor)
+		local nStrEffectMod = getStrEffectBonus(nodeChar)
 		nStrength = nStrength + nStrEffectMod
 	end
 	
@@ -94,7 +94,9 @@ function onEncumbranceChanged()
 end
 
 --	Determine the total bonus to STR from effects
-function getStrEffectBonus(rActor)
+function getStrEffectBonus(nodeChar)
+	local rActor = ActorManager.getActor('pc', nodeChar)
+	
 	if not rActor then
 		return 0
 	end
