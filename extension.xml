@@ -3,7 +3,7 @@
 
 	<properties>
 		<name>Total Encumbrance</name>
-		<version>1.3.0.0</version>
+		<version>1.3.1.0</version>
 		<author>bmos</author>
 		<description>An extension that computes and displays the weight of carried coins.</description>
 		<ruleset>
@@ -14,11 +14,20 @@
 	<announcement text="PFRPG Total Encumbrance Extension: This extension applies any applicable encumbrance penalties including coin weight in your total." font="emotefont" />
 
 	<base>
+		<!-- Records -->
 		<includefile source="campaign/record_char_inventory.xml" />
 		<includefile source="campaign/record_char_main.xml" />
 		<includefile source="campaign/record_spell_entry.xml" />
+
+		<!-- Templates -->
+		<includefile source="campaign/template_char.xml" />
+		
+		<!-- Strings -->
 		<includefile source="strings/strings_total_encumbrance.xml" />
 		<includefile source="strings/strings_options.xml" />
+		
+		<!-- Scripts -->
+		<script name="LibTotalEncumbrance" file="scripts/lib_total_encumbrance.lua" />
 		<script name="CoinsWeight" file="scripts/coins_weight.lua" />
 		<script name="RealEncumbrance" file="scripts/real_encumbrance.lua" />
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
