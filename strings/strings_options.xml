@@ -22,5 +22,5 @@
 	<string name="opt_lab_coin_weight">Encumbrance: Coin Weight</string>
 	<string name="opt_lab_enc_color">Encumbrance: Color-Coded</string>
 	<string name="opt_lab_spell_fail">Encumbrance: Spell Failure</string>
-	<string name="opt_lab_carry_effects">Encumbrance: STR Effects Change Carry Capacity</string>
+	<string name="opt_lab_carry_effects">Encumbrance: Carry Capacity from Effects</string>
 </root>
