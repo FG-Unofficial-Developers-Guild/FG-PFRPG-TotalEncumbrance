@@ -22,9 +22,6 @@ local function handleApplyPenaltiesArgs(nodeField)
 		nodePC = nodeField.getChild( '...' )
 	elseif nodeField.getName() == 'carried' then
 		nodePC = nodeField.getChild( '....' )
-	else
-		local rActor = ActorManager.getActor("pc", nodeWin)
-		local nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 
 	return nodePC
