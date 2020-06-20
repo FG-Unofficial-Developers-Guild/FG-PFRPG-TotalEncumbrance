@@ -37,6 +37,7 @@ function onEncumbranceChanged()
 	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then -- if Carry Capacity from Effects is enabled in options
 		local nStrEffectMod = getStrEffectBonus(nodeChar)
 		nStrength = nStrength + nStrEffectMod
+		DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
 	end
 	
 	if nStrength > 0 then
