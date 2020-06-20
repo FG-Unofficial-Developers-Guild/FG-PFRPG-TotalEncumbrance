@@ -99,16 +99,18 @@ end
 --	Determine if the spell requires somatic compenents
 function isSomaticSpell(nodeSpell)
 	local components = DB.getValue(nodeSpell,'components')
-	local componentstable = fromCSV(components)
+	local stillspell = true
 
-	stillspell = true
+	if components then
+		local componentstable = fromCSV(components)
 
-	for _,v in pairs(componentstable) do
-		if v == 'S' or v == ' S' then
-			stillspell = false
+		for _,v in pairs(componentstable) do
+			if v == 'S' or v == ' S' then
+				stillspell = false
+			end
 		end
 	end
-
+	
 	return stillspell
 end
 
