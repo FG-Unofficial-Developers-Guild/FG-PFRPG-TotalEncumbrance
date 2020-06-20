@@ -42,7 +42,7 @@ function applyPenalties(nodeField)
 	maxstattoset, checkpenaltytoset, spellfailuretoset = computePenalties(nodePC)
 
 	--enable armor encumbrance when needed
-	if maxstattoset ~= 0 or checkpenaltytoset ~= 0 or spellfailuretoset ~= 0 then
+	if maxstattoset ~= nil or checkpenaltytoset ~= 0 or spellfailuretoset ~= 0 then
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 	else
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
@@ -80,7 +80,7 @@ local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spel
 		itemsubtype = DB.getValue(v, 'subtype')
 
 		if itemcarried == 2 then
-			if itemmaxstat ~= nil and itemmaxstat ~= 0 then
+			if itemmaxstat ~= nil then
 				table.insert(maxstattable, itemmaxstat)
 			end
 			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
@@ -209,7 +209,7 @@ function computePenalties(nodePC)
 	if table.getn(maxstattable) ~= 0 then
 		maxstattoset = math.min(unpack(maxstattable))
 	else
-		maxstattoset = 0
+		maxstattoset = nil
 	end
 
 	if table.getn(checkpenaltytable) ~= 0 then
