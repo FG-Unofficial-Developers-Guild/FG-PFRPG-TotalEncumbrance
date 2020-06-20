@@ -348,7 +348,7 @@
 					<right />
 				</anchored>
 			</frame_char>
-			<basicnumber name="encstradj" source="encumbrance.manualstradj">
+			<basicnumber name="encstradj" source="encumbrance.stradj">
 				<anchored to="encadjframe" width="60" height="20">
 					<top offset="25" />
 					<right anchor="center" offset="-50" />
