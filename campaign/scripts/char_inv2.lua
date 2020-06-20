@@ -4,6 +4,7 @@
 
 function onInit()
 	onEncumbranceChanged()
+	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'abilities.strength.score'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
@@ -12,6 +13,7 @@ function onInit()
 end
 
 function onClose()
+	DB.removeHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'abilities.strength.score'), 'onUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
@@ -28,16 +30,29 @@ function onSizeChanged()
 end
 
 function onEncumbranceChanged()
-	local nodeChar = getDatabaseNode()
+	local nodeChar
+	local rActor
+
+	if getDatabaseNode().getParent().getName() == 'charsheet' then
+		nodeChar = getDatabaseNode()
+		rActor = ActorManager.getActor('pc', nodeChar)
+	elseif getDatabaseNode().getName() == 'effects' then
+		rActor = ActorManager.getActor('ct', getDatabaseNode())
+		Debug.chat(rActor)
+		nodeChar = DB.findNode(rActor['sCreatureNode'])
+		Debug.chat(nodeChar)
+	end
 
 	local nHeavy = 0
 	local nStrength = DB.getValue(nodeChar, 'abilities.strength.score', 10)
+
 	nStrength = nStrength + DB.getValue(nodeChar, 'encumbrance.stradj', 0)
 	
+	local nStrEffectMod = getStrEffectBonus(rActor)
+	DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
+
 	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then -- if Carry Capacity from Effects is enabled in options
-		local nStrEffectMod = getStrEffectBonus(nodeChar)
 		nStrength = nStrength + nStrEffectMod
-		DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
 	end
 	
 	if nStrength > 0 then
@@ -95,9 +110,7 @@ function onEncumbranceChanged()
 end
 
 --	Determine the total bonus to STR from effects
-function getStrEffectBonus(nodeChar)
-	local rActor = ActorManager.getActor('pc', nodeChar)
-	
+function getStrEffectBonus(rActor)
 	if not rActor then
 		return 0
 	end
