@@ -34,11 +34,7 @@ end
 
 --	Determine if the spell is from a spellset that is on the arcane casters list
 function isArcaneCaster(nodeSpellset)
-	-- these are the classes that should roll arcane failure chance when encumbered by these types of armor/shields
-	local arcaneclass_heavyarmor = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Bloodrager', 'Skald', 'Unchained Summoner'}
-	local arcaneclass_medarmor = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Unchained Summoner'}
-	local arcaneclass_ltarmor = {'Sorcerer', 'Wizard', 'Witch', 'Arcanist'}
-	local arcaneclass_shield = {'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Bloodrager', 'Unchained Summoner'}
+	-- this gets the name of the spell class being used to cast the spell that triggers this
 	local playerspellset = DB.getValue(nodeSpellset, 'label')
 
 	local armorcategory = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.armorcategory')
@@ -47,32 +43,32 @@ function isArcaneCaster(nodeSpellset)
 	arcanecaster = false
 
 	if armorcategory == 3 then --if PC has is wearing heavy armor
-		for _,v in pairs(arcaneclass_heavyarmor) do
+		for _,v in pairs(TEGlobals.arcaneclass_heavyarmor) do
 			if v == playerspellset then
 				arcanecaster = true
 			end
 		end
 	elseif armorcategory == 2 then --if PC has is wearing medium armor
-		for _,v in pairs(arcaneclass_medarmor) do
+		for _,v in pairs(TEGlobals.arcaneclass_medarmor) do
 			if v == playerspellset then
 				arcanecaster = true
 			end
 		end
 	elseif armorcategory == 1 then --if PC has is wearing light armor
-		for _,v in pairs(arcaneclass_ltarmor) do
+		for _,v in pairs(TEGlobals.arcaneclass_ltarmor) do
 			if v == playerspellset then
 				arcanecaster = true
 			end
 		end
 	end
 	if shieldequipped == 2 then -- if PC has a tower shield equipped
-		for _,v in pairs(arcaneclass_heavyarmor) do
+		for _,v in pairs(TEGlobals.arcaneclass_heavyarmor) do
 			if v == playerspellset then
 				arcanecaster = true
 			end
 		end
 	elseif shieldequipped == 1 then -- if PC has a shield equipped
-		for _,v in pairs(arcaneclass_shield) do
+		for _,v in pairs(TEGlobals.arcaneclass_shield) do
 			if v == playerspellset then
 				arcanecaster = true
 			end

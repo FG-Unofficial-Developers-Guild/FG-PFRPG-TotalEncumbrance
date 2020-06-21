@@ -136,9 +136,9 @@ end
 --Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
 local function encumbrancePenalties(light, medium, total)
 	if total > medium then -- heavy load
-		return 1, -6, nil
+		return TEGlobals.heavymaxstat, TEGlobals.heavycheckpenalty, nil
 	elseif total > light then -- medium load
-		return 3, -3, nil
+		return TEGlobals.mediummaxstat, TEGlobals.mediumcheckpenalty, nil
 	else -- light load
 		return nil, nil, nil
 	end

@@ -1,6 +1,5 @@
 --
--- Please see the license.html file included with this distribution for
--- attribution and copyright information.
+-- Please see the license.html file included with this distribution for attribution and copyright information.
 --
 
 -- Initialization
@@ -51,12 +50,8 @@ function computePCCoinsWeigh(nodePC)
 		totalcoins = totalcoins + DB.getValue(coin, "amount", 0)
 	end
 
-	-- We have now computed the coins weight for this PC
-	-- CHANGE WEIGHT HERE, Change coinsperunit to the number of coins that equals 1 weight
-	local coinsperunit = 50
-	
 	if OptionsManager.isOption('COIN_WEIGHT', 'on') then -- if coin weight calculation is enabled
-		totalcoins = math.floor(totalcoins / coinsperunit)
+		totalcoins = math.floor(totalcoins / TEGlobals.coinsperunit)
 	else
 		totalcoins = 0
 	end
