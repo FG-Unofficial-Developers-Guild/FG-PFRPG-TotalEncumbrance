@@ -2,6 +2,20 @@
 --	Please see the license.html file included with this distribution for attribution and copyright information.
 --
 
+--	process tClumsyArmorTypes to escape and special characters
+function onInit()
+	local tSpecialCharacters = {'%(', '%)', '%.', '%+', '%-', '%*', '%?', '%[', '%^', '%$'}
+
+	for i,_ in ipairs(tClumsyArmorTypes) do
+		tClumsyArmorTypes[i] = string.gsub(tClumsyArmorTypes[i], '%%', '%%%%')
+
+		for _,vv in ipairs(tSpecialCharacters) do
+			tClumsyArmorTypes[i] = string.gsub(tClumsyArmorTypes[i], vv, '%' .. vv)
+		end
+		tClumsyArmorTypes[i] = string.lower(tClumsyArmorTypes[i])
+	end
+end
+
 --	Change coinsperunit to the number of coins that equals 1 weight
 coinsperunit = 50
 
@@ -17,3 +31,6 @@ heavycheckpenalty = -6
 
 mediummaxstat = 3
 mediumcheckpenalty = -3
+
+-- Armor that has a max dex of 0 (I promise this was the only way)
+tClumsyArmorTypes = {'Fortress plate', 'Half-plate', 'Lamellar (iron)', 'Lamellar (stone coat)', 'Splint mail'}
