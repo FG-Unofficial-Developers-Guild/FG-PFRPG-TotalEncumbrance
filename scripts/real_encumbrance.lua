@@ -42,8 +42,10 @@ function applyPenalties(nodeField)
 
 	--enable armor encumbrance when needed
 	if nMaxStatToSet ~= -1 or nCheckPenaltyToSet ~= 0 or nSpellFailureToSet ~= 0 then
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 	else
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 	end
 
