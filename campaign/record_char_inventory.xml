@@ -36,6 +36,8 @@
 							end
 						end
 					</script>
+				<hideonvalue>-1</hideonvalue>
+				<min>-1</min>
 			</basicnumber>
 			<basicnumber name="armorcheckpenalty" source="encumbrance.armorcheckpenalty" insertbefore="encumbranceframe">
 				<anchored to="armormaxstatbonus" position="right" offset="15,0" width="35" />
@@ -63,6 +65,8 @@
 							end
 						end
 					</script>
+				<hideonvalue>0</hideonvalue>
+				<max>0</max>
 			</basicnumber>
 			<buttonfield name="usearmormaxstatbonus" source="encumbrance.armormaxstatbonusactive" insertbefore="encumbranceframe" merge="replace">
 				<anchored to="armorpenaltyframe" position="insidetopleft" offset="67,28" width="12" height="12" />
@@ -91,6 +95,12 @@
 						end
 				</script>
 			</buttonfield>
+			<basicnumber name="spellfailure" source="encumbrance.spellfailure" insertbefore="encumbranceframe">
+				<anchored to="armorcheckpenalty" position="right" offset="15,0" width="35" />
+				<hideonvalue>0</hideonvalue>
+				<min>0</min>
+				<max>100</max>
+			</basicnumber>
 
 	<!--Encumbrance Frame-->
 			<frame_char name="encumbranceframe">
