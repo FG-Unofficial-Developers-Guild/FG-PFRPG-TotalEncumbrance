@@ -118,6 +118,25 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local nMaxStatFromArmor
 	local nCheckPenaltyFromArmor
 
+	if table.getn(tMaxStat) ~= 0 then
+		nMaxStatFromArmor = LibTotalEncumbrance.tableSum(tMaxStat) -- this would sum penalties on multi-equipped armor
+	else
+		nMaxStatFromArmor = 0
+	end
+	if table.getn(tEqCheckPenalty) ~= 0 then
+		nCheckPenaltyFromArmor = LibTotalEncumbrance.tableSum(tEqCheckPenalty) -- this would sum penalties on multi-equipped armor
+	else
+		nCheckPenaltyFromArmor = 0
+	end
+
+	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromarmor', 'number', nMaxStatFromArmor ~= nil and nMaxStatFromArmor or -1)
+	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromarmor', 'number', nCheckPenaltyFromArmor ~= nil and nCheckPenaltyFromArmor or 0)
+
+	local nHeavyArmorCount = table.getn(tHeavyArmor)
+	local nMedArmorCount = table.getn(tMedArmor)
+	local nLtArmorCount = table.getn(tLtArmor)
+	local nShieldCount = table.getn(tShield)
+
 	if nHeavyArmorCount ~= 0 and nHeavyArmorCount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 3)
 	elseif nMedArmorCount ~= 0 and nMedArmorCount ~= nil then
