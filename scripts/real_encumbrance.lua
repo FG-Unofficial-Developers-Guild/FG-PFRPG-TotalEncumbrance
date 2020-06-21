@@ -225,6 +225,10 @@ function computePenalties(nodePC)
 
 	if table.getn(tSpellFailure) ~= 0 then
 		nSpellFailureToSet = LibTotalEncumbrance.tableSum(tSpellFailure) -- this would sum penalties on multi-equipped armor
+
+		if nSpellFailureToSet > 100 then
+			nSpellFailureToSet = 100
+		end
 	else
 		nSpellFailureToSet = 0
 	end
