@@ -118,7 +118,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local nMaxStatFromArmor
 	local nCheckPenaltyFromArmor
 
-	if heavyarmorcount ~= 0 and heavyarmorcount ~= nil then
+	if nHeavyArmorCount ~= 0 and nHeavyArmorCount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 3)
 	elseif nMedArmorCount ~= 0 and nMedArmorCount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 2)
