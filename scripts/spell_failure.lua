@@ -3,7 +3,7 @@
 --
 
 function onInit()
-	ActionsManager.registerResultHandler("spellfailure", onRoll)
+	ActionsManager.registerResultHandler("spellfailure", spellFailureMessage)
 end
 
 --	Automatically determine if arcane failure chance should be rolled when a spell's cast button is clicked
@@ -126,20 +126,20 @@ function rollDice(nodeChar, rActor, nSpellFailureChance)
 end
 
 --	Determines success/failure and outputs to chat
-function onRoll(rSource, rTarget, rRoll)
-	local rMessage = ActionsManager.createActionMessage(rSource, rRoll);
+function spellFailureMessage(rSource, rTarget, rRoll)
+	local rMessage = ActionsManager.createActionMessage(rSource, rRoll)
 
 	if rRoll.nTarget then
-		local nTotal = ActionsManager.total(rRoll);
-		local nTargetDC = tonumber(rRoll.nTarget) or 0;
+		local nTotal = ActionsManager.total(rRoll)
+		local nTargetDC = tonumber(rRoll.nTarget) or 0
 		
-		rMessage.text = rMessage.text .. " (vs. DC " .. nTargetDC .. ")";
+		rMessage.text = rMessage.text .. ' (vs. DC ' .. nTargetDC .. ')'
 		if nTotal >= nTargetDC then
-			rMessage.text = rMessage.text .. " [SUCCESS]";
+			rMessage.text = rMessage.text .. ' [SUCCESS]'
 		else
-			rMessage.text = rMessage.text .. " [FAILURE]";
+			rMessage.text = rMessage.text .. ' [FAILURE]'
 		end
 	end
 	
-	Comm.deliverChatMessage(rMessage);
+	Comm.deliverChatMessage(rMessage)
 end
