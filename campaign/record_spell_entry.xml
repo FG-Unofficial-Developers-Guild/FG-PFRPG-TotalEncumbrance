@@ -8,6 +8,7 @@
 <root>
 	<windowclass name="spell_header" merge="join">
 		<margins control="0,0,0,2" />
+		<!-- this is here so line 27 could be added to triggger spell failure chance calculations when spells are cast -->
 		<script>
 			function onInit()
 				if not ActorManager.isPC(getDatabaseNode().getChild('.......')) then

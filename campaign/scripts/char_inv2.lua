@@ -51,7 +51,8 @@ function onEncumbranceChanged()
 	local nStrEffectMod = getStrEffectBonus(rActor)
 	DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
 
-	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then -- if Carry Capacity from Effects is enabled in options
+--	modify onEncumbranceChanged to include STR effects in calculating carrying capacity (only if CARRY_CAPACITY_FROM_EFFECTS is enabled in options)
+	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
 		nStrength = nStrength + nStrEffectMod
 	end
 	

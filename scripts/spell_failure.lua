@@ -6,7 +6,8 @@ function onInit()
 	ActionsManager.registerResultHandler("spellfailure", spellFailureMessage)
 end
 
---	Automatically determine if arcane failure chance should be rolled when a spell's cast button is clicked
+--	When a spell's cast button is clicked, determine if arcane failure chance should be rolled.
+--	Trigger location: record_spell_entry.xml usePower()
 function arcaneSpellFailure(nodeSpell)
 	local nodeSpellset = nodeSpell.getChild('.....')
 	local nSpellFailureChance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
@@ -18,7 +19,7 @@ function arcaneSpellFailure(nodeSpell)
 		-- if true, rolls failure chance
 		local bArcaneCaster = isArcaneCaster(nodeSpellset)
 
-		-- if true, doesn't roll failure chance
+		-- if bStillSpell is flase, roll spell failure chance
 		local bStillSpell = isSomaticSpell(nodeSpell)
 
 		-- set up and roll percentile dice for arcane failure
@@ -34,8 +35,8 @@ end
 
 --	Determine if the spell is from a spellset that is on the arcane casters list
 function isArcaneCaster(nodeSpellset)
-	-- this gets the name of the spell class being used to cast the spell that triggers this
 	local sPlayerSpellset = DB.getValue(nodeSpellset, 'label')
+	--	Gets name of the spell class being used to cast the spell that triggers this (requires spell class to be only the name of the class)
 
 	local nArmorCategory = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.armorcategory')
 	local nShieldEquipped = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.shieldequipped')

@@ -18,6 +18,7 @@
 			<source><name>...encumbrance.armorcheckpenalty</name><op>+</op></source>
 			<source><name>ranks</name><op>+</op></source>
 			<source><name>misc</name><op>+</op></source>
+			<!-- this is here so that skill check penalties from encumbrance apply properly -->
 			<script>
 				function onSourceValue(source, sourcename)
 					if sourcename == "ranks" then
