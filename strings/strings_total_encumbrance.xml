@@ -16,4 +16,5 @@
 		<string name="char_label_totalweight">Total Encumbrance</string>
 		<string name="char_label_invarmor">Penalties</string>
 		<string name="char_label_encstr_fromeffects">Str Effects</string>
+		<string name="char_label_combatarmor">Penalty</string>
 </root>
