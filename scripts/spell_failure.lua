@@ -35,8 +35,8 @@ end
 
 --	Determine if the spell is from a spellset that is on the arcane casters list
 function isArcaneCaster(nodeSpellset)
-	local sPlayerSpellset = DB.getValue(nodeSpellset, 'label')
 	--	Gets name of the spell class being used to cast the spell that triggers this (requires spell class to be only the name of the class)
+	local sPlayerSpellset = string.lower(DB.getValue(nodeSpellset, 'label'))
 
 	local nArmorCategory = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.armorcategory')
 	local nShieldEquipped = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.shieldequipped')
@@ -45,32 +45,32 @@ function isArcaneCaster(nodeSpellset)
 
 	if nArmorCategory == 3 then --if PC has is wearing heavy armor
 		for _,v in pairs(TEGlobals.tArcaneClass_HeavyArmor) do
-			if v == sPlayerSpellset then
+			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
 	elseif nArmorCategory == 2 then --if PC has is wearing medium armor
 		for _,v in pairs(TEGlobals.tArcaneClass_MedArmor) do
-			if v == sPlayerSpellset then
+			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
 	elseif nArmorCategory == 1 then --if PC has is wearing light armor
 		for _,v in pairs(TEGlobals.tArcaneClass_LtArmor) do
-			if v == sPlayerSpellset then
+			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
 	end
 	if nShieldEquipped == 2 then -- if PC has a tower shield equipped
 		for _,v in pairs(TEGlobals.tArcaneClass_HeavyArmor) do
-			if v == sPlayerSpellset then
+			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
 	elseif nShieldEquipped == 1 then -- if PC has a shield equipped
 		for _,v in pairs(TEGlobals.tArcaneClass_Shield) do
-			if v == sPlayerSpellset then
+			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
