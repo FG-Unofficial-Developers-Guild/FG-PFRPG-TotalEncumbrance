@@ -12,7 +12,6 @@ function onInit()
 		for _,vv in ipairs(tSpecialCharacters) do
 			tClumsyArmorTypes[i] = string.gsub(tClumsyArmorTypes[i], vv, '%' .. vv)
 		end
-		tClumsyArmorTypes[i] = string.lower(tClumsyArmorTypes[i])
 	end
 end
 

@@ -84,7 +84,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 
 		if nItemCarried == 2 then
 			for _,v in pairs(TEGlobals.tClumsyArmorTypes) do
-				if string.find(sItemName, v) then
+				if string.find(sItemName, string.lower(v)) then
 					bClumsyArmor = true
 					break
 				end
