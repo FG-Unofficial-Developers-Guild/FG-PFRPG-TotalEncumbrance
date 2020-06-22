@@ -1,16 +1,15 @@
 --
--- Please see the license.html file included with this distribution for attribution and copyright information.
+--	Please see the license.html file included with this distribution for attribution and copyright information.
 --
 
---Summary: you know
 function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
 end
 
---Summary: Handles arguments of applyPenalties()
---Argument: potentially nil nodeField representing carried databasenode on newly carried / equipped / dropped item
---Return: appropriate object databasenode - should represent node of PC
+--	Summary: Handles arguments of applyPenalties()
+--	Argument: potentially nil nodeField representing carried databasenode on newly carried / equipped / dropped item
+--	Return: appropriate object databasenode - should represent node of PC
 local function handleApplyPenaltiesArgs(nodeField)
 	local nodePC
 
@@ -23,206 +22,237 @@ local function handleApplyPenaltiesArgs(nodeField)
 	elseif nodeField.getName() == 'carried' then
 		nodePC = nodeField.getChild( '....' )
 	else
-		local rActor = ActorManager.getActor("pc", nodeWin)
+		local rActor = ActorManager.getActor("pc", nodeField)
 		local nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 
 	return nodePC
 end
 
---Summary: Recomputes penalties and updates max stat and check penalty
---Arguments: nodeField - node of 'carried' when called from handler
+--	Summary: Recomputes penalties and updates max stat and check penalty
+--	Arguments: nodeField - node of 'carried' when called from handler
 function applyPenalties(nodeField)
 	local nodePC = handleApplyPenaltiesArgs(nodeField)
 
-	local maxstattoset
-	local checkpenaltytoset
-	local spellfailuretoset
+	local nMaxStatToSet
+	local nCheckPenaltyToSet
+	local nSpellFailureToSet
 
-	maxstattoset, checkpenaltytoset, spellfailuretoset = computePenalties(nodePC)
+	nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet = computePenalties(nodePC)
 
 	--enable armor encumbrance when needed
-	if maxstattoset ~= 0 or checkpenaltytoset ~= 0 or spellfailuretoset ~= 0 then
+	if nMaxStatToSet ~= -1 or nCheckPenaltyToSet ~= 0 or nSpellFailureToSet ~= 0 then
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 	else
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 	end
 
-	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', maxstattoset)
-	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', checkpenaltytoset)
-	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', spellfailuretoset)
+	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', nMaxStatToSet)
+	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
+	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
 end
 
---Summary: Finds max stat / check penalty tables with appropriate nonzero values
---Argument: databasenode nodePC is the PC node
---Argument: table maxstattable is empty table to represent max stat penalties
---Argument: table eqcheckpenaltytable is empty table to represent check penalty penalties
---Argument: table spellfailuretable is empty table to represent spell failure penalties
---Return: nil, however table arguments are directly updated
-local function rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spellfailuretable)
-	local itemcarried
-	local itemmaxstat
-	local itemcheckpenalty
-	local itemspellfailure
+--	Summary: Finds max stat / check penalty tables with appropriate nonzero values
+--	Argument: databasenode nodePC is the PC node
+--	Argument: table tMaxStat is empty table to represent max stat penalties
+--	Argument: table tEqCheckPenalty is empty table to represent check penalty penalties
+--	Argument: table tSpellFailure is empty table to represent spell failure penalties
+--	Return: nil, however table arguments are directly updated
+local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure)
+	local nItemCarried
+	local nItemMaxStat
+	local nItemCheckPenalty
+	local nItemSpellFailure
 
-	local ltarmortable = {}
-	local medarmortable = {}
-	local heavyarmortable = {}
-	local shieldtable = {}
+	local tLtArmor = {}
+	local tMedArmor = {}
+	local tHeavyArmor = {}
+	local tShield = {}
+
+	local bClumsyArmor = false
 
 	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
-		itemcarried = DB.getValue(v, 'carried', 0)
-		itemmaxstat = DB.getValue(v, 'maxstatbonus')
-		itemcheckpenalty = DB.getValue(v, 'checkpenalty')
-		itemspellfailure = DB.getValue(v, 'spellfailure')
-		itemtype = DB.getValue(v, 'type')
-		itemname = DB.getValue(v, 'name')
-		itemsubtype = DB.getValue(v, 'subtype')
+		nItemCarried = DB.getValue(v, 'carried', 0)
+		nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
+		nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
+		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
+		sItemType = string.lower(DB.getValue(v, 'type', ''))
+		sItemName = string.lower(DB.getValue(v, 'name', ''))
+		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
 
-		if itemcarried == 2 then
-			if itemmaxstat ~= nil and itemmaxstat ~= 0 then
-				table.insert(maxstattable, itemmaxstat)
-			end
-			if itemcheckpenalty ~= nil and itemcheckpenalty ~= 0 then
-				table.insert(eqcheckpenaltytable, itemcheckpenalty)
-			end
-			if itemspellfailure ~= nil and itemspellfailure ~= 0 then
-				table.insert(spellfailuretable, itemspellfailure)
-			end
-			if itemtype == 'Armor' then
-				if itemsubtype == 'Light' or itemsubtype == 'light' then
-					table.insert(ltarmortable, '1')
-				elseif itemsubtype == 'Medium' or itemsubtype == 'medium' then
-					table.insert(medarmortable, '2')
-				elseif itemsubtype == 'Heavy' or itemsubtype == 'heavy' then
-					table.insert(heavyarmortable, '3')
+		if nItemCarried == 2 then
+			for _,v in pairs(TEGlobals.tClumsyArmorTypes) do
+				if string.find(sItemName, v) then
+					bClumsyArmor = true
+					break
 				end
-				if itemname == 'Tower' then
-					table.insert(heavyarmortable, '3')
-				elseif itemsubtype == 'Shield' or itemsubtype == 'Magic Shield' then
-					table.insert(shieldtable, 'i like turtles')
+			end
+			if nItemMaxStat ~= 0 or bClumsyArmor then
+				table.insert(tMaxStat, nItemMaxStat)
+			end
+			if nItemCheckPenalty ~= 0 then
+				table.insert(tEqCheckPenalty, nItemCheckPenalty)
+			end
+			if nItemSpellFailure ~= 0 then
+				table.insert(tSpellFailure, nItemSpellFailure)
+			end
+			if sItemType == 'armor' then
+				if sItemSubtype == 'light' then
+					table.insert(tLtArmor, '1')
+				elseif sItemSubtype == 'medium' then
+					table.insert(tMedArmor, '2')
+				elseif sItemSubtype == 'heavy' then
+					table.insert(tHeavyArmor, '3')
+				end
+				if sItemName == 'tower' then
+					table.insert(tHeavyArmor, '3')
+				elseif sItemSubtype == 'shield' or sItemSubtype == 'magic shield' then
+					table.insert(tShield, 'i like turtles')
 				end
 			end
 		end
 	end
 
-	local heavyarmorcount = table.getn(heavyarmortable)
-	local medarmorcount = table.getn(medarmortable)
-	local ltarmorcount = table.getn(ltarmortable)
-	local shieldcount = table.getn(shieldtable)
+	local nMaxStatFromArmor
+	local nCheckPenaltyFromArmor
 
-	if heavyarmorcount ~= 0 and heavyarmorcount ~= nil then
+	if table.getn(tMaxStat) ~= 0 then
+		nMaxStatFromArmor = math.min(unpack(tMaxStat)) -- this would pick the lowest max dex if there is multi-equipped armor
+	else
+		nMaxStatFromArmor = -1
+	end
+	if table.getn(tEqCheckPenalty) ~= 0 then
+		nCheckPenaltyFromArmor = LibTotalEncumbrance.tableSum(tEqCheckPenalty) -- this would sum penalties on multi-equipped armor
+	else
+		nCheckPenaltyFromArmor = 0
+	end
+
+	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromarmor', 'number', nMaxStatFromArmor ~= nil and nMaxStatFromArmor or -1)
+	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromarmor', 'number', nCheckPenaltyFromArmor ~= nil and nCheckPenaltyFromArmor or 0)
+
+	local nHeavyArmorCount = table.getn(tHeavyArmor)
+	local nMedArmorCount = table.getn(tMedArmor)
+	local nLtArmorCount = table.getn(tLtArmor)
+	local nShieldCount = table.getn(tShield)
+
+	if nHeavyArmorCount ~= 0 and nHeavyArmorCount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 3)
-	elseif medarmorcount ~= 0 and medarmorcount ~= nil then
+	elseif nMedArmorCount ~= 0 and nMedArmorCount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 2)
-	elseif ltarmorcount ~= 0 and ltarmorcount ~= nil then
+	elseif nLtArmorCount ~= 0 and nLtArmorCount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 1)
 	else 
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 0)
 	end
-	if shieldcount ~= 0 and shieldcount ~= nil then
+	if nShieldCount ~= 0 and nShieldCount ~= nil then
 		DB.setValue(nodePC, 'encumbrance.shieldequipped', 'number', 1)
 	else
 		DB.setValue(nodePC, 'encumbrance.shieldequipped', 'number', 0)
 	end
 end
 
---Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
---Argument: number light is medium encumbrance threshold for PC
---Argument: number medium is heavy encumbrance threshold for PC
---Argument: number total is current total encumbrance for PC
---Return: number for max stat penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
---Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
---Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
+--	Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
+--	Argument: number light is medium encumbrance threshold for PC
+--	Argument: number medium is heavy encumbrance threshold for PC
+--	Argument: number total is current total encumbrance for PC
+--	Return: number for max stat penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
+--	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
+--	Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
 local function encumbrancePenalties(light, medium, total)
 	if total > medium then -- heavy load
-		return TEGlobals.heavymaxstat, TEGlobals.heavycheckpenalty, nil
+		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty, nil
 	elseif total > light then -- medium load
-		return TEGlobals.mediummaxstat, TEGlobals.mediumcheckpenalty, nil
+		return TEGlobals.nMediumMaxStat, TEGlobals.nMediumCheckPenalty, nil
 	else -- light load
 		return nil, nil, nil
 	end
 end
 
---Summary: Appends encumbrance-based penalties to respective penalty tables
---Argument: databasenode nodePC is the PC node
---Argument: table holding nonzero max stat penalties from armor / shields
---Argument: table holding nonzero check penalty penalties from armor / shields
---Argument: table holding nonzero spell failure penalties from armor / shields
---Return: nil, however table arguments are directly updated
-local function rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
+--	Summary: Appends encumbrance-based penalties to respective penalty tables
+--	Argument: databasenode nodePC is the PC node
+--	Argument: table holding nonzero max stat penalties from armor / shields
+--	Argument: table holding nonzero check penalty penalties from armor / shields
+--	Argument: table holding nonzero spell failure penalties from armor / shields
+--	Return: nil, however table arguments are directly updated
+local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure)
 	local light = DB.getValue(nodePC, 'encumbrance.lightload')
 	local medium = DB.getValue(nodePC, 'encumbrance.mediumload')
 	local total = DB.getValue(nodePC, 'encumbrance.total')
 
-	local maxstatbonusfromenc
-	local checkpenaltyfromenc
-	local spellfailurefromenc
+	local nMaxStatFromEnc
+	local NCheckPenaltyFromEnc
+	local nSpellFailureFromEnc
 
 	if light ~= nil then
-		maxstatbonusfromenc, checkpenaltyfromenc, spellfailurefromenc = encumbrancePenalties(light, medium, total)
+		nMaxStatFromEnc, NCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(light, medium, total)
 	end
 
-	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', maxstatbonusfromenc ~= nil and maxstatbonusfromenc or 0)
-	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', checkpenaltyfromenc ~= nil and checkpenaltyfromenc or 0)
+	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
+	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', NCheckPenaltyFromEnc ~= nil and NCheckPenaltyFromEnc or 0)
 
 	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') then -- if weight encumbrance penalties are enabled in options
-		if maxstatbonusfromenc ~= nil then
-			table.insert(maxstattable, maxstatbonusfromenc)
+		if nMaxStatFromEnc ~= nil then
+			table.insert(tMaxStat, nMaxStatFromEnc)
 		end
 
-		if checkpenaltyfromenc ~= nil then
-			table.insert(checkpenaltytable, checkpenaltyfromenc)
+		if NCheckPenaltyFromEnc ~= nil then
+			table.insert(tCheckPenalty, NCheckPenaltyFromEnc)
 		end
 		--[[ I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
 		For now, it can be removed
 
-		if spellfailurefromenc ~= nil then
-			table.insert(spellfailuretable, spellfailurefromenc)
+		if nSpellFailureFromEnc ~= nil then
+			table.insert(tSpellFailure, nSpellFailureFromEnc)
 		end --]]
 	end
 end
 
---Summary: Finds max stat and check penalty based on current enc / armor / shield data
---Argument: databasenode nodePC is the PC node
---Return: number holding armor max stat penalty
---Return: number holding armor check penalty
---Return: number holding armor spell failure penalty
+--	Summary: Finds max stat and check penalty based on current enc / armor / shield data
+--	Argument: databasenode nodePC is the PC node
+--	Return: number holding armor max stat penalty
+--	Return: number holding armor check penalty
+--	Return: number holding armor spell failure penalty
 function computePenalties(nodePC)
-	local maxstattable = {}
-	local eqcheckpenaltytable = {}
-	local checkpenaltytable = {}
-	local spellfailuretable = {}
+	local tMaxStat = {}
+	local tEqCheckPenalty = {}
+	local tCheckPenalty = {}
+	local tSpellFailure = {}
 
-	local maxstattoset
-	local checkpenaltytoset
-	local spellfailuretoset
+	local nMaxStatToSet
+	local nCheckPenaltyToSet
+	local nSpellFailureToSet
 
-	rawArmorPenalties(nodePC, maxstattable, eqcheckpenaltytable, spellfailuretable)
+	rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure)
 
-	if table.getn(eqcheckpenaltytable) ~= 0 then
-		table.insert(checkpenaltytable, LibTotalEncumbrance.tableSum(eqcheckpenaltytable)) -- add equipment total to overall table for comparison with encumbrance
+	if table.getn(tEqCheckPenalty) ~= 0 then
+		table.insert(tCheckPenalty, LibTotalEncumbrance.tableSum(tEqCheckPenalty)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
-	rawEncumbrancePenalties(nodePC, maxstattable, checkpenaltytable, spellfailuretable)
+	rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure)
 
-	if table.getn(maxstattable) ~= 0 then
-		maxstattoset = math.min(unpack(maxstattable))
+	if table.getn(tMaxStat) ~= 0 then
+		nMaxStatToSet = math.min(unpack(tMaxStat))
 	else
-		maxstattoset = 0
+		nMaxStatToSet = -1
 	end
 
-	if table.getn(checkpenaltytable) ~= 0 then
-		checkpenaltytoset = math.min(unpack(checkpenaltytable)) -- this would sum penalties on multi-equipped shields / armor & encumbrance
+	if table.getn(tCheckPenalty) ~= 0 then
+		nCheckPenaltyToSet = math.min(unpack(tCheckPenalty)) -- this would sum penalties on multi-equipped shields / armor & encumbrance
 	else
-		checkpenaltytoset = 0
+		nCheckPenaltyToSet = 0
 	end
 
-	if table.getn(spellfailuretable) ~= 0 then
-		spellfailuretoset = LibTotalEncumbrance.tableSum(spellfailuretable) -- this would sum penalties on multi-equipped armor
+	if table.getn(tSpellFailure) ~= 0 then
+		nSpellFailureToSet = LibTotalEncumbrance.tableSum(tSpellFailure) -- this would sum penalties on multi-equipped armor
+
+		if nSpellFailureToSet > 100 then
+			nSpellFailureToSet = 100
+		end
 	else
-		spellfailuretoset = 0
+		nSpellFailureToSet = 0
 	end
 
-	return maxstattoset, checkpenaltytoset, spellfailuretoset
+	return nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet
 end
