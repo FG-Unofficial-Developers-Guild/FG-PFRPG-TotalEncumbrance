@@ -26,7 +26,7 @@ function arcaneSpellFailure(nodeSpell)
 			if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'auto') then
 				rollDice(nodeChar, rActor, nSpellFailureChance)
 			elseif OptionsManager.isOption('AUTO_SPELL_FAILURE', 'prompt') then
-				ChatManager.SystemMessage(nSpellFailureChance..'% '..'Arcane Spell Failure Chance')
+				ChatManager.SystemMessage('Roll for ' .. nSpellFailureChance .. '% ' .. 'Arcane Spell Failure Chance')
 			end
 		end
 	end
