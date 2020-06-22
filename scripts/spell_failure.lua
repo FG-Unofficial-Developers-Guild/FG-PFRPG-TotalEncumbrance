@@ -19,10 +19,10 @@ function arcaneSpellFailure(nodeSpell)
 		local bArcaneCaster = isArcaneCaster(nodeSpellset)
 
 		-- if true, doesn't roll failure chance
-		local bNotStillSpell = isSomaticSpell(nodeSpell)
+		local bStillSpell = isSomaticSpell(nodeSpell)
 
 		-- set up and roll percentile dice for arcane failure
-		if bArcaneCaster == true and bNotStillSpell == false then
+		if bArcaneCaster == true and bStillSpell == false then
 			if OptionsManager.isOption('AUTO_SPELL_FAILURE', 'auto') then
 				rollDice(nodeChar, rActor, nSpellFailureChance)
 			elseif OptionsManager.isOption('AUTO_SPELL_FAILURE', 'prompt') then
