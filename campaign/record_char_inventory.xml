@@ -40,9 +40,14 @@
 						if nPenaltiesActive == 0 then
 							window.armormaxstatbonus.setColor('7F000000')
 						else
-							Debug.chat(nMaxStatFromArmor, nMaxStatFromEnc)
-							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') and nMaxStatFromArmor &lt; nMaxStatFromEnc and nMaxStatFromEnc ~= -1 then
-								window.armormaxstatbonus.setColor('FFb22929')
+							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
+								and nMaxStatFromEnc ~= -1
+								and (
+									nMaxStatFromArmor &gt; nMaxStatFromEnc
+									or nMaxStatFromArmor == -1
+								)
+								then
+								window.armormaxstatbonus.setColor('FFB22929')
 							else
 								window.armormaxstatbonus.setColor('FF000000')
 							end
@@ -50,8 +55,14 @@
 						if nPenaltiesActive == 0 then
 							window.armorcheckpenalty.setColor('7F000000')
 						else
-							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on') and nCheckPenaltyFromArmor &gt; nCheckPenaltyFromEnc and nCheckPenaltyFromEnc ~= 0 then
-								window.armorcheckpenalty.setColor('FFb22929')
+							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
+								and nCheckPenaltyFromEnc ~= 0
+								and (
+									nCheckPenaltyFromArmor &gt; nCheckPenaltyFromEnc
+									or nCheckPenaltyFromArmor == 0
+								)
+							then
+								window.armorcheckpenalty.setColor('FFB22929')
 							else
 								window.armorcheckpenalty.setColor('FF000000')
 							end

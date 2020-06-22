@@ -119,9 +119,9 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local nCheckPenaltyFromArmor
 
 	if table.getn(tMaxStat) ~= 0 then
-		nMaxStatFromArmor = LibTotalEncumbrance.tableSum(tMaxStat) -- this would sum penalties on multi-equipped armor
+		nMaxStatFromArmor = math.min(unpack(tMaxStat)) -- this would pick the lowest max dex if there is multi-equipped armor
 	else
-		nMaxStatFromArmor = 0
+		nMaxStatFromArmor = -1
 	end
 	if table.getn(tEqCheckPenalty) ~= 0 then
 		nCheckPenaltyFromArmor = LibTotalEncumbrance.tableSum(tEqCheckPenalty) -- this would sum penalties on multi-equipped armor
@@ -189,7 +189,7 @@ local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFa
 		nMaxStatFromEnc, NCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(light, medium, total)
 	end
 
-	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or 0)
+	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', NCheckPenaltyFromEnc ~= nil and NCheckPenaltyFromEnc or 0)
 
 	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') then -- if weight encumbrance penalties are enabled in options
