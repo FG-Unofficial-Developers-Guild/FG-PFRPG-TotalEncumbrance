@@ -210,13 +210,9 @@ local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFa
 	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
 	local total = DB.getValue(nodePC, 'encumbrance.total', 0)
 
-	local nMaxStatFromEnc
-	local nCheckPenaltyFromEnc
-	local nSpellFailureFromEnc
 	local nEncumbranceSpeed20
 	local nEncumbranceSpeed30
-
-	nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodePC, light, medium, total)
+	local nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodePC, light, medium, total)
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', nCheckPenaltyFromEnc ~= nil and nCheckPenaltyFromEnc or 0)
@@ -301,9 +297,10 @@ function computePenalties(nodePC)
 	local tEncumbranceSpeed = TEGlobals.tEncumbranceSpeed
 	local nSpeedBase = DB.getValue(nodePC, "speed.base", 0)
 	local nSpeedTableIndex = nSpeedBase / 5
-	local nSpeedPenaltyFromEnc = 0
 
 	nSpeedTableIndex = nSpeedTableIndex + 0.5 - (nSpeedTableIndex + 0.5) % 1
+
+	local nSpeedPenaltyFromEnc = 0
 
 	if tEncumbranceSpeed[nSpeedTableIndex] ~= nil then
 		nSpeedPenaltyFromEnc = tEncumbranceSpeed[nSpeedTableIndex] - nSpeedBase
@@ -312,11 +309,13 @@ function computePenalties(nodePC)
 	DB.setValue(nodePC, 'encumbrance.speedfromenc', 'number', nSpeedPenaltyFromEnc ~= nil and nSpeedPenaltyFromEnc or 0)
 
 	local bApplySpeedPenalty = true
+
 	if CharManager.hasTrait(nodePC, "Slow and Steady") then
 		bApplySpeedPenalty = false
 	end
 
 	local nSpeedPenalty = 0
+
 	if bApplySpeedPenalty then
 		if (nSpeedBase >= 30) and (nSpeedPenalty30 > 0) then
 			nSpeedPenalty = nSpeedPenalty30 - 30
