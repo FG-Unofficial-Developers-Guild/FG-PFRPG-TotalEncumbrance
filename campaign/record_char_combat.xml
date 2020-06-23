@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+  Please see the license.html file included with this distribution for attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charsheet_combat" merge="join">
+		<script file="campaign/scripts/char_combat.lua" />
+		<sheetdata>
+			<!-- this is here to trigger speed recalculation if base speed is changed -->
+			<basicnumber name="speedbase" source="speed.base" merge="replace">
+				<anchored to="speedframe" position="insidetopleft" offset="12,54" width="30" height="20" />
+				<script>
+					function onValueChanged()
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+					end
+				</script>
+			</basicnumber>
+			<basicnumber name="speedarmor" source="speed.armor">
+				<anchored to="speedbase" position="right" offset="8,0" width="30" />
+				<hideonvalue>0</hideonvalue>
+			</basicnumber>
+			<label_fieldtop name="speedarmor_label">
+				<anchored to="speedarmor" />
+				<static textres="char_label_combatarmor" />
+			</label_fieldtop>
+		</sheetdata>
+	</windowclass>
+</root>
