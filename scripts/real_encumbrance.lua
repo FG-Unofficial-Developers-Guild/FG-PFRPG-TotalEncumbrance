@@ -34,11 +34,7 @@ end
 function applyPenalties(nodeField)
 	local nodePC = handleApplyPenaltiesArgs(nodeField)
 
-	local nMaxStatToSet
-	local nCheckPenaltyToSet
-	local nSpellFailureToSet
-
-	nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet = computePenalties(nodePC)
+	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
 
 	--enable armor encumbrance when needed
 	if nMaxStatToSet ~= -1 or nCheckPenaltyToSet ~= 0 or nSpellFailureToSet ~= 0 then
@@ -52,6 +48,12 @@ function applyPenalties(nodeField)
 	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', nMaxStatToSet)
 	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
 	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
+
+	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
+
+	--recalculate total speed from all inputs
+	local nSpeedToSet = nSpeedBase + nSpeedPenalty + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
+	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
 end
 
 --	Summary: Finds max stat / check penalty tables with appropriate nonzero values
@@ -60,7 +62,7 @@ end
 --	Argument: table tEqCheckPenalty is empty table to represent check penalty penalties
 --	Argument: table tSpellFailure is empty table to represent spell failure penalties
 --	Return: nil, however table arguments are directly updated
-local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure)
+local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
 	local nItemCarried
 	local nItemMaxStat
 	local nItemCheckPenalty
@@ -78,6 +80,8 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
 		nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
 		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
+		nItemSpeed20 = DB.getValue(v, 'speed20', 0)
+		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
 		sItemType = string.lower(DB.getValue(v, 'type', ''))
 		sItemName = string.lower(DB.getValue(v, 'name', ''))
 		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
@@ -97,6 +101,12 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 			end
 			if nItemSpellFailure ~= 0 then
 				table.insert(tSpellFailure, nItemSpellFailure)
+			end
+			if nItemSpeed20 ~= 0 then
+				table.insert(tSpeed20, nItemSpeed20)
+			end
+			if nItemSpeed30 ~= 0 then
+				table.insert(tSpeed30, nItemSpeed30)
 			end
 			if sItemType == 'armor' then
 				if sItemSubtype == 'light' then
@@ -123,14 +133,30 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	else
 		nMaxStatFromArmor = -1
 	end
+
+	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromarmor', 'number', nMaxStatFromArmor ~= nil and nMaxStatFromArmor or -1)
+
 	if table.getn(tEqCheckPenalty) ~= 0 then
 		nCheckPenaltyFromArmor = LibTotalEncumbrance.tableSum(tEqCheckPenalty) -- this would sum penalties on multi-equipped armor
 	else
 		nCheckPenaltyFromArmor = 0
 	end
 
-	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromarmor', 'number', nMaxStatFromArmor ~= nil and nMaxStatFromArmor or -1)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromarmor', 'number', nCheckPenaltyFromArmor ~= nil and nCheckPenaltyFromArmor or 0)
+
+	if table.getn(tSpeed20) ~= 0 then
+		nSpeed20FromArmor = math.min(unpack(tSpeed20)) -- this gets min speed from multi-equipped armor
+	else
+		nSpeed20FromArmor = 0
+	end
+	if table.getn(tSpeed30) ~= 0 then
+		nSpeed30FromArmor = math.min(unpack(tSpeed30)) -- this gets min speed from multi-equipped armor
+	else
+		nSpeed30FromArmor = 0
+	end
+
+	DB.setValue(nodePC, 'encumbrance.speed20fromarmor', 'number', nSpeed20FromArmor ~= nil and nSpeed20FromArmor or 0)
+	DB.setValue(nodePC, 'encumbrance.speed30fromarmor', 'number', nSpeed30FromArmor ~= nil and nSpeed30FromArmor or 0)
 
 	local nHeavyArmorCount = table.getn(tHeavyArmor)
 	local nMedArmorCount = table.getn(tMedArmor)
@@ -160,12 +186,15 @@ end
 --	Return: number for max stat penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
 --	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
 --	Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
-local function encumbrancePenalties(light, medium, total)
+local function encumbrancePenalties(nodePC, light, medium, total)
 	if total > medium then -- heavy load
+		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 3)
 		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty, nil
 	elseif total > light then -- medium load
+		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 2)
 		return TEGlobals.nMediumMaxStat, TEGlobals.nMediumCheckPenalty, nil
 	else -- light load
+		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 1)
 		return nil, nil, nil
 	end
 end
@@ -176,29 +205,29 @@ end
 --	Argument: table holding nonzero check penalty penalties from armor / shields
 --	Argument: table holding nonzero spell failure penalties from armor / shields
 --	Return: nil, however table arguments are directly updated
-local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure)
-	local light = DB.getValue(nodePC, 'encumbrance.lightload')
-	local medium = DB.getValue(nodePC, 'encumbrance.mediumload')
-	local total = DB.getValue(nodePC, 'encumbrance.total')
+local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
+	local light = DB.getValue(nodePC, 'encumbrance.lightload', 0)
+	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
+	local total = DB.getValue(nodePC, 'encumbrance.total', 0)
 
 	local nMaxStatFromEnc
-	local NCheckPenaltyFromEnc
+	local nCheckPenaltyFromEnc
 	local nSpellFailureFromEnc
+	local nEncumbranceSpeed20
+	local nEncumbranceSpeed30
 
-	if light ~= nil then
-		nMaxStatFromEnc, NCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(light, medium, total)
-	end
+	nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodePC, light, medium, total)
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
-	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', NCheckPenaltyFromEnc ~= nil and NCheckPenaltyFromEnc or 0)
+	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', nCheckPenaltyFromEnc ~= nil and nCheckPenaltyFromEnc or 0)
 
 	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') then -- if weight encumbrance penalties are enabled in options
 		if nMaxStatFromEnc ~= nil then
 			table.insert(tMaxStat, nMaxStatFromEnc)
 		end
 
-		if NCheckPenaltyFromEnc ~= nil then
-			table.insert(tCheckPenalty, NCheckPenaltyFromEnc)
+		if nCheckPenaltyFromEnc ~= nil then
+			table.insert(tCheckPenalty, nCheckPenaltyFromEnc)
 		end
 		--[[ I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
 		For now, it can be removed
@@ -219,18 +248,20 @@ function computePenalties(nodePC)
 	local tEqCheckPenalty = {}
 	local tCheckPenalty = {}
 	local tSpellFailure = {}
+	local tSpeed20 = {}
+	local tSpeed30 = {}
 
 	local nMaxStatToSet
 	local nCheckPenaltyToSet
 	local nSpellFailureToSet
 
-	rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure)
+	rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
 
 	if table.getn(tEqCheckPenalty) ~= 0 then
 		table.insert(tCheckPenalty, LibTotalEncumbrance.tableSum(tEqCheckPenalty)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
-	rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure)
+	rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure, tSpeed)
 
 	if table.getn(tMaxStat) ~= 0 then
 		nMaxStatToSet = math.min(unpack(tMaxStat))
@@ -254,5 +285,55 @@ function computePenalties(nodePC)
 		nSpellFailureToSet = 0
 	end
 
-	return nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet
+	if table.getn(tSpeed20) ~= 0 then
+		nSpeedPenalty20 = math.min(unpack(tSpeed20))
+	else
+		nSpeedPenalty20 = 0
+	end
+
+	if table.getn(tSpeed30) ~= 0 then
+		nSpeedPenalty30 = math.min(unpack(tSpeed30))
+	else
+		nSpeedPenalty30 = 0
+	end
+
+	--compute speed including total encumberance speed penalty
+	local tEncumbranceSpeed = TEGlobals.tEncumbranceSpeed
+	local nSpeedBase = DB.getValue(nodePC, "speed.base", 0)
+	local nSpeedTableIndex = nSpeedBase / 5
+	local nSpeedPenaltyFromEnc = 0
+
+	nSpeedTableIndex = nSpeedTableIndex + 0.5 - (nSpeedTableIndex + 0.5) % 1
+
+	if tEncumbranceSpeed[nSpeedTableIndex] ~= nil then
+		nSpeedPenaltyFromEnc = tEncumbranceSpeed[nSpeedTableIndex] - nSpeedBase
+	end
+
+	DB.setValue(nodePC, 'encumbrance.speedfromenc', 'number', nSpeedPenaltyFromEnc ~= nil and nSpeedPenaltyFromEnc or 0)
+
+	local bApplySpeedPenalty = true
+	if CharManager.hasTrait(nodePC, "Slow and Steady") then
+		bApplySpeedPenalty = false
+	end
+
+	local nSpeedPenalty = 0
+	if bApplySpeedPenalty then
+		if (nSpeedBase >= 30) and (nSpeedPenalty30 > 0) then
+			nSpeedPenalty = nSpeedPenalty30 - 30
+		elseif (nSpeedBase < 30) and (nSpeedPenalty20 > 0) then
+			nSpeedPenalty = nSpeedPenalty20 - 20
+		end
+	end
+
+	local nEncumbranceLevel = DB.getValue(nodePC, 'encumbrance.encumbrancelevel', 0)
+
+	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') and nEncumbranceLevel > 1 then -- if weight encumbrance penalties are enabled in options and player is encumbered
+		if nSpeedPenalty ~= 0 and nSpeedPenaltyFromEnc ~= 0 then
+			nSpeedPenalty = math.min(nSpeedPenaltyFromEnc, nSpeedPenalty)
+		elseif nSpeedPenaltyFromEnc then
+			nSpeedPenalty = nSpeedPenaltyFromEnc - nSpeedBase
+		end
+	end
+
+	return nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase
 end
