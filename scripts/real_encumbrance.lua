@@ -235,12 +235,6 @@ local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFa
 		if nSpellFailureFromEnc ~= nil then
 			table.insert(tSpellFailure, nSpellFailureFromEnc)
 		end --]]
-		if TEGlobals.nEncumbranceSpeed20 ~= nil then
-			table.insert(tSpeed20, TEGlobals.nEncumbranceSpeed20)
-		end
-		if TEGlobals.nEncumbranceSpeed30 ~= nil then
-			table.insert(tSpeed30, TEGlobals.nEncumbranceSpeed30)
-		end
 	end
 end
 
@@ -267,7 +261,7 @@ function computePenalties(nodePC)
 		table.insert(tCheckPenalty, LibTotalEncumbrance.tableSum(tEqCheckPenalty)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
-	rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
+	rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure, tSpeed)
 
 	if table.getn(tMaxStat) ~= 0 then
 		nMaxStatToSet = math.min(unpack(tMaxStat))
@@ -304,19 +298,40 @@ function computePenalties(nodePC)
 	end
 
 	--compute speed including total encumberance speed penalty
+	local tEncumbranceSpeed = TEGlobals.tEncumbranceSpeed
+	local nSpeedBase = DB.getValue(nodePC, "speed.base", 0)
+	local nSpeedTableIndex = nSpeedBase / 5
+	local nSpeedPenaltyFromEnc = 0
+
+	nSpeedTableIndex = nSpeedTableIndex + 0.5 - (nSpeedTableIndex + 0.5) % 1
+
+	if tEncumbranceSpeed[nSpeedTableIndex] ~= nil then
+		nSpeedPenaltyFromEnc = tEncumbranceSpeed[nSpeedTableIndex] - nSpeedBase
+	end
+
+	DB.setValue(nodePC, 'encumbrance.speedfromenc', 'number', nSpeedPenaltyFromEnc ~= nil and nSpeedPenaltyFromEnc or 0)
 
 	local bApplySpeedPenalty = true
 	if CharManager.hasTrait(nodePC, "Slow and Steady") then
 		bApplySpeedPenalty = false
 	end
 
-	local nSpeedBase = DB.getValue(nodePC, "speed.base", 0)
 	local nSpeedPenalty = 0
 	if bApplySpeedPenalty then
 		if (nSpeedBase >= 30) and (nSpeedPenalty30 > 0) then
 			nSpeedPenalty = nSpeedPenalty30 - 30
 		elseif (nSpeedBase < 30) and (nSpeedPenalty20 > 0) then
 			nSpeedPenalty = nSpeedPenalty20 - 20
+		end
+	end
+
+	local nEncumbranceLevel = DB.getValue(nodePC, 'encumbrance.encumbrancelevel', 0)
+
+	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') and nEncumbranceLevel > 1 then -- if weight encumbrance penalties are enabled in options and player is encumbered
+		if nSpeedPenalty ~= 0 and nSpeedPenaltyFromEnc ~= 0 then
+			nSpeedPenalty = math.min(nSpeedPenaltyFromEnc, nSpeedPenalty)
+		elseif nSpeedPenaltyFromEnc then
+			nSpeedPenalty = nSpeedPenaltyFromEnc - nSpeedBase
 		end
 	end
 
