@@ -38,9 +38,7 @@ function onEncumbranceChanged()
 		rActor = ActorManager.getActor('pc', nodeChar)
 	elseif getDatabaseNode().getName() == 'effects' then
 		rActor = ActorManager.getActor('ct', getDatabaseNode())
-		Debug.chat(rActor)
 		nodeChar = DB.findNode(rActor['sCreatureNode'])
-		Debug.chat(nodeChar)
 	end
 
 	local nHeavy = 0
