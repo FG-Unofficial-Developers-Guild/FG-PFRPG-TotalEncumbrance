@@ -203,9 +203,9 @@ end
 --	Argument: table holding nonzero spell failure penalties from armor / shields
 --	Return: nil, however table arguments are directly updated
 local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
-	local light = DB.getValue(nodePC, 'encumbrance.lightload')
-	local medium = DB.getValue(nodePC, 'encumbrance.mediumload')
-	local total = DB.getValue(nodePC, 'encumbrance.total')
+	local light = DB.getValue(nodePC, 'encumbrance.lightload', 0)
+	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
+	local total = DB.getValue(nodePC, 'encumbrance.total', 0)
 
 	local nMaxStatFromEnc
 	local nCheckPenaltyFromEnc
@@ -213,9 +213,7 @@ local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFa
 	local nEncumbranceSpeed20
 	local nEncumbranceSpeed30
 
-	if light ~= nil then
 		nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(light, medium, total)
-	end
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', nCheckPenaltyFromEnc ~= nil and nCheckPenaltyFromEnc or 0)
