@@ -34,7 +34,7 @@ end
 function applyPenalties(nodeField)
 	local nodePC = handleApplyPenaltiesArgs(nodeField)
 
-	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedToSet = computePenalties(nodePC)
+	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
 
 	--enable armor encumbrance when needed
 	if nMaxStatToSet ~= -1 or nCheckPenaltyToSet ~= 0 or nSpellFailureToSet ~= 0 then
@@ -49,6 +49,10 @@ function applyPenalties(nodeField)
 	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
 	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
 
+	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
+
+	--recalculate total speed from all inputs
+	local nSpeedToSet = nSpeedBase + nSpeedPenalty + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
 	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
 end
 
@@ -315,8 +319,5 @@ function computePenalties(nodePC)
 		end
 	end
 
-	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
-	local nSpeedToSet = nSpeedBase + nSpeedPenalty + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
-
-	return nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedToSet
+	return nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase
 end
