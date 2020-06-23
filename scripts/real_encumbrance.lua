@@ -331,7 +331,7 @@ function computePenalties(nodePC)
 		if nSpeedPenalty ~= 0 and nSpeedPenaltyFromEnc ~= 0 then
 			nSpeedPenalty = math.min(nSpeedPenaltyFromEnc, nSpeedPenalty)
 		elseif nSpeedPenaltyFromEnc then
-			nSpeedPenalty = nSpeedPenaltyFromEnc - nSpeedBase
+			nSpeedPenalty = nSpeedPenaltyFromEnc
 		end
 	end
 
