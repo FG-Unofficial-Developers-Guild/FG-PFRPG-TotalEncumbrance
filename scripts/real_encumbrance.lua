@@ -21,9 +21,6 @@ local function handleApplyPenaltiesArgs(nodeField)
 		nodePC = nodeField.getChild( '...' )
 	elseif nodeField.getName() == 'carried' then
 		nodePC = nodeField.getChild( '....' )
-	else
-		local rActor = ActorManager.getActor("pc", nodeField)
-		local nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 
 	return nodePC
@@ -210,8 +207,6 @@ local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFa
 	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
 	local total = DB.getValue(nodePC, 'encumbrance.total', 0)
 
-	local nEncumbranceSpeed20
-	local nEncumbranceSpeed30
 	local nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodePC, light, medium, total)
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
