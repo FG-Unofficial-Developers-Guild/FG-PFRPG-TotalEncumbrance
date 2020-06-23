@@ -31,5 +31,8 @@ nHeavyCheckPenalty = -6
 nMediumMaxStat = 3
 nMediumCheckPenalty = -3
 
+nEncumbranceSpeed30 = 20
+nEncumbranceSpeed20 = 15
+
 --	Armor that has a max dex of 0 (I promise this was the only way)
 tClumsyArmorTypes = {'Fortress plate', 'Half-plate', 'Lamellar (iron)', 'Lamellar (stone coat)', 'Splint mail'}
