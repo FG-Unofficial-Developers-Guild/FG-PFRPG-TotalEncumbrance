@@ -11,9 +11,11 @@
 		</ruleset>
 	</properties>
 
-	<announcement text="PFRPG Total Encumbrance Extension: This extension applies any applicable encumbrance penalties including coin weight in your total." font="emotefont" />
+	<announcement text="PFRPG Total Encumbrance: This extension applies encumbrance penalties, rolls spell failure chances, weighs PC coins, and patches in support for armor max stat of zero."  icon="EncumberedGuy" font="emotefont" />
 
 	<base>
+	    <icon name="EncumberedGuy" file="graphics/encumbered_guy.png" />
+
 		<!-- Records -->
 		<includefile source="campaign/record_char_inventory.xml" />
 		<includefile source="campaign/record_char_main.xml" />
