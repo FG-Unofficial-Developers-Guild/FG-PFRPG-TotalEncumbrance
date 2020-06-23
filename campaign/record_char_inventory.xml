@@ -26,6 +26,7 @@
 				<state icon="button_checkon" tooltipres="char_tooltip_armormodon" />
 				<script>
 					function onInit()
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 						onValueChanged()
 					end
 
