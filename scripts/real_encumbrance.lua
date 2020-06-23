@@ -186,12 +186,15 @@ end
 --	Return: number for max stat penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
 --	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
 --	Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
-local function encumbrancePenalties(light, medium, total)
+local function encumbrancePenalties(nodePC, light, medium, total)
 	if total > medium then -- heavy load
+		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 3)
 		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty, nil
 	elseif total > light then -- medium load
+		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 2)
 		return TEGlobals.nMediumMaxStat, TEGlobals.nMediumCheckPenalty, nil
 	else -- light load
+		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 1)
 		return nil, nil, nil
 	end
 end
@@ -213,7 +216,7 @@ local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFa
 	local nEncumbranceSpeed20
 	local nEncumbranceSpeed30
 
-		nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(light, medium, total)
+	nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodePC, light, medium, total)
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', nCheckPenaltyFromEnc ~= nil and nCheckPenaltyFromEnc or 0)
