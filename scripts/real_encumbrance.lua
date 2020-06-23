@@ -302,7 +302,7 @@ function computePenalties(nodePC)
 		nSpeedPenalty30 = 0
 	end
 
---	compute speed including encumberance speed penalty
+	--compute speed including total encumberance speed penalty
 
 	local bApplySpeedPenalty = true
 	if CharManager.hasTrait(nodePC, "Slow and Steady") then
