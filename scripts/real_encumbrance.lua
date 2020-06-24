@@ -5,6 +5,7 @@
 function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
+	DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('combattracker.list'), 'onChildDeleted', applyPenalties)
 end
@@ -19,6 +20,8 @@ local function handleApplyPenaltiesArgs(nodeField)
 	if nodeField.getParent().getName() == 'charsheet' then
 		nodePC = nodeField
 	elseif nodeField.getName() == 'inventorylist' then
+		nodePC = nodeField.getParent()
+	elseif nodeField.getName() == 'hp' then
 		nodePC = nodeField.getParent()
 	elseif nodeField.getParent().getName() == 'inventorylist' then
 		nodePC = nodeField.getChild( '...' )
@@ -43,7 +46,7 @@ function applyPenalties(nodeField)
 
 	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
 
-	--enable armor encumbrance when needed
+	--	enable armor encumbrance when needed
 	if nMaxStatToSet ~= -1 or nCheckPenaltyToSet ~= 0 or nSpellFailureToSet ~= 0 then
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
@@ -60,7 +63,7 @@ function applyPenalties(nodeField)
 
 	local nSpeedAdjFromEffects, bSpeedHalved = getSpeedEffects(nodePC, rActor)
 
-	--recalculate total speed from all inputs
+	--	recalculate total speed from all inputs
 	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
 
 	if bSpeedHalved then
