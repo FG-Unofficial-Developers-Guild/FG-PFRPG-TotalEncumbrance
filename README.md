@@ -8,7 +8,7 @@ I was excited to come across Alaxandir's CoreRPG port of Zuger's Coin Weight ext
 * Automatically roll arcane spell failure chance when appropriate. Alternately, prompt user to roll via a chat message including the spell failure chance.
 * Carrying capacities update live when strength-modifying effects are applied/changed/removed.
 * Armor can now have a max dex of zero, although it's a workaround. See the encumbrance_globals.lua section below.
-* Speed penalties auto-change based on weight encumbrance.
+* Speed penalties auto-change based on weight encumbrance and effects.
 
 Any values designed to be user-modifiable are located in scripts/encumbrance_globals.lua and include:
 * Coins per weight unit
