@@ -73,8 +73,6 @@ function applyPenalties(nodeField)
 		nSpeedToSet = nSpeedToSet + 0.5 - (nSpeedToSet + 0.5) % 1
 	end
 
-	Debug.chat(nSpeedToSet)
-
 	if bSpeedHalved then
 		nSpeedToSet = nSpeedToSet / 2
 	end
