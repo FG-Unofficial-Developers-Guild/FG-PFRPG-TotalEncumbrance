@@ -66,11 +66,18 @@ function applyPenalties(nodeField)
 	--	recalculate total speed from all inputs
 	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
 
+	--	round to nearest 5 or 1 as specified in options SPEED_INCREMENT
+	if OptionsManager.isOption('SPEED_INCREMENT', '5') then
+		nSpeedToSet = ((nSpeedToSet / 5) + 0.5 - ((nSpeedToSet / 5) + 0.5) % 1) * 5
+	else
+		nSpeedToSet = nSpeedToSet + 0.5 - (nSpeedToSet + 0.5) % 1
+	end
+
+	Debug.chat(nSpeedToSet)
+
 	if bSpeedHalved then
 		nSpeedToSet = nSpeedToSet / 2
 	end
-
-	nSpeedToSet = nSpeedToSet + 0.5 - (nSpeedToSet + 0.5) % 1
 
 	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
 	DB.setValue(nodePC, "speed.total", "number", nSpeedToSet)

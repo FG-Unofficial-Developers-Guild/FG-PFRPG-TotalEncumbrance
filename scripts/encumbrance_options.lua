@@ -21,4 +21,7 @@ function registerOptions()
 
 	OptionsManager.registerOption2('CARRY_CAPACITY_FROM_EFFECTS', false, 'option_header_game', 'opt_lab_carry_effects', 'option_entry_cycler', 
 		{ labels = 'enc_opt_carry_effects_off', values = 'off', baselabel = 'enc_opt_carry_effects_on', baseval = 'on', default = 'on' })
+
+	OptionsManager.registerOption2('SPEED_INCREMENT', false, 'option_header_game', 'opt_lab_speed_inc', 'option_entry_cycler', 
+		{ labels = 'enc_opt_speed_inc_1', values = '1', baselabel = 'enc_opt_speed_inc_5', baseval = '5', default = '5' })
 end
