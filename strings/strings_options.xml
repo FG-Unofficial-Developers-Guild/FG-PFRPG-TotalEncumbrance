@@ -30,6 +30,7 @@
 	<string name="enc_opt_carry_effects_on">Enabled</string>
 	<string name="enc_opt_carry_effects_off">Disabled</string>
 
+	<!-- disabled
 	<string name="enc_opt_speed_inc_5">Round to 5</string>
-	<string name="enc_opt_speed_inc_1">Round to 1</string>
+	<string name="enc_opt_speed_inc_1">Round to 1</string> -->
 </root>
