@@ -5,6 +5,8 @@
 function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
+	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyPenalties)
+	DB.addHandler(DB.getPath('combattracker.list'), 'onChildDeleted', applyPenalties)
 end
 
 --	Summary: Handles arguments of applyPenalties()
@@ -12,6 +14,7 @@ end
 --	Return: appropriate object databasenode - should represent node of PC
 local function handleApplyPenaltiesArgs(nodeField)
 	local nodePC
+	local rActor
 
 	if nodeField.getParent().getName() == 'charsheet' then
 		nodePC = nodeField
@@ -21,15 +24,22 @@ local function handleApplyPenaltiesArgs(nodeField)
 		nodePC = nodeField.getChild( '...' )
 	elseif nodeField.getName() == 'carried' then
 		nodePC = nodeField.getChild( '....' )
+	elseif nodeField.getName() == 'effects' then
+		rActor = ActorManager.getActor('ct', nodeField.getParent())
+		nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 
-	return nodePC
+	if not rActor then
+		rActor = ActorManager.getActor("pc", nodePC)
+	end
+
+	return nodePC, rActor
 end
 
 --	Summary: Recomputes penalties and updates max stat and check penalty
 --	Arguments: nodeField - node of 'carried' when called from handler
 function applyPenalties(nodeField)
-	local nodePC = handleApplyPenaltiesArgs(nodeField)
+	local nodePC, rActor = handleApplyPenaltiesArgs(nodeField)
 
 	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
 
@@ -48,9 +58,49 @@ function applyPenalties(nodeField)
 
 	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
 
+	local nSpeedAdjFromEffects, bSpeedHalved = getSpeedEffects(nodePC, rActor)
+
 	--recalculate total speed from all inputs
-	local nSpeedToSet = nSpeedBase + nSpeedPenalty + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
+	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
+
+	if bSpeedHalved then
+		nSpeedToSet = nSpeedToSet / 2
+	end
+
+	nSpeedToSet = nSpeedToSet + 0.5 - (nSpeedToSet + 0.5) % 1
+
 	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
+	DB.setValue(nodePC, "speed.total", "number", nSpeedToSet)
+end
+
+--	Summary: Determine the total bonus to character's speed from effects
+--	Argument: rActor containing the PC's charsheet and combattracker nodes
+--	Return: total bonus to speed from effects formatted as 'SPEED: n' in the combat tracker
+function getSpeedEffects(nodePC, rActor)
+	if not rActor then
+		return 0, false
+	end
+
+	bSpeedHalved = false
+
+	if EffectManager35E.hasEffectCondition(rActor, "Exhausted") then
+		bSpeedHalved = true
+	end
+	if EffectManager35E.hasEffectCondition(rActor, "Entangled") then
+		bSpeedHalved = true
+	end
+
+	--	Check if the character is disabled (at zero remaining hp)
+	local nTotalHp = DB.getValue(nodePC, "hp.total", 0)
+	local nWounds = DB.getValue(nodePC, "hp.wounds", 0)
+
+	if nTotalHp == nWounds then
+		bSpeedHalved = true
+	end
+
+	local nSpeedAdjFromEffects = EffectManager35E.getEffectsBonus(rActor, 'SPEED', true)
+
+	return nSpeedAdjFromEffects, bSpeedHalved
 end
 
 --	Summary: Finds max stat / check penalty tables with appropriate nonzero values
