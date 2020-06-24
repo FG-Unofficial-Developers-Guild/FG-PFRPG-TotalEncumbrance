@@ -117,9 +117,9 @@ function getStrEffectBonus(rActor)
 	local nStrEffectMod = EffectManager35E.getEffectsBonus(rActor, 'STR', true)
 
 	if EffectManager35E.hasEffectCondition(rActor, "Exhausted") then
-		nStrEffectMod = nEffectMod - 6
+		nStrEffectMod = nStrEffectMod - 6
 	elseif EffectManager35E.hasEffectCondition(rActor, "Fatigued") then
-		nStrEffectMod = nEffectMod - 2
+		nStrEffectMod = nStrEffectMod - 2
 	end
 
 	return nStrEffectMod
