@@ -61,7 +61,7 @@ function applyPenalties(nodeField)
 
 	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
 
-	local nSpeedAdjFromEffects, bSpeedHalved = getSpeedEffects(nodePC, rActor)
+	local nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero = getSpeedEffects(nodePC, rActor)
 
 	--	recalculate total speed from all inputs
 	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
@@ -73,9 +73,12 @@ function applyPenalties(nodeField)
 --		nSpeedToSet = nSpeedToSet + 0.5 - (nSpeedToSet + 0.5) % 1
 --	end
 
-	if bSpeedHalved then
+	if bSpeedZero then
+		nSpeedToSet = 0
+	elseif bSpeedHalved then
 		nSpeedToSet = nSpeedToSet / 2
 	end
+
 
 	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
 	DB.setValue(nodePC, "speed.total", "number", nSpeedToSet)
@@ -90,12 +93,24 @@ function getSpeedEffects(nodePC, rActor)
 	end
 
 	bSpeedHalved = false
+	bSpeedZero = false
 
 	if EffectManager35E.hasEffectCondition(rActor, "Exhausted") then
 		bSpeedHalved = true
 	end
 	if EffectManager35E.hasEffectCondition(rActor, "Entangled") then
 		bSpeedHalved = true
+	end
+	if EffectManager35E.hasEffectCondition(rActor, "Grappled") then
+		bSpeedZero = true
+	elseif EffectManager35E.hasEffectCondition(rActor, "Paralyzed") then
+		bSpeedZero = true
+	end
+	elseif EffectManager35E.hasEffectCondition(rActor, "Petrified") then
+		bSpeedZero = true
+	end
+	elseif EffectManager35E.hasEffectCondition(rActor, "Pinned") then
+		bSpeedZero = true
 	end
 
 	--	Check if the character is disabled (at zero remaining hp)
@@ -108,7 +123,7 @@ function getSpeedEffects(nodePC, rActor)
 
 	local nSpeedAdjFromEffects = EffectManager35E.getEffectsBonus(rActor, 'SPEED', true)
 
-	return nSpeedAdjFromEffects, bSpeedHalved
+	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
 
 --	Summary: Finds max stat / check penalty tables with appropriate nonzero values

@@ -46,7 +46,7 @@ function onEncumbranceChanged()
 
 	nStrength = nStrength + DB.getValue(nodeChar, 'encumbrance.stradj', 0)
 	
-	local nStrEffectMod = getStrEffectBonus(rActor)
+	local nStrEffectMod = getStrEffectBonus(rActor, nStrength)
 	DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
 
 --	modify onEncumbranceChanged to include STR effects in calculating carrying capacity (only if CARRY_CAPACITY_FROM_EFFECTS is enabled in options)
@@ -109,7 +109,7 @@ function onEncumbranceChanged()
 end
 
 --	Determine the total bonus to STR from effects
-function getStrEffectBonus(rActor)
+function getStrEffectBonus(rActor, nStrength)
 	if not rActor then
 		return 0
 	end
@@ -120,6 +120,8 @@ function getStrEffectBonus(rActor)
 		nStrEffectMod = nStrEffectMod - 6
 	elseif EffectManager35E.hasEffectCondition(rActor, "Fatigued") then
 		nStrEffectMod = nStrEffectMod - 2
+	elseif EffectManager35E.hasEffectCondition(rActor, "Paralyzed") then
+		nStrEffectMod = -1 * nStrength
 	end
 
 	return nStrEffectMod
