@@ -4,7 +4,7 @@
 	<properties>
 		<name>Total Encumbrance</name>
 		<version>1.4.0</version>
-		<author>bmos</author>
+		<author>bmos (Wil Thieme)</author>
 		<description>An extension that computes and displays the weight of carried coins.</description>
 		<ruleset>
 			<name>PFRPG</name>
