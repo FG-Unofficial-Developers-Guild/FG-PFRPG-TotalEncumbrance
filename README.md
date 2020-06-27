@@ -15,5 +15,3 @@ Any values designed to be user-modifiable are located in scripts/encumbrance_glo
 * Classes which have arcane failure in different categories of armor
 * Encumbrance penalties for medium or heavy encumbrance
 * A list of armor that is supposed to have a maximum dex penalty of zero (as FG didn't support this and I wanted half-plate to work right without manual corrections)
-
-https://svn.fantasygrounds.com/forums/showthread.php?58641-Coin-Weight-for-Pathfinder
