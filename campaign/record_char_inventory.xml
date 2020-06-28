@@ -156,6 +156,11 @@
 			<frame_char name="coinframe">
 				<bounds>255,-205,-29,200</bounds>
 			</frame_char>
+			<label name="coin_label" merge="replace">
+				<anchored to="coinframe" position="insidetopright" offset="10,15" />
+				<static textres="char_label_money" />
+			</label>
+
 
 		<!--Carried Coin of Coin Type 1-->
 			<number_dropadd name="coinamount1" >
