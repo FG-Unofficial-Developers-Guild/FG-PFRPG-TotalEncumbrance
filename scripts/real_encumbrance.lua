@@ -38,58 +38,10 @@ local function handleApplyPenaltiesArgs(node)
 	return nodePC, rActor
 end
 
---	Summary: Recomputes penalties and updates max stat and check penalty
---	Arguments: node - node of 'carried' when called from handler
-function applyPenalties(node)
-	local nodePC, rActor = handleApplyPenaltiesArgs(node)
-
-	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
-
-	--	enable armor encumbrance when needed
-	if
-		nMaxStatToSet ~= -1
-		or nCheckPenaltyToSet ~= 0
-		or nSpellFailureToSet ~= 0
-	then
-		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
-		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
-	else
-		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
-		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
-	end
-
-	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', nMaxStatToSet)
-	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
-	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
-
-	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
-
-	local nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero = getSpeedEffects(nodePC, rActor)
-
-	--	recalculate total speed from all inputs
-	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
-
-	--	round to nearest 5 (or 1 as specified in options list - SPEED_INCREMENT)
---	if OptionsManager.isOption('SPEED_INCREMENT', '5') then
-		nSpeedToSet = ((nSpeedToSet / 5) + 0.5 - ((nSpeedToSet / 5) + 0.5) % 1) * 5
---	else
---		nSpeedToSet = nSpeedToSet + 0.5 - (nSpeedToSet + 0.5) % 1
---	end
-
-	if bSpeedZero then
-		nSpeedToSet = 0
-	elseif bSpeedHalved then
-		nSpeedToSet = nSpeedToSet / 2
-	end
-
-	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
-	DB.setValue(nodePC, "speed.total", "number", nSpeedToSet)
-end
-
 --	Summary: Determine the total bonus to character's speed from effects
 --	Argument: rActor containing the PC's charsheet and combattracker nodes
 --	Return: total bonus to speed from effects formatted as 'SPEED: n' in the combat tracker
-function getSpeedEffects(nodePC, rActor)
+local function getSpeedEffects(nodePC, rActor)
 	if not rActor then
 		return 0, false
 	end
@@ -386,7 +338,7 @@ end
 --	Return: number holding armor max stat penalty
 --	Return: number holding armor check penalty
 --	Return: number holding armor spell failure penalty
-function computePenalties(nodePC)
+local function computePenalties(nodePC)
 	local tMaxStat = {}
 	local tEqCheckPenalty = {}
 	local tCheckPenalty = {}
@@ -490,4 +442,52 @@ function computePenalties(nodePC)
 	end
 
 	return nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase
+end
+
+--	Summary: Recomputes penalties and updates max stat and check penalty
+--	Arguments: node - node of 'carried' when called from handler
+function applyPenalties(node)
+	local nodePC, rActor = handleApplyPenaltiesArgs(node)
+
+	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
+
+	--	enable armor encumbrance when needed
+	if
+		nMaxStatToSet ~= -1
+		or nCheckPenaltyToSet ~= 0
+		or nSpellFailureToSet ~= 0
+	then
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
+	else
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
+		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
+	end
+
+	DB.setValue(nodePC, 'encumbrance.armormaxstatbonus', 'number', nMaxStatToSet)
+	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
+	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
+
+	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
+
+	local nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero = getSpeedEffects(nodePC, rActor)
+
+	--	recalculate total speed from all inputs
+	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
+
+	--	round to nearest 5 (or 1 as specified in options list - SPEED_INCREMENT)
+--	if OptionsManager.isOption('SPEED_INCREMENT', '5') then
+		nSpeedToSet = ((nSpeedToSet / 5) + 0.5 - ((nSpeedToSet / 5) + 0.5) % 1) * 5
+--	else
+--		nSpeedToSet = nSpeedToSet + 0.5 - (nSpeedToSet + 0.5) % 1
+--	end
+
+	if bSpeedZero then
+		nSpeedToSet = 0
+	elseif bSpeedHalved then
+		nSpeedToSet = nSpeedToSet / 2
+	end
+
+	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
+	DB.setValue(nodePC, "speed.total", "number", nSpeedToSet)
 end
