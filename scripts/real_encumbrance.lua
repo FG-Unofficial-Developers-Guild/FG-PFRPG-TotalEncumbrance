@@ -162,6 +162,10 @@ local function numericalNumbers(sItemCost)
 		end
 	end
 
+	if nItemCost == nil then
+		nItemCost = 0
+	end
+
 	return nItemCost
 end
 
