@@ -11,24 +11,24 @@ function onInit()
 end
 
 --	Summary: Handles arguments of applyPenalties()
---	Argument: potentially nil nodeField representing carried databasenode on newly carried / equipped / dropped item
+--	Argument: potentially nil node representing carried databasenode on newly carried / equipped / dropped item
 --	Return: appropriate object databasenode - should represent node of PC
-local function handleApplyPenaltiesArgs(nodeField)
+local function handleApplyPenaltiesArgs(node)
 	local nodePC
 	local rActor
 
-	if nodeField.getParent().getName() == 'charsheet' then
-		nodePC = nodeField
-	elseif nodeField.getName() == 'inventorylist' then
-		nodePC = nodeField.getParent()
-	elseif nodeField.getName() == 'hp' then
-		nodePC = nodeField.getParent()
-	elseif nodeField.getParent().getName() == 'inventorylist' then
-		nodePC = nodeField.getChild( '...' )
-	elseif nodeField.getName() == 'carried' then
-		nodePC = nodeField.getChild( '....' )
-	elseif nodeField.getName() == 'effects' then
-		rActor = ActorManager.getActor('ct', nodeField.getParent())
+	if node.getParent().getName() == 'charsheet' then
+		nodePC = node
+	elseif node.getName() == 'inventorylist' then
+		nodePC = node.getParent()
+	elseif node.getName() == 'carried' then
+		nodePC = node.getChild( '....' )
+	elseif node.getParent().getName() == 'inventorylist' then
+		nodePC = node.getChild( '...' )
+	elseif node.getName() == 'hp' then
+		nodePC = node.getParent()
+	elseif node.getName() == 'effects' then
+		rActor = ActorManager.getActor('ct', node.getParent())
 		nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 
@@ -40,9 +40,9 @@ local function handleApplyPenaltiesArgs(nodeField)
 end
 
 --	Summary: Recomputes penalties and updates max stat and check penalty
---	Arguments: nodeField - node of 'carried' when called from handler
-function applyPenalties(nodeField)
-	local nodePC, rActor = handleApplyPenaltiesArgs(nodeField)
+--	Arguments: node - node of 'carried' when called from handler
+function applyPenalties(node)
+	local nodePC, rActor = handleApplyPenaltiesArgs(node)
 
 	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
 
