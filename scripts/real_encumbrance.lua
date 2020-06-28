@@ -16,26 +16,23 @@ end
 --	Argument: potentially nil node representing carried databasenode on newly carried / equipped / dropped item
 --	Return: appropriate object databasenode - should represent node of PC
 local function handleApplyPenaltiesArgs(node)
-	local nodePC
-	local rActor
-
 	if node.getParent().getName() == 'charsheet' then
-		nodePC = node
+		local nodePC = node
 	elseif node.getName() == 'inventorylist' then
-		nodePC = node.getParent()
+		local nodePC = node.getParent()
 	elseif node.getName() == 'carried' then
-		nodePC = node.getChild( '....' )
+		local nodePC = node.getChild( '....' )
 	elseif node.getParent().getName() == 'inventorylist' then
-		nodePC = node.getChild( '...' )
+		local nodePC = node.getChild( '...' )
 	elseif node.getName() == 'hp' then
-		nodePC = node.getParent()
+		local nodePC = node.getParent()
 	elseif node.getName() == 'effects' then
-		rActor = ActorManager.getActor('ct', node.getParent())
-		nodePC = DB.findNode(rActor['sCreatureNode'])
+		local rActor = ActorManager.getActor('ct', node.getParent())
+		local nodePC = DB.findNode(rActor['sCreatureNode'])
 	end
 
 	if not rActor then
-		rActor = ActorManager.getActor("pc", nodePC)
+		local rActor = ActorManager.getActor("pc", nodePC)
 	end
 
 	return nodePC, rActor
@@ -85,7 +82,6 @@ function applyPenalties(node)
 		nSpeedToSet = nSpeedToSet / 2
 	end
 
-
 	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
 	DB.setValue(nodePC, "speed.total", "number", nSpeedToSet)
 end
@@ -98,8 +94,8 @@ function getSpeedEffects(nodePC, rActor)
 		return 0, false
 	end
 
-	bSpeedHalved = false
-	bSpeedZero = false
+	local bSpeedHalved = false
+	local bSpeedZero = false
 
 	if
 		EffectManager35E.hasEffectCondition(rActor, "Exhausted")
@@ -118,10 +114,7 @@ function getSpeedEffects(nodePC, rActor)
 	end
 
 	--	Check if the character is disabled (at zero remaining hp)
-	local nTotalHp = DB.getValue(nodePC, "hp.total", 0)
-	local nWounds = DB.getValue(nodePC, "hp.wounds", 0)
-
-	if nTotalHp == nWounds then
+	if DB.getValue(nodePC, "hp.total", 0) == DB.getValue(nodePC, "hp.wounds", 0) then
 		bSpeedHalved = true
 	end
 
@@ -180,6 +173,14 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local nItemMaxStat
 	local nItemCheckPenalty
 	local nItemSpellFailure
+	local nItemSpeed20
+	local nItemSpeed30
+	local nItemIDed
+	local nItemCount
+	local sItemName
+	local sItemType
+	local sItemSubtype
+	local sItemCost
 
 	local tLtArmor = {}
 	local tMedArmor = {}
@@ -187,7 +188,6 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local tShield = {}
 
 	local nTotalInvVal = 0
-
 	local bClumsyArmor = false
 
 	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
@@ -263,35 +263,32 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 
 	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Inv Total: '..nTotalInvVal..' gp')
 
-	local nMaxStatFromArmor
-	local nCheckPenaltyFromArmor
-
 	if table.getn(tMaxStat) ~= 0 then
-		nMaxStatFromArmor = math.min(unpack(tMaxStat)) -- this would pick the lowest max dex if there is multi-equipped armor
+		local nMaxStatFromArmor = math.min(unpack(tMaxStat)) -- this would pick the lowest max dex if there is multi-equipped armor
 	else
-		nMaxStatFromArmor = -1
+		local nMaxStatFromArmor = -1
 	end
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromarmor', 'number', nMaxStatFromArmor ~= nil and nMaxStatFromArmor or -1)
 
 	if table.getn(tEqCheckPenalty) ~= 0 then
-		nCheckPenaltyFromArmor = LibTotalEncumbrance.tableSum(tEqCheckPenalty) -- this would sum penalties on multi-equipped armor
+		local nCheckPenaltyFromArmor = LibTotalEncumbrance.tableSum(tEqCheckPenalty) -- this would sum penalties on multi-equipped armor
 	else
-		nCheckPenaltyFromArmor = 0
+		local nCheckPenaltyFromArmor = 0
 	end
 
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromarmor', 'number', nCheckPenaltyFromArmor ~= nil and nCheckPenaltyFromArmor or 0)
 
 	if table.getn(tSpeed20) ~= 0 then
-		nSpeed20FromArmor = math.min(unpack(tSpeed20)) -- this gets min speed from multi-equipped armor
+		local nSpeed20FromArmor = math.min(unpack(tSpeed20)) -- this gets min speed from multi-equipped armor
 	else
-		nSpeed20FromArmor = 0
+		local nSpeed20FromArmor = 0
 	end
 
 	if table.getn(tSpeed30) ~= 0 then
-		nSpeed30FromArmor = math.min(unpack(tSpeed30)) -- this gets min speed from multi-equipped armor
+		local nSpeed30FromArmor = math.min(unpack(tSpeed30)) -- this gets min speed from multi-equipped armor
 	else
-		nSpeed30FromArmor = 0
+		local nSpeed30FromArmor = 0
 	end
 
 	DB.setValue(nodePC, 'encumbrance.speed20fromarmor', 'number', nSpeed20FromArmor ~= nil and nSpeed20FromArmor or 0)
@@ -397,10 +394,6 @@ function computePenalties(nodePC)
 	local tSpeed20 = {}
 	local tSpeed30 = {}
 
-	local nMaxStatToSet
-	local nCheckPenaltyToSet
-	local nSpellFailureToSet
-
 	rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
 
 	if table.getn(tEqCheckPenalty) ~= 0 then
@@ -410,37 +403,37 @@ function computePenalties(nodePC)
 	rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure, tSpeed)
 
 	if table.getn(tMaxStat) ~= 0 then
-		nMaxStatToSet = math.min(unpack(tMaxStat))
+		local nMaxStatToSet = math.min(unpack(tMaxStat))
 	else
-		nMaxStatToSet = -1
+		local nMaxStatToSet = -1
 	end
 
 	if table.getn(tCheckPenalty) ~= 0 then
-		nCheckPenaltyToSet = math.min(unpack(tCheckPenalty)) -- this would sum penalties on multi-equipped shields / armor & encumbrance
+		local nCheckPenaltyToSet = math.min(unpack(tCheckPenalty)) -- this would sum penalties on multi-equipped shields / armor & encumbrance
 	else
-		nCheckPenaltyToSet = 0
+		local nCheckPenaltyToSet = 0
 	end
 
 	if table.getn(tSpellFailure) ~= 0 then
-		nSpellFailureToSet = LibTotalEncumbrance.tableSum(tSpellFailure) -- this would sum penalties on multi-equipped armor
+		local nSpellFailureToSet = LibTotalEncumbrance.tableSum(tSpellFailure) -- this would sum penalties on multi-equipped armor
 
 		if nSpellFailureToSet > 100 then
 			nSpellFailureToSet = 100
 		end
 	else
-		nSpellFailureToSet = 0
+		local nSpellFailureToSet = 0
 	end
 
 	if table.getn(tSpeed20) ~= 0 then
-		nSpeedPenalty20 = math.min(unpack(tSpeed20))
+		local nSpeedPenalty20 = math.min(unpack(tSpeed20))
 	else
-		nSpeedPenalty20 = 0
+		local nSpeedPenalty20 = 0
 	end
 
 	if table.getn(tSpeed30) ~= 0 then
-		nSpeedPenalty30 = math.min(unpack(tSpeed30))
+		local nSpeedPenalty30 = math.min(unpack(tSpeed30))
 	else
-		nSpeedPenalty30 = 0
+		local nSpeedPenalty30 = 0
 	end
 
 	--compute speed including total encumberance speed penalty
