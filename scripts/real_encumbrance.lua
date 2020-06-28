@@ -187,6 +187,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local tShield = {}
 	
 	local nTotalInvVal = 0
+--	local nTotalInvVal = getTotalCoinWealth(nodePC)
 
 	local bClumsyArmor = false
 
@@ -248,7 +249,8 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		end
 	end
 
-	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Inv Total: '..nTotalInvVal..' gp')
+	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Item Total: '..nTotalInvVal..' gp')
+--	DB.setValue(nodePC, 'coins.wealthtotal', 'string', 'Wealth Total: '..nWealthVal..' gp')
 
 	local nMaxStatFromArmor
 	local nCheckPenaltyFromArmor
