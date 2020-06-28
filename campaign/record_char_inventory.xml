@@ -157,7 +157,7 @@
 				<bounds>255,-205,-29,200</bounds>
 			</frame_char>
 			<label name="coin_label" merge="replace">
-				<anchored to="coinframe" position="insidetopleft" offset="30,7" />
+				<anchored to="coinframe" position="insidetopleft" offset="15,7" />
 				<static textres="char_label_money" />
 			</label>
 
@@ -183,6 +183,7 @@
 		<!--Label of Coin Type 1-->
 			<stringu name="coinname1" source="coins.slot1.name">
 				<anchored to="coinamount1" position="righthigh" offset="60,0" width="20" />
+				<default>pp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 2-->
@@ -206,6 +207,7 @@
 		<!--Label of Coin Type 2-->
 			<stringu name="coinname2" source="coins.slot2.name">
 				<anchored to="coinamount2" position="righthigh" offset="60,0" width="20"/>
+				<default>gp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 3-->
@@ -229,6 +231,7 @@
 		<!--Label of Coin Type 3-->
 			<stringu name="coinname3" source="coins.slot3.name">
 				<anchored to="coinamount3" position="right" offset="60,0" width="20" />
+				<default>sp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 4-->
@@ -251,6 +254,7 @@
 		<!--Label of Coin Type 4-->
 			<stringu name="coinname4" source="coins.slot4.name">
 				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" />
+				<default>cp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 5-->
