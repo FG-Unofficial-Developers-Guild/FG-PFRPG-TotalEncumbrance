@@ -162,8 +162,6 @@ local function numericalNumbers(sItemCost)
 		end
 	end
 
-	Debug.chat(nItemCost)
-
 	return nItemCost
 end
 
@@ -245,8 +243,6 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 			end
 		end
 	end
-
---	Debug.chat(nTotalInvVal)
 
 	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Inv Total: '..nTotalInvVal..' gp')
 
