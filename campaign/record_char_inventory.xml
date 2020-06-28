@@ -157,7 +157,7 @@
 				<bounds>255,-205,-29,200</bounds>
 			</frame_char>
 			<label name="coin_label" merge="replace">
-				<anchored to="coinframe" position="insidetopright" offset="10,15" />
+				<anchored to="coinframe" position="insidetopleft" offset="30,7" />
 				<static textres="char_label_money" />
 			</label>
 
@@ -298,7 +298,20 @@
 			<stringu name="coinname6" source="coins.slot6.name">
 				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
 			</stringu>
-
+		<!-- Coins 'Other' Text Box -->
+			<basicstring name="coinother">
+				<anchored>
+					<left parent="coinname1" anchor="right" offset="10" />
+					<right parent="coinframe" offset="-15" />
+					<top parent="coinamount1" />
+					<bottom parent="coinamount6" />
+				</anchored>
+				<multilinespacing>20</multilinespacing>
+			</basicstring>
+			<stringu name="inventorytotal" source="coins.inventorytotal">
+				<anchored to="coinframe" position="insidetopright" offset="15,10" />
+				<readonly />
+			</stringu>
 		</sheetdata>
 	</windowclass>
 	
