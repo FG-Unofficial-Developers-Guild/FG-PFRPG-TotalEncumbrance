@@ -49,7 +49,11 @@ function applyPenalties(node)
 	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodePC)
 
 	--	enable armor encumbrance when needed
-	if nMaxStatToSet ~= -1 or nCheckPenaltyToSet ~= 0 or nSpellFailureToSet ~= 0 then
+	if
+		nMaxStatToSet ~= -1
+		or nCheckPenaltyToSet ~= 0
+		or nSpellFailureToSet ~= 0
+	then
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodePC, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 	else
@@ -97,19 +101,19 @@ function getSpeedEffects(nodePC, rActor)
 	bSpeedHalved = false
 	bSpeedZero = false
 
-	if EffectManager35E.hasEffectCondition(rActor, "Exhausted") then
+	if
+		EffectManager35E.hasEffectCondition(rActor, "Exhausted")
+		or EffectManager35E.hasEffectCondition(rActor, "Entangled")
+	then
 		bSpeedHalved = true
 	end
-	if EffectManager35E.hasEffectCondition(rActor, "Entangled") then
-		bSpeedHalved = true
-	end
-	if EffectManager35E.hasEffectCondition(rActor, "Grappled") then
-		bSpeedZero = true
-	elseif EffectManager35E.hasEffectCondition(rActor, "Paralyzed") then
-		bSpeedZero = true
-	elseif EffectManager35E.hasEffectCondition(rActor, "Petrified") then
-		bSpeedZero = true
-	elseif EffectManager35E.hasEffectCondition(rActor, "Pinned") then
+
+	if
+		EffectManager35E.hasEffectCondition(rActor, "Grappled")
+		or EffectManager35E.hasEffectCondition(rActor, "Paralyzed")
+		or EffectManager35E.hasEffectCondition(rActor, "Petrified")
+		or EffectManager35E.hasEffectCondition(rActor, "Pinned")
+	then
 		bSpeedZero = true
 	end
 
@@ -181,7 +185,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local tMedArmor = {}
 	local tHeavyArmor = {}
 	local tShield = {}
-	
+
 	local nTotalInvVal = 0
 
 	local bClumsyArmor = false
@@ -212,21 +216,30 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 					break
 				end
 			end
-			if nItemMaxStat ~= 0 or bClumsyArmor then
+
+			if
+				nItemMaxStat ~= 0
+				or bClumsyArmor
+			then
 				table.insert(tMaxStat, nItemMaxStat)
 			end
+
 			if nItemCheckPenalty ~= 0 then
 				table.insert(tEqCheckPenalty, nItemCheckPenalty)
 			end
+
 			if nItemSpellFailure ~= 0 then
 				table.insert(tSpellFailure, nItemSpellFailure)
 			end
+
 			if nItemSpeed20 ~= 0 then
 				table.insert(tSpeed20, nItemSpeed20)
 			end
+
 			if nItemSpeed30 ~= 0 then
 				table.insert(tSpeed30, nItemSpeed30)
 			end
+
 			if sItemType == 'armor' then
 				if sItemSubtype == 'light' then
 					table.insert(tLtArmor, '1')
@@ -235,9 +248,13 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 				elseif sItemSubtype == 'heavy' then
 					table.insert(tHeavyArmor, '3')
 				end
+
 				if sItemName == 'tower' then
 					table.insert(tHeavyArmor, '3')
-				elseif sItemSubtype == 'shield' or sItemSubtype == 'magic shield' then
+				elseif
+					sItemSubtype == 'shield'
+					or sItemSubtype == 'magic shield'
+				then
 					table.insert(tShield, 'i like turtles')
 				end
 			end
@@ -270,6 +287,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	else
 		nSpeed20FromArmor = 0
 	end
+
 	if table.getn(tSpeed30) ~= 0 then
 		nSpeed30FromArmor = math.min(unpack(tSpeed30)) -- this gets min speed from multi-equipped armor
 	else
@@ -284,16 +302,29 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local nLtArmorCount = table.getn(tLtArmor)
 	local nShieldCount = table.getn(tShield)
 
-	if nHeavyArmorCount ~= 0 and nHeavyArmorCount ~= nil then
+	if
+		nHeavyArmorCount ~= 0
+		and nHeavyArmorCount ~= nil
+	then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 3)
-	elseif nMedArmorCount ~= 0 and nMedArmorCount ~= nil then
+	elseif
+			nMedArmorCount ~= 0
+			and nMedArmorCount ~= nil
+	then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 2)
-	elseif nLtArmorCount ~= 0 and nLtArmorCount ~= nil then
+	elseif
+		nLtArmorCount ~= 0
+		and nLtArmorCount ~= nil
+	then
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 1)
-	else 
+	else
 		DB.setValue(nodePC, 'encumbrance.armorcategory', 'number', 0)
 	end
-	if nShieldCount ~= 0 and nShieldCount ~= nil then
+
+	if
+		nShieldCount ~= 0
+		and nShieldCount ~= nil
+	then
 		DB.setValue(nodePC, 'encumbrance.shieldequipped', 'number', 1)
 	else
 		DB.setValue(nodePC, 'encumbrance.shieldequipped', 'number', 0)
@@ -436,17 +467,29 @@ function computePenalties(nodePC)
 	local nSpeedPenalty = 0
 
 	if bApplySpeedPenalty then
-		if (nSpeedBase >= 30) and (nSpeedPenalty30 > 0) then
+		if
+			nSpeedBase >= 30
+			and nSpeedPenalty30 > 0
+		then
 			nSpeedPenalty = nSpeedPenalty30 - 30
-		elseif (nSpeedBase < 30) and (nSpeedPenalty20 > 0) then
+		elseif
+			nSpeedBase < 30
+			and nSpeedPenalty20 > 0
+		then
 			nSpeedPenalty = nSpeedPenalty20 - 20
 		end
 	end
 
 	local nEncumbranceLevel = DB.getValue(nodePC, 'encumbrance.encumbrancelevel', 0)
 
-	if OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on') and nEncumbranceLevel > 1 then -- if weight encumbrance penalties are enabled in options and player is encumbered
-		if nSpeedPenalty ~= 0 and nSpeedPenaltyFromEnc ~= 0 then
+	if -- if weight encumbrance penalties are enabled in options and player is encumbered
+		OptionsManager.isOption('WEIGHT_ENCUMBRANCE', 'on')
+		and nEncumbranceLevel > 1
+	then
+		if
+			nSpeedPenalty ~= 0
+			and nSpeedPenaltyFromEnc ~= 0
+		then
 			nSpeedPenalty = math.min(nSpeedPenaltyFromEnc, nSpeedPenalty)
 		elseif nSpeedPenaltyFromEnc then
 			nSpeedPenalty = nSpeedPenaltyFromEnc
