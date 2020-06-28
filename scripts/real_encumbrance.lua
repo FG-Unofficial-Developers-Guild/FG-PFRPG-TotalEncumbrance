@@ -5,6 +5,7 @@
 function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.weight'), 'onUpdate', applyPenalties)
+	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyPenalties)
@@ -127,8 +128,42 @@ end
 
 --	Summary: converts strings like 300gp to 300 or 30pp to 300.
 local function numericalNumbers(sItemCost)
-	local nItemCost = 1
-	
+	local nUnitStringPos = string.find(sItemCost, ' gp', 2,  true)
+	local nDenomination = 1
+
+	if not nUnitStringPos then
+		nUnitStringPos = string.find(sItemCost, ' cp', 2,  true)
+		nDenomination = 3
+	end
+	if not nUnitStringPos then
+		nUnitStringPos = string.find(sItemCost, ' sp', 2,  true)
+		nDenomination = 2
+	end
+	if not nUnitStringPos then
+		nUnitStringPos = string.find(sItemCost, ' pp', 2,  true)
+		nDenomination = 4
+	end
+	if not nUnitStringPos then
+		nDenomination = 0
+	end
+
+	local nItemCost = 0
+	if nUnitStringPos then
+		nUnitStringPos = nUnitStringPos - 1
+		nItemCost = tonumber(string.sub(sItemCost, 1, nUnitStringPos))
+		if nDenomination == 2 then
+			nItemCost = nItemCost * .1
+		end
+		if nDenomination == 3 then
+			nItemCost = nItemCost * .01
+		end
+		if nDenomination == 4 then
+			nItemCost = nItemCost * 10
+		end
+	end
+
+	Debug.chat(nItemCost)
+
 	return nItemCost
 end
 
@@ -160,12 +195,12 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
 		nItemSpeed20 = DB.getValue(v, 'speed20', 0)
 		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
-		sItemType = string.lower(DB.getValue(v, 'type', ''))
+		nItemIDed = DB.getValue(v, 'isidentified', '')
+		nItemCount = DB.getValue(v, 'count', '')
 		sItemName = string.lower(DB.getValue(v, 'name', ''))
-		nItemIDed = string.lower(DB.getValue(v, 'isidentified', ''))
-		sItemCost = string.lower(DB.getValue(v, 'cost', ''))
-		nItemCount = string.lower(DB.getValue(v, 'count', ''))
+		sItemType = string.lower(DB.getValue(v, 'type', ''))
 		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
+		sItemCost = string.lower(DB.getValue(v, 'cost', ''))
 
 		if nItemIDed == 1 then
 			nItemCost = numericalNumbers(sItemCost)
@@ -211,7 +246,9 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		end
 	end
 
-	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Inv Total: '..nTotalInvVal)
+--	Debug.chat(nTotalInvVal)
+
+	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Inv Total: '..nTotalInvVal..' gp')
 
 	local nMaxStatFromArmor
 	local nCheckPenaltyFromArmor
