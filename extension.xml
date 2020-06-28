@@ -7,10 +7,10 @@
 		<author>bmos (Wil Thieme)</author>
 		<description>An extension that computes and displays the weight of carried coins.</description>
 		<ruleset>
-		  <name>PFRPG</name>
+			<name>PFRPG</name>
 		</ruleset>
 		<ruleset>
-		  <name>3.5</name>
+			<name>3.5</name>
 		</ruleset>
 	</properties>
 
