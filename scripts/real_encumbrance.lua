@@ -105,10 +105,8 @@ function getSpeedEffects(nodePC, rActor)
 		bSpeedZero = true
 	elseif EffectManager35E.hasEffectCondition(rActor, "Paralyzed") then
 		bSpeedZero = true
-	end
 	elseif EffectManager35E.hasEffectCondition(rActor, "Petrified") then
 		bSpeedZero = true
-	end
 	elseif EffectManager35E.hasEffectCondition(rActor, "Pinned") then
 		bSpeedZero = true
 	end
