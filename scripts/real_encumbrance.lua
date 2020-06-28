@@ -128,29 +128,21 @@ end
 
 --	Summary: converts strings like 300gp to 300 or 30pp to 300.
 local function stringToNumber(sItemCost)
-	local nUnitStringPos = string.find(sItemCost, ' gp', 2,  true)
-	local nDenomination = 1
-
-	if not nUnitStringPos then
-		nUnitStringPos = string.find(sItemCost, ' cp', 2,  true)
-		nDenomination = 3
-	end
-	if not nUnitStringPos then
-		nUnitStringPos = string.find(sItemCost, ' sp', 2,  true)
+	local nDenomination = 0
+	if string.match(sItemCost, 'gp') then
+		nDenomination = 1
+	elseif string.match(sItemCost, 'sp') then
 		nDenomination = 2
-	end
-	if not nUnitStringPos then
-		nUnitStringPos = string.find(sItemCost, ' pp', 2,  true)
+	elseif string.match(sItemCost, 'cp') then
+		nDenomination = 3
+	elseif string.match(sItemCost, 'pp') then
 		nDenomination = 4
 	end
-	if not nUnitStringPos then
-		nDenomination = 0
-	end
 
-	local nItemCost = 0
-	if nUnitStringPos then
-		nUnitStringPos = nUnitStringPos - 1
-		nItemCost = tonumber(string.sub(sItemCost, 1, nUnitStringPos))
+	local nItemCost = sItemCost:gsub('[^0-9.-]', '', x)
+	local nItemCost = tonumber(nItemCost)
+
+	if nDenomination ~= 0 then
 		if nDenomination == 2 then
 			nItemCost = nItemCost * .1
 		end
@@ -160,9 +152,7 @@ local function stringToNumber(sItemCost)
 		if nDenomination == 4 then
 			nItemCost = nItemCost * 10
 		end
-	end
-
-	if nItemCost == nil then
+	else
 		nItemCost = 0
 	end
 
