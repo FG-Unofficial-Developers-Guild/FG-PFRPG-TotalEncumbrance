@@ -156,6 +156,11 @@
 			<frame_char name="coinframe">
 				<bounds>255,-205,-29,200</bounds>
 			</frame_char>
+			<label name="coin_label" merge="replace">
+				<anchored to="coinframe" position="insidetopleft" offset="15,7" />
+				<static textres="char_label_money" />
+			</label>
+
 
 		<!--Carried Coin of Coin Type 1-->
 			<number_dropadd name="coinamount1" >
@@ -178,6 +183,7 @@
 		<!--Label of Coin Type 1-->
 			<stringu name="coinname1" source="coins.slot1.name">
 				<anchored to="coinamount1" position="righthigh" offset="60,0" width="20" />
+				<default>pp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 2-->
@@ -201,6 +207,7 @@
 		<!--Label of Coin Type 2-->
 			<stringu name="coinname2" source="coins.slot2.name">
 				<anchored to="coinamount2" position="righthigh" offset="60,0" width="20"/>
+				<default>gp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 3-->
@@ -224,6 +231,7 @@
 		<!--Label of Coin Type 3-->
 			<stringu name="coinname3" source="coins.slot3.name">
 				<anchored to="coinamount3" position="right" offset="60,0" width="20" />
+				<default>sp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 4-->
@@ -246,6 +254,7 @@
 		<!--Label of Coin Type 4-->
 			<stringu name="coinname4" source="coins.slot4.name">
 				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" />
+				<default>cp</default>
 			</stringu>
 
 		<!--Carried Coin of Coin Type 5-->
@@ -293,7 +302,20 @@
 			<stringu name="coinname6" source="coins.slot6.name">
 				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
 			</stringu>
-
+		<!-- Coins 'Other' Text Box -->
+			<basicstring name="coinother">
+				<anchored>
+					<left parent="coinname1" anchor="right" offset="10" />
+					<right parent="coinframe" offset="-15" />
+					<top parent="coinamount1" />
+					<bottom parent="coinamount6" />
+				</anchored>
+				<multilinespacing>20</multilinespacing>
+			</basicstring>
+			<stringu name="inventorytotal" source="coins.inventorytotal">
+				<anchored to="coinframe" position="insidetopright" offset="15,10" />
+				<readonly />
+			</stringu>
 		</sheetdata>
 	</windowclass>
 	
