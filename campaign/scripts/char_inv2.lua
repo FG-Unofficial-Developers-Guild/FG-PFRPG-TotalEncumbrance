@@ -5,7 +5,7 @@
 function onInit()
 	onEncumbranceChanged()
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath(getDatabaseNode(), 'abilities.strength.score'), 'onUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(getDatabaseNode(), 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
@@ -14,7 +14,7 @@ end
 
 function onClose()
 	DB.removeHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath(getDatabaseNode(), 'abilities.strength.score'), 'onUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(getDatabaseNode(), 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
@@ -43,6 +43,7 @@ function onEncumbranceChanged()
 
 	local nHeavy = 0
 	local nStrength = DB.getValue(nodeChar, 'abilities.strength.score', 10)
+	local nStrengthDamage = DB.getValue(nodeChar, 'abilities.strength.damage', 0)
 
 	nStrength = nStrength + DB.getValue(nodeChar, 'encumbrance.stradj', 0)
 	
@@ -51,7 +52,7 @@ function onEncumbranceChanged()
 
 --	modify onEncumbranceChanged to include STR effects in calculating carrying capacity (only if CARRY_CAPACITY_FROM_EFFECTS is enabled in options)
 	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
-		nStrength = nStrength + nStrEffectMod
+		nStrength = nStrength + nStrEffectMod - nStrengthDamage
 	end
 	
 	if nStrength > 0 then
