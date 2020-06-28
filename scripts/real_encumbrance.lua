@@ -124,6 +124,13 @@ function getSpeedEffects(nodePC, rActor)
 	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
 
+--	Summary: converts strings like 300gp to 300 or 30pp to 300.
+local function numericalNumbers(sItemCost)
+	local nItemCost = 1
+	
+	return nItemCost
+end
+
 --	Summary: Finds max stat / check penalty tables with appropriate nonzero values
 --	Argument: databasenode nodePC is the PC node
 --	Argument: table tMaxStat is empty table to represent max stat penalties
@@ -140,6 +147,8 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local tMedArmor = {}
 	local tHeavyArmor = {}
 	local tShield = {}
+	
+	local nTotalInvVal = 0
 
 	local bClumsyArmor = false
 
@@ -152,7 +161,15 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
 		sItemType = string.lower(DB.getValue(v, 'type', ''))
 		sItemName = string.lower(DB.getValue(v, 'name', ''))
+		nItemIDed = string.lower(DB.getValue(v, 'isidentified', ''))
+		sItemCost = string.lower(DB.getValue(v, 'cost', ''))
+		nItemCount = string.lower(DB.getValue(v, 'count', ''))
 		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
+
+		if nItemIDed == 1 then
+			nItemCost = numericalNumbers(sItemCost)
+			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
+		end
 
 		if nItemCarried == 2 then
 			for _,v in pairs(TEGlobals.tClumsyArmorTypes) do
@@ -192,6 +209,8 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 			end
 		end
 	end
+
+	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Inv Total: '..nTotalInvVal)
 
 	local nMaxStatFromArmor
 	local nCheckPenaltyFromArmor
