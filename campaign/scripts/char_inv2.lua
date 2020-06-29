@@ -51,9 +51,9 @@ function onEncumbranceChanged()
 	DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
 
 --	modify onEncumbranceChanged to include STR effects in calculating carrying capacity (only if CARRY_CAPACITY_FROM_EFFECTS is enabled in options)
-	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
+--	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
 		nStrength = nStrength + nStrEffectMod - nStrengthDamage
-	end
+--	end
 	
 	if nStrength > 0 then
 		if nStrength <= 10 then
