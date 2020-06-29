@@ -3,11 +3,7 @@
 --
 
 function onInit()
-	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
-	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.weight'), 'onUpdate', applyPenalties)
-	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', applyPenalties)
-	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.count'), 'onUpdate', applyPenalties)
-	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
+	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('combattracker.list'), 'onChildDeleted', applyPenalties)
