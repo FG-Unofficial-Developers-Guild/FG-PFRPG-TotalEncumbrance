@@ -118,7 +118,7 @@
 
 		<!--Coin Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
-				<anchored to="encumbranceliftoverhead" position="below" offset="0,15" width="55" height="20" />
+				<anchored to="encumbranceliftoverhead" position="below" offset="0,15" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
@@ -136,7 +136,7 @@
 
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbrancepushordrag" position="below" offset="0,15" width="55" height="20" />
+				<anchored to="encumbrancepushordrag" position="below" offset="0,15" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
@@ -189,7 +189,7 @@
 		<!--Carried Coin of Coin Type 2-->
 			<number_dropadd name="coinamount2">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount1" position="below" offset="0,6" width="40" height="20" />
+				<anchored to="coinamount1" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -213,7 +213,7 @@
 		<!--Carried Coin of Coin Type 3-->
 			<number_dropadd name="coinamount3">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount2" position="below" offset="0,6" width="40" height="20" />
+				<anchored to="coinamount2" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -224,7 +224,7 @@
 		<!--Non Carried Coin of Coin Type 3-->
 			<number_dropadd name="coinamount3a" source="coins.slot3.amountA">
 				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount3" position="right" offset="10,0" width="40" height="20" />
+				<anchored to="coinamount3" position="right" offset="10,0" width="40" />
 				<frame name="fielddark" offset="7,5,7,5" />
 			</number_dropadd>
 
@@ -237,7 +237,7 @@
 		<!--Carried Coin of Coin Type 4-->
 			<number_dropadd name="coinamount4">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount3" position="below" offset="0,6" width="40" height="20" />
+				<anchored to="coinamount3" position="below" offset="0,6" height="20" />
 				<script>
 				function onValueChanged()
 					CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -260,7 +260,7 @@
 		<!--Carried Coin of Coin Type 5-->
 			<number_dropadd name="coinamount5">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount4" position="below" offset="0,6" width="40" height="20" />
+				<anchored to="coinamount4" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -283,7 +283,7 @@
 		<!--Carried Coin of Coin Type 6-->
 			<number_dropadd name="coinamount6">
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinamount5" position="below" offset="0,6" width="40" height="20" />
+				<anchored to="coinamount5" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
