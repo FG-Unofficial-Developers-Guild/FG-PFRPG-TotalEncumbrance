@@ -1,11 +1,12 @@
 --
---	Please see the license.html file included with this distribution for attribution and copyright information.
+--	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
 function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.weight'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', applyPenalties)
+	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.count'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyPenalties)
@@ -79,30 +80,23 @@ local function getSpeedEffects(nodePC, rActor)
 end
 
 --	Summary: converts strings like 300gp to 300 or 30pp to 300.
-local function numericalNumbers(sItemCost)
-	local nUnitStringPos = string.find(sItemCost, ' gp', 2,  true)
-	local nDenomination = 1
-
-	if not nUnitStringPos then
-		nUnitStringPos = string.find(sItemCost, ' cp', 2,  true)
-		nDenomination = 3
-	end
-	if not nUnitStringPos then
-		nUnitStringPos = string.find(sItemCost, ' sp', 2,  true)
+local function stringToNumber(sItemCost)
+	local nDenomination = 0
+	if string.match(sItemCost, 'gp') then
+		nDenomination = 1
+	elseif string.match(sItemCost, 'sp') then
 		nDenomination = 2
-	end
-	if not nUnitStringPos then
-		nUnitStringPos = string.find(sItemCost, ' pp', 2,  true)
+	elseif string.match(sItemCost, 'cp') then
+		nDenomination = 3
+	elseif string.match(sItemCost, 'pp') then
 		nDenomination = 4
 	end
-	if not nUnitStringPos then
-		nDenomination = 0
-	end
 
-	local nItemCost = 0
-	if nUnitStringPos then
-		nUnitStringPos = nUnitStringPos - 1
-		nItemCost = tonumber(string.sub(sItemCost, 1, nUnitStringPos))
+	local sItemCost = sItemCost:gsub('[^0-9.-]', '', x)
+	sItemCost = sItemCost:gsub(',', '', x)
+	nItemCost = tonumber(sItemCost)
+
+	if nDenomination ~= 0 then
 		if nDenomination == 2 then
 			nItemCost = nItemCost * .1
 		end
@@ -112,9 +106,18 @@ local function numericalNumbers(sItemCost)
 		if nDenomination == 4 then
 			nItemCost = nItemCost * 10
 		end
+	else
+		nItemCost = 0
 	end
 
 	return nItemCost
+end
+
+---	Returns a string formatted with commas inserted every three digits from the left side of the decimal place
+--	@param n The number to be reformatted.
+local function formatCurrency(n)
+	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+	return left..(num:reverse():gsub('(%d%d%d)',TEGlobals.sDigitDivider):reverse())..right
 end
 
 --	Summary: Finds max stat / check penalty tables with appropriate nonzero values
@@ -143,6 +146,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local tShield = {}
 
 	local nTotalInvVal = 0
+--	local nTotalInvVal = getTotalCoinWealth(nodePC)
 
 	local bClumsyArmor = false
 
@@ -153,15 +157,15 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
 		nItemSpeed20 = DB.getValue(v, 'speed20', 0)
 		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
-		nItemIDed = DB.getValue(v, 'isidentified', 0)
-		nItemCount = DB.getValue(v, 'count', 0)
+		nItemIDed = DB.getValue(v, 'isidentified', 1)
+		nItemCount = DB.getValue(v, 'count', 1)
 		sItemName = string.lower(DB.getValue(v, 'name', ''))
 		sItemType = string.lower(DB.getValue(v, 'type', ''))
 		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
 		sItemCost = string.lower(DB.getValue(v, 'cost', ''))
 
-		if nItemIDed == 1 then
-			nItemCost = numericalNumbers(sItemCost)
+		if nItemIDed ~= 0 then
+			nItemCost = stringToNumber(sItemCost)
 			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
 		end
 
@@ -217,7 +221,10 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		end
 	end
 
-	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Inv Total: '..nTotalInvVal..' gp')
+
+	local sTotalInvVal = formatCurrency(nTotalInvVal)
+	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Item Total: '..sTotalInvVal..' gp')
+--	DB.setValue(nodePC, 'coins.wealthtotal', 'string', 'Wealth Total: '..nWealthVal..' gp')
 
 	local nMaxStatFromArmor
 	local nCheckPenaltyFromArmor

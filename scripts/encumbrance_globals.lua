@@ -1,5 +1,5 @@
 --
---	Please see the license.html file included with this distribution for attribution and copyright information.
+--	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
 --	process tClumsyArmorTypes to escape and special characters
@@ -36,3 +36,6 @@ tEncumbranceSpeed = {'5','10','10','15','20','20','25','30','30','35','40','40',
 
 --	Armor that has a max dex of 0 (I promise this was the only way)
 tClumsyArmorTypes = {'Fortress plate', 'Half-plate', 'Lamellar (iron)', 'Lamellar (stone coat)', 'Splint mail'}
+
+--	Seperator for decimal places
+sDigitDivider = '%1,'
