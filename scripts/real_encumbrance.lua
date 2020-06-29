@@ -82,31 +82,24 @@ end
 
 --	Summary: converts strings like 300gp to 300 or 30pp to 300.
 local function stringToNumber(sItemCost)
-	local nDenomination = 0
+	local nDenomination
+
 	if string.match(sItemCost, 'gp') then
-		nDenomination = 1
+		nDenomination = 0
 	elseif string.match(sItemCost, 'sp') then
-		nDenomination = 2
+		nDenomination = -1
 	elseif string.match(sItemCost, 'cp') then
-		nDenomination = 3
+		nDenomination = -2
 	elseif string.match(sItemCost, 'pp') then
-		nDenomination = 4
+		nDenomination = 1
 	end
 
 	local sItemCost = sItemCost:gsub('[^0-9.-]', '', x)
 	sItemCost = sItemCost:gsub(',', '', x)
 	nItemCost = tonumber(sItemCost)
 
-	if nDenomination ~= 0 then
-		if nDenomination == 2 then
-			nItemCost = nItemCost * .1
-		end
-		if nDenomination == 3 then
-			nItemCost = nItemCost * .01
-		end
-		if nDenomination == 4 then
-			nItemCost = nItemCost * 10
-		end
+	if nDenomination then
+		nItemCost = nItemCost * math.pow(10, nDenomination)
 	else
 		nItemCost = 0
 	end
