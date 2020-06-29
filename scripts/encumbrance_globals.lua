@@ -36,3 +36,6 @@ tEncumbranceSpeed = {'5','10','10','15','20','20','25','30','30','35','40','40',
 
 --	Armor that has a max dex of 0 (I promise this was the only way)
 tClumsyArmorTypes = {'Fortress plate', 'Half-plate', 'Lamellar (iron)', 'Lamellar (stone coat)', 'Splint mail'}
+
+--	Seperator for decimal places
+sDigitDivider = '%1,'

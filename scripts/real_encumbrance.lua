@@ -160,6 +160,13 @@ local function stringToNumber(sItemCost)
 	return nItemCost
 end
 
+---	Returns a string formatted with commas inserted every three digits from the left side of the decimal place
+--	@param n The number to be reformatted.
+local function formatCurrency(n)
+	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+	return left..(num:reverse():gsub('(%d%d%d)',TEGlobals.sDigitDivider):reverse())..right
+end
+
 --	Summary: Finds max stat / check penalty tables with appropriate nonzero values
 --	Argument: databasenode nodePC is the PC node
 --	Argument: table tMaxStat is empty table to represent max stat penalties
@@ -240,7 +247,9 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		end
 	end
 
-	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Item Total: '..nTotalInvVal..' gp')
+
+	local sTotalInvVal = formatCurrency(nTotalInvVal)	
+	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Item Total: '..sTotalInvVal..' gp')
 --	DB.setValue(nodePC, 'coins.wealthtotal', 'string', 'Wealth Total: '..nWealthVal..' gp')
 
 	local nMaxStatFromArmor
