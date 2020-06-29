@@ -126,7 +126,7 @@ end
 --	Argument: table tEqCheckPenalty is empty table to represent check penalty penalties
 --	Argument: table tSpellFailure is empty table to represent spell failure penalties
 --	Return: nil, however table arguments are directly updated
-local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure)
+local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
 	local nItemCarried
 	local nItemMaxStat
 	local nItemCheckPenalty
@@ -322,7 +322,7 @@ end
 --	Argument: table holding nonzero check penalty penalties from armor / shields
 --	Argument: table holding nonzero spell failure penalties from armor / shields
 --	Return: nil, however table arguments are directly updated
-local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
+local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure)
 	local light = DB.getValue(nodePC, 'encumbrance.lightload', 0)
 	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
 	local total = DB.getValue(nodePC, 'encumbrance.total', 0)
