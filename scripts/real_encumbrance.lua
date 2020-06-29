@@ -143,6 +143,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 	local tShield = {}
 
 	local nTotalInvVal = 0
+
 	local bClumsyArmor = false
 
 	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
@@ -152,8 +153,8 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
 		nItemSpeed20 = DB.getValue(v, 'speed20', 0)
 		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
-		nItemIDed = DB.getValue(v, 'isidentified', '')
-		nItemCount = DB.getValue(v, 'count', '')
+		nItemIDed = DB.getValue(v, 'isidentified', 0)
+		nItemCount = DB.getValue(v, 'count', 0)
 		sItemName = string.lower(DB.getValue(v, 'name', ''))
 		sItemType = string.lower(DB.getValue(v, 'type', ''))
 		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
