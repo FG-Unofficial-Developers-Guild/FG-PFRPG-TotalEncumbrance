@@ -215,10 +215,13 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		end
 	end
 
-
-	local sTotalInvVal = formatCurrency(nTotalInvVal)
-	DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Item Total: '..sTotalInvVal..' gp')
---	DB.setValue(nodePC, 'coins.wealthtotal', 'string', 'Wealth Total: '..nWealthVal..' gp')
+	if OptionsManager.isOption('CALCULATE_INVENTORY_VALUE', 'on') then
+		local sTotalInvVal = formatCurrency(nTotalInvVal)
+		DB.setValue(nodePC, 'coins.inventorytotal', 'string', 'Item Total: '..sTotalInvVal..' gp')
+--		DB.setValue(nodePC, 'coins.wealthtotal', 'string', 'Wealth Total: '..nWealthVal..' gp')
+	else
+		DB.setValue(nodePC, 'coins.inventorytotal', 'string', '')
+	end
 
 	local nMaxStatFromArmor
 	local nCheckPenaltyFromArmor
