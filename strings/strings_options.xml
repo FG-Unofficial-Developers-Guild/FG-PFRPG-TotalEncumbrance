@@ -7,11 +7,10 @@
 <root>
 	<!-- options titles -->
 	<string name="opt_lab_weight_enc">Encumbrance: Weight Penalties</string>
-	<string name="opt_lab_coin_weight">Encumbrance: Coin Weight</string>
-	<string name="opt_lab_enc_color">Encumbrance: Color-Coded</string>
-	<string name="opt_lab_spell_fail">Encumbrance: Spell Failure</string>
-	<string name="opt_lab_carry_effects">Encumbrance: Carry Capacity from Effects</string>
-	<string name="opt_lab_speed_inc">Encumbrance: Speed Increment</string>
+	<string name="opt_lab_coin_weight">Encumbrance: Calculate Coin Weight</string>
+	<string name="opt_lab_enc_color">Encumbrance: Color-Coded Penalties</string>
+	<string name="opt_lab_spell_fail">Encumbrance: Automate Spell Failure</string>
+	<string name="opt_lab_inv_value">Encumbrance: Calculate Inventory Value</string>
 
 	<!-- option states -->
 	<string name="enc_opt_pen_on">Enabled</string>
@@ -22,6 +21,9 @@
 	
 	<string name="enc_opt_color_on">Enabled</string>
 	<string name="enc_opt_color_off">Disabled</string>
+	
+	<string name="enc_opt_inv_value_on">Enabled</string>
+	<string name="enc_opt_inv_value_off">Disabled</string>
 	
 	<string name="enc_opt_fail_on">Auto Roll</string>
 	<string name="enc_opt_fail_prompt">Prompt Roll</string>
