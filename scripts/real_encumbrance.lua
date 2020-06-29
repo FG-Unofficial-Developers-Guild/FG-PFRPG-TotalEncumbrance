@@ -18,7 +18,7 @@ end
 local function handleApplyPenaltiesArgs(node)
 	local nodePC
 	local rActor
-	
+
 	if node.getParent().getName() == 'charsheet' then
 		nodePC = node
 	elseif node.getName() == 'inventorylist' then
@@ -123,7 +123,7 @@ end
 --	Argument: table tEqCheckPenalty is empty table to represent check penalty penalties
 --	Argument: table tSpellFailure is empty table to represent spell failure penalties
 --	Return: nil, however table arguments are directly updated
-local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
+local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure)
 	local nItemCarried
 	local nItemMaxStat
 	local nItemCheckPenalty
