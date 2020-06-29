@@ -6,6 +6,7 @@ function onInit()
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.carried'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.weight'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', applyPenalties)
+	DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.count'), 'onUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
 	DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', applyPenalties)
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyPenalties)
@@ -196,14 +197,14 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
 		nItemSpeed20 = DB.getValue(v, 'speed20', 0)
 		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
-		nItemIDed = DB.getValue(v, 'isidentified', '')
-		nItemCount = DB.getValue(v, 'count', '')
+		nItemIDed = DB.getValue(v, 'isidentified', 1)
+		nItemCount = DB.getValue(v, 'count', 1)
 		sItemName = string.lower(DB.getValue(v, 'name', ''))
 		sItemType = string.lower(DB.getValue(v, 'type', ''))
 		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
 		sItemCost = string.lower(DB.getValue(v, 'cost', ''))
 
-		if nItemIDed == 1 then
+		if nItemIDed ~= 0 then
 			nItemCost = stringToNumber(sItemCost)
 			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
 		end
