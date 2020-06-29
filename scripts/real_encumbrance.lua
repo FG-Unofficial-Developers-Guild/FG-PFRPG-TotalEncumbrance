@@ -139,8 +139,9 @@ local function stringToNumber(sItemCost)
 		nDenomination = 4
 	end
 
-	local nItemCost = sItemCost:gsub('[^0-9.-]', '', x)
-	local nItemCost = tonumber(nItemCost)
+	local sItemCost = sItemCost:gsub('[^0-9.-]', '', x)
+	sItemCost = sItemCost:gsub(',', '', x)
+	nItemCost = tonumber(sItemCost)
 
 	if nDenomination ~= 0 then
 		if nDenomination == 2 then
