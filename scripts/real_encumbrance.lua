@@ -98,7 +98,7 @@ local function processItemCost(sItemCost)
 	sItemCost = sItemCost:gsub(',', '', x)
 	nItemCost = tonumber(sItemCost)
 
-	if nDenomination then
+	if nDenomination and nItemCost then
 		nItemCost = nItemCost * math.pow(10, nDenomination)
 	else
 		nItemCost = 0
