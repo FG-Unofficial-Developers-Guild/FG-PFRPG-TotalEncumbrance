@@ -54,6 +54,8 @@ function onEncumbranceChanged()
 --	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
 		nStrength = nStrength + nStrEffectMod - nStrengthDamage
 --	end
+
+	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
 	
 	if nStrength > 0 then
 		if nStrength <= 10 then
@@ -63,7 +65,7 @@ function onEncumbranceChanged()
 		end
 	end
 
-	nHeavy = nHeavy * DB.getValue(nodeChar, 'encumbrance.carrymult', 1)
+	nHeavy = math.floor(nHeavy * DB.getValue(nodeChar, 'encumbrance.carrymult', 1) * nUnit)
 
 	local nLight = math.floor(nHeavy / 3)
 	local nMedium = math.floor((nHeavy / 3) * 2)

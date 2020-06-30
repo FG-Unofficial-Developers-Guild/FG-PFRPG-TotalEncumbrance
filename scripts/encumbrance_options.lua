@@ -22,6 +22,9 @@ function registerOptions()
 	OptionsManager.registerOption2('CALCULATE_INVENTORY_VALUE', false, 'option_header_game', 'opt_lab_inv_value', 'option_entry_cycler', 
 		{ labels = 'enc_opt_inv_value_off', values = 'off', baselabel = 'enc_opt_inv_value_on', baseval = 'on', default = 'on' })
 
+	OptionsManager.registerOption2('ENCUMBRANCE_UNIT', false, 'option_header_game', 'opt_lab_enc_unit', 'option_entry_cycler', 
+		{ labels = 'enc_opt_enc_unit_kg', values = 'kg', baselabel = 'enc_opt_enc_unit_lb', baseval = 'lb', default = 'lb' })
+
 --	OptionsManager.registerOption2('CARRY_CAPACITY_FROM_EFFECTS', false, 'option_header_game', 'opt_lab_carry_effects', 'option_entry_cycler', 
 --		{ labels = 'enc_opt_carry_effects_off', values = 'off', baselabel = 'enc_opt_carry_effects_on', baseval = 'on', default = 'on' })
 

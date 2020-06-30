@@ -15,7 +15,7 @@ function onInit()
 	end
 end
 
---	Change coinsperunit to the number of coins that equals 1 weight
+--	Change coinsperunit to the number of coins that equals 1 pound (even if using kg, the conversion is automatic)
 nCoinsPerUnit = 50
 
 --	Set multipliers for different currency denominations

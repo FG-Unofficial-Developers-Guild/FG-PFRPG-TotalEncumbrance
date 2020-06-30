@@ -43,18 +43,19 @@ function onCoinsValueChanged(nodeWin)
 	CoinsWeight.computePCCoinsWeigh(nodePC)
 end
 
---	This function really compute the weight of the coins
+---	Computes the weight of all coins in "carried" fields.
 function computePCCoinsWeigh(nodePC)
-	local nTotalcoins = 0;
+	local nTotalCoins = 0
 	for _,coin in pairs(DB.getChildren(nodePC, "coins")) do
-		nTotalcoins = nTotalcoins + DB.getValue(coin, "amount", 0)
+		nTotalCoins = nTotalCoins + DB.getValue(coin, "amount", 0)
 	end
 
 	if OptionsManager.isOption('COIN_WEIGHT', 'on') then -- if coin weight calculation is enabled
-		nTotalcoins = math.floor(nTotalcoins / TEGlobals.nCoinsPerUnit)
+		local nUnit = LibTotalEncumbrance.getEncWeightUnit()
+		nTotalCoinWeight = math.floor(nTotalCoins / (TEGlobals.nCoinsPerUnit * nUnit))
 	else
-		nTotalcoins = 0
+		nTotalCoinWeight = 0
 	end
 
-	DB.setValue(nodePC.getPath() .. '.encumbrance.treasure', 'number', nTotalcoins)
+	DB.setValue(nodePC.getPath() .. '.encumbrance.treasure', 'number', nTotalCoinWeight)
 end
