@@ -229,7 +229,7 @@
 			</number_dropadd>
 
 		<!--Label of Coin Type 3-->
-			<stringu name="coinname3" source="coins.slot3.name">
+			<stringu name="coinname3" source="coins.slot3.name" merge="replace">
 				<anchored to="coinamount3" position="right" offset="60,0" width="20" />
 				<default>sp</default>
 			</stringu>
