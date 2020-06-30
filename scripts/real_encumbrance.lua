@@ -84,29 +84,15 @@ end
 
 --	Summary: converts strings like 300gp to 300 or 30pp to 300.
 local function processItemCost(sItemCost)
-	local nDenomination
-
-	if string.match(sItemCost, 'gp') then
-		nDenomination = 0
-	elseif string.match(sItemCost, 'sp') then
-		nDenomination = -1
-	elseif string.match(sItemCost, 'cp') then
-		nDenomination = -2
-	elseif string.match(sItemCost, 'pp') then
-		nDenomination = 1
-	end
-
-	local sItemCost = sItemCost:gsub('[^0-9.-]', '', x)
-	sItemCost = sItemCost:gsub(',', '', x)
+	local sItemCost = sItemCost:gsub('[^0-9.-]', '')
 	nItemCost = tonumber(sItemCost)
-
-	if nDenomination and nItemCost then
-		nItemCost = nItemCost * math.pow(10, nDenomination)
-	else
-		nItemCost = 0
+	for k,v in pairs(TEGlobals.tDenominations) do
+		if string.match(sItemCost, k) then
+			return nItemCost * v
+		end
 	end
 
-	return nItemCost
+	return 0
 end
 
 ---	Returns a string formatted with commas inserted every three digits from the left side of the decimal place
