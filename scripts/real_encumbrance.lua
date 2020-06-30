@@ -81,7 +81,7 @@ local function getSpeedEffects(nodePC, rActor)
 end
 
 --	Summary: converts strings like 300gp to 300 or 30pp to 300.
-local function stringToNumber(sItemCost)
+local function processItemCost(sItemCost)
 	local nDenomination
 
 	if string.match(sItemCost, 'gp') then
@@ -159,7 +159,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		sItemCost = string.lower(DB.getValue(v, 'cost', ''))
 
 		if nItemIDed ~= 0 then
-			nItemCost = stringToNumber(sItemCost)
+			nItemCost = processItemCost(sItemCost)
 			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
 		end
 
