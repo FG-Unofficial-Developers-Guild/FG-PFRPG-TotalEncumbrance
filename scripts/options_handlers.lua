@@ -24,10 +24,11 @@ function onEncOptionChanged()
 			if sClass == 'charsheet' and sRecord then
 				local nodePC = DB.findNode(sRecord)
 				if nodePC then
-					RealEncumbrance.applyPenalties(nodePC)
+					CoinsWeight.recomputeTotalWeight(nodePC)
 					local update = DB.getValue(nodePC, 'encumbrance.stradj')
 					DB.setValue(nodePC, 'encumbrance.stradj', 'number', -1)
 					DB.setValue(nodePC, 'encumbrance.stradj', 'number', update)
+					RealEncumbrance.applyPenalties(nodePC)
 				end
 			end
 		end
@@ -44,7 +45,6 @@ function onCoinWeightOptionChanged()
 				local nodePC = DB.findNode(sRecord)
 				if nodePC then
 					CoinsWeight.onCoinsValueChanged(nodePC)
-					CoinsWeight.recomputeTotalWeight(nodePC)
 				end
 			end
 		end

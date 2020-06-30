@@ -16,6 +16,11 @@ function recomputeTotalWeight(nodeWin)
 
 	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
 	local nEqLoad = DB.getValue(nodePC, 'encumbrance.load') * nUnit
+
+	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg-full') then
+		nEqLoad = DB.getValue(nodePC, 'encumbrance.load')
+	end
+
 	local nTreasure = DB.getValue(nodePC, 'encumbrance.treasure')
 	local nTotal = nTreasure + nEqLoad
 	local nTotalToSet =	nTotal + 0.5 - (nTotal + 0.5) % 1

@@ -295,11 +295,7 @@ local function encumbrancePenalties(nodePC)
 	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
 	local light = DB.getValue(nodePC, 'encumbrance.lightload', 0)
 	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
-	local total = DB.getValue(nodePC, 'encumbrance.total', 0) * nUnit
-
-	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg-full') then
-		total = DB.getValue(nodePC, 'encumbrance.total', 0)
-	end
+	local total = DB.getValue(nodePC, 'encumbrance.total', 0)
 
 	if total > medium then -- heavy load
 		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 3)
