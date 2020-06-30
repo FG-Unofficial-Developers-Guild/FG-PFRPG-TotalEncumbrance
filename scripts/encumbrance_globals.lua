@@ -18,9 +18,6 @@ end
 --	Change coinsperunit to the number of coins that equals 1 weight
 nCoinsPerUnit = 50
 
---	Set multipliers for different currency denominations
-tDenominations = {['pp'] = 10, ['gp'] = 1, ['ep'] = 0.5, ['sp'] = 0.1, ['cp'] = 0.01}
-
 --	Set which arcane classes face spell failure while wearing different types of armor
 tArcaneClass_HeavyArmor = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Bloodrager', 'Skald', 'Unchained Summoner'}
 tArcaneClass_MedArmor = {'Bard', 'Sorcerer', 'Wizard', 'Magus', 'Summoner', 'Witch', 'Arcanist', 'Unchained Summoner'}
