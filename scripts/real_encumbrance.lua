@@ -82,11 +82,14 @@ local function getSpeedEffects(nodePC, rActor)
 	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
 
+--	Used in function below
+local tDenominations = {['pp'] = 10, ['gp'] = 1, ['ep'] = 0.5, ['sp'] = 0.1, ['cp'] = 0.01}
+
 --	Summary: converts strings like 300gp to 300 or 30pp to 300.
 local function processItemCost(sItemCost)
-	local sItemCost = sItemCost:gsub('[^0-9.-]', '')
-	nItemCost = tonumber(sItemCost)
-	for k,v in pairs(TEGlobals.tDenominations) do
+	nItemCost = tonumber(sItemCost:gsub('[^0-9.-]', ''))
+
+	for k,v in pairs(tDenominations) do
 		if string.match(sItemCost, k) then
 			return nItemCost * v
 		end
