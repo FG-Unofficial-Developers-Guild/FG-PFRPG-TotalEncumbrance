@@ -291,7 +291,16 @@ end
 --	Return: number for max stat penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
 --	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
 --	Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
-local function encumbrancePenalties(nodePC, light, medium, total)
+local function encumbrancePenalties(nodePC)
+	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
+	local light = DB.getValue(nodePC, 'encumbrance.lightload', 0)
+	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
+	local total = DB.getValue(nodePC, 'encumbrance.total', 0) * nUnit
+
+	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg-full') then
+		total = DB.getValue(nodePC, 'encumbrance.total', 0)
+	end
+
 	if total > medium then -- heavy load
 		DB.setValue(nodePC, 'encumbrance.encumbrancelevel', 'number', 3)
 		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty, nil
@@ -311,11 +320,7 @@ end
 --	Argument: table holding nonzero spell failure penalties from armor / shields
 --	Return: nil, however table arguments are directly updated
 local function rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure)
-	local light = DB.getValue(nodePC, 'encumbrance.lightload', 0)
-	local medium = DB.getValue(nodePC, 'encumbrance.mediumload', 0)
-	local total = DB.getValue(nodePC, 'encumbrance.total', 0)
-
-	local nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodePC, light, medium, total)
+local nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodePC)
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromenc', 'number', nCheckPenaltyFromEnc ~= nil and nCheckPenaltyFromEnc or 0)

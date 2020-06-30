@@ -33,7 +33,8 @@
 	<string name="enc_opt_fail_off">Disabled</string>
 	
 	<string name="enc_opt_enc_unit_lb">Pounds</string>
-	<string name="enc_opt_enc_unit_kg">Kilograms</string>
+	<string name="enc_opt_enc_unit_kg">Kilograms-Lazy</string>
+	<string name="enc_opt_enc_unit_kg-full">Kilograms</string>
 	
 	<!-- disabled
 	<string name="enc_opt_carry_effects_on">Enabled</string>

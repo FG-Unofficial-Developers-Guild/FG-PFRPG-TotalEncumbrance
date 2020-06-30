@@ -18,9 +18,10 @@ end
 --- Provide the appropriate weight unit (pounds or kilograms) depending on the GM's choice
 --	@return nUnit Desired multipler (to convert pounds to kilograms)
 function getEncWeightUnit()
-	local nUnit = 1
-	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg') then
-		nUnit = 0.45359237
+	local nUnit = 0.45359237
+
+	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'lb') then
+		nUnit = 1
 	end
 	
 	return nUnit
