@@ -82,7 +82,7 @@ local function getSpeedEffects(nodePC, rActor)
 	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
 
---	Summary: converts strings like 300gp to 300 or 30pp to 300.
+---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(sItemCost)
 	nItemCost = tonumber(sItemCost:gsub('[^0-9.-]', ''))
 
