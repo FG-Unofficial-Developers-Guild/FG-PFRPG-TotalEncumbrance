@@ -148,7 +148,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		sItemName = string.lower(DB.getValue(v, 'name', ''))
 		sItemType = string.lower(DB.getValue(v, 'type', ''))
 		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
-		sItemCost = string.lower(DB.getValue(v, 'cost', ''))
+		sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
 
 		if nItemIDed ~= 0 and sItemCost then
 			nItemCost = processItemCost(sItemCost)
