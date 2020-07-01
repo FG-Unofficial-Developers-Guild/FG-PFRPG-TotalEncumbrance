@@ -215,37 +215,29 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		DB.setValue(nodePC, 'coins.inventorytotal', 'string', '')
 	end
 
-	local nMaxStatFromArmor
-	local nCheckPenaltyFromArmor
-	local nSpeed20FromArmor
-	local nSpeed30FromArmor
+	local nMaxStatFromArmor = -1
+	local nCheckPenaltyFromArmor = 0
+	local nSpeed20FromArmor = 0
+	local nSpeed30FromArmor = 0
 
 	if table.getn(tMaxStat) ~= 0 then
 		nMaxStatFromArmor = math.min(unpack(tMaxStat)) -- this would pick the lowest max dex if there is multi-equipped armor
-	else
-		nMaxStatFromArmor = -1
 	end
 
 	DB.setValue(nodePC, 'encumbrance.maxstatbonusfromarmor', 'number', nMaxStatFromArmor ~= nil and nMaxStatFromArmor or -1)
 
 	if table.getn(tEqCheckPenalty) ~= 0 then
 		nCheckPenaltyFromArmor = LibTotalEncumbrance.tableSum(tEqCheckPenalty) -- this would sum penalties on multi-equipped armor
-	else
-		nCheckPenaltyFromArmor = 0
 	end
 
 	DB.setValue(nodePC, 'encumbrance.checkpenaltyfromarmor', 'number', nCheckPenaltyFromArmor ~= nil and nCheckPenaltyFromArmor or 0)
 
 	if table.getn(tSpeed20) ~= 0 then
 		nSpeed20FromArmor = math.min(unpack(tSpeed20)) -- this gets min speed from multi-equipped armor
-	else
-		nSpeed20FromArmor = 0
 	end
 
 	if table.getn(tSpeed30) ~= 0 then
 		nSpeed30FromArmor = math.min(unpack(tSpeed30)) -- this gets min speed from multi-equipped armor
-	else
-		nSpeed30FromArmor = 0
 	end
 
 	DB.setValue(nodePC, 'encumbrance.speed20fromarmor', 'number', nSpeed20FromArmor ~= nil and nSpeed20FromArmor or 0)
@@ -360,22 +352,18 @@ local function computePenalties(nodePC)
 
 	rawEncumbrancePenalties(nodePC, tMaxStat, tCheckPenalty, tSpellFailure)
 
-	local nMaxStatToSet
-	local nCheckPenaltyToSet
-	local nSpellFailureToSet
-	local nSpeedPenalty20
-	local nSpeedPenalty30
+	local nMaxStatToSet = -1
+	local nCheckPenaltyToSet = 0
+	local nSpellFailureToSet = 0
+	local nSpeedPenalty20 = 0
+	local nSpeedPenalty30 = 0
 
 	if table.getn(tMaxStat) ~= 0 then
 		 nMaxStatToSet = math.min(unpack(tMaxStat))
-	else
-		 nMaxStatToSet = -1
 	end
 
 	if table.getn(tCheckPenalty) ~= 0 then
 		 nCheckPenaltyToSet = math.min(unpack(tCheckPenalty)) -- this would sum penalties on multi-equipped shields / armor & encumbrance
-	else
-		 nCheckPenaltyToSet = 0
 	end
 
 	if table.getn(tSpellFailure) ~= 0 then
@@ -384,20 +372,14 @@ local function computePenalties(nodePC)
 		if nSpellFailureToSet > 100 then
 			nSpellFailureToSet = 100
 		end
-	else
-		 nSpellFailureToSet = 0
 	end
 
 	if table.getn(tSpeed20) ~= 0 then
 		 nSpeedPenalty20 = math.min(unpack(tSpeed20))
-	else
-		 nSpeedPenalty20 = 0
 	end
 
 	if table.getn(tSpeed30) ~= 0 then
 		 nSpeedPenalty30 = math.min(unpack(tSpeed30))
-	else
-		 nSpeedPenalty30 = 0
 	end
 
 	--compute speed including total encumberance speed penalty
