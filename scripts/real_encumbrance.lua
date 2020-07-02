@@ -83,8 +83,11 @@ local function getSpeedEffects(nodePC, rActor)
 end
 
 ---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
-local function processItemCost(sItemCost)
+local function processItemCost(nodePC, sItemCost, sItemName)
 	if string.match(sItemCost, '%-') then
+		local sHoldingPc = DB.getValue(nodePC, 'name', 'unknown player')
+		ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has an improper value.')
+
 		return 0
 	end
 
@@ -154,7 +157,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
 
 		if nItemIDed ~= 0 and sItemCost then
-			nItemCost = processItemCost(sItemCost)
+			nItemCost = processItemCost(nodePC, sItemCost, sItemName)
 			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
 		end
 
