@@ -84,11 +84,14 @@ end
 
 ---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(sItemCost)
+	if string.match(sItemCost, '%-') then
+		return 0
+	end
+
 	local sTrimmedItemCost = sItemCost:gsub('[^0-9.-]', '')
 
 	if sTrimmedItemCost then
 		nTrimmedItemCost = tonumber(sTrimmedItemCost)
-
 		for k,v in pairs(TEGlobals.tDenominations) do
 			if string.match(sItemCost, k) then
 				return nTrimmedItemCost * v
