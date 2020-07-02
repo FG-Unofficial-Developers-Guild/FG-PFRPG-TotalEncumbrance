@@ -85,8 +85,10 @@ end
 ---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(nodePC, sItemCost, sItemName)
 	if string.match(sItemCost, '%-') then
-		local sHoldingPc = DB.getValue(nodePC, 'name', 'unknown player')
-		ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has an improper value.')
+		if OptionsManager.isOption('WARN_COST', 'on') then -- if Designate Incorrect Costs is enabled in options
+			local sHoldingPc = DB.getValue(nodePC, 'name', 'unknown player')
+			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has an improper value.')
+		end
 
 		return 0
 	end
