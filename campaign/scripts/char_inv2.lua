@@ -20,8 +20,6 @@ function onInit()
 		rActor = ActorManager.getActor('ct', node.getChild('...'))
 		nodeEffects = DB.findNode(rActor['sCTNode'])
 	end
-	
-	Debug.chat(node, nodeEffects)
 
 	DB.addHandler(DB.getPath(nodeEffects, 'effects.*.label'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
