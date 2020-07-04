@@ -3,7 +3,10 @@
 --
 
 function onInit()
+	DB.setValue(getDatabaseNode(), 'coins.costerrorannouncer', 'number', 1)
+
 	onEncumbranceChanged()
+
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath('combattracker.list'), 'onChildDeleted', onStrengthChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
@@ -123,11 +126,11 @@ function getStrEffectBonus(rActor, nStrength)
 
 	local nStrEffectMod = EffectManager35E.getEffectsBonus(rActor, 'STR', true)
 
-	if EffectManager35E.hasEffectCondition(rActor, "Exhausted") then
+	if EffectManager35E.hasEffectCondition(rActor, 'Exhausted') then
 		nStrEffectMod = nStrEffectMod - 6
-	elseif EffectManager35E.hasEffectCondition(rActor, "Fatigued") then
+	elseif EffectManager35E.hasEffectCondition(rActor, 'Fatigued') then
 		nStrEffectMod = nStrEffectMod - 2
-	elseif EffectManager35E.hasEffectCondition(rActor, "Paralyzed") then
+	elseif EffectManager35E.hasEffectCondition(rActor, 'Paralyzed') then
 		nStrEffectMod = -1 * nStrength
 	end
 

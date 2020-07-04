@@ -85,8 +85,11 @@ end
 ---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(nodePC, sItemCost, sItemName)
 	if string.match(sItemCost, '%-') then
-		if OptionsManager.isOption('WARN_COST', 'on') then -- if Designate Incorrect Costs is enabled in options
+		local bAnnounce = DB.getValue(nodePC, 'coins.costerrorannouncer', 1)
+
+		if (OptionsManager.isOption('WARN_COST', 'subtle') and bAnnounce == 1) or OptionsManager.isOption('WARN_COST', 'on') then
 			local sHoldingPc = DB.getValue(nodePC, 'name', 'unknown player')
+
 			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has an improper value.')
 		end
 
@@ -111,6 +114,7 @@ end
 --	@param n The number to be reformatted.
 local function formatCurrency(n)
 	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+
 	return left..(num:reverse():gsub('(%d%d%d)',TEGlobals.sDigitDivider):reverse())..right
 end
 
@@ -214,6 +218,8 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 			end
 		end
 	end
+
+	DB.setValue(nodePC, 'coins.costerrorannouncer', 'number', 0)
 
 	if OptionsManager.isOption('CALCULATE_INVENTORY_VALUE', 'on') then
 		local sTotalInvVal = formatCurrency(nTotalInvVal)

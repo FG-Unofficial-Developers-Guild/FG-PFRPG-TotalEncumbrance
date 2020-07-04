@@ -37,8 +37,9 @@
 	<string name="enc_opt_enc_unit_kg">Kilograms-Lazy</string>
 	<string name="enc_opt_enc_unit_kg-full">Kilograms</string>
 	
-	<string name="enc_opt_warn_cost_on">Enabled</string>
+	<string name="enc_opt_warn_cost_subtle">Enabled</string>
 	<string name="enc_opt_warn_cost_off">Disabled</string>
+	<string name="enc_opt_warn_cost_on">Verbose</string>
 	
 	<!-- disabled
 	<string name="enc_opt_carry_effects_on">Enabled</string>
