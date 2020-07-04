@@ -3,27 +3,53 @@
 --
 
 function onInit()
-	DB.setValue(getDatabaseNode(), 'coins.costerrorannouncer', 'number', 1)
+	local node = getDatabaseNode()
 
+	DB.setValue(node, 'coins.costerrorannouncer', 'number', 1)
 	onEncumbranceChanged()
 
-	DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath(getDatabaseNode(), 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
-	DB.addHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
-	DB.addHandler(DB.getPath(getDatabaseNode(), 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
-	DB.addHandler(DB.getPath(getDatabaseNode(), 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
+	local rActor
+	local nodeEffects
+	if node.getParent().getName() == 'charsheet' then
+		rActor = ActorManager.getActor('pc', node)
+		nodeEffects = DB.findNode(rActor['sCTNode'])
+	elseif node.getChild('...').getName() == 'charsheet' then
+		rActor = ActorManager.getActor('pc', node.getParent())
+		nodeEffects = DB.findNode(rActor['sCTNode'])
+	elseif node.getChild('....') == 'charsheet' then
+		rActor = ActorManager.getActor('ct', node.getChild('...'))
+		nodeEffects = DB.findNode(rActor['sCTNode'])
+	end
+	
+	Debug.chat(node, nodeEffects)
+
+	DB.addHandler(DB.getPath(nodeEffects, 'effects.*.label'), 'onUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
+	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
+	DB.addHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
+	DB.addHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 end
 
 function onClose()
-	DB.removeHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath(getDatabaseNode(), 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
-	DB.removeHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
-	DB.removeHandler(DB.getPath(getDatabaseNode(), 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
-	DB.removeHandler(DB.getPath(getDatabaseNode(), 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
+	local node = getDatabaseNode()
+
+	local rActor
+	local nodeEffects
+	if node.getChild('...').getName() == 'charsheet' then
+		rActor = ActorManager.getActor('pc', node.getParent())
+		nodeEffects = DB.findNode(rActor['sCTNode'])
+	elseif node.getChild('....') == 'charsheet' then
+		rActor = ActorManager.getActor('ct', node.getChild('...'))
+		nodeEffects = DB.findNode(rActor['sCTNode'])
+	end
+
+	DB.removeHandler(DB.getPath(nodeEffects, 'effects.*.label'), 'onUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
+	DB.removeHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
+	DB.removeHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
+	DB.removeHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 end
 
 function onStrengthChanged()
