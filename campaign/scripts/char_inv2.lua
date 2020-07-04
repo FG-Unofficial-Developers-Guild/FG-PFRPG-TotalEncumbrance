@@ -8,7 +8,7 @@ function onInit()
 	onEncumbranceChanged()
 
 	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath('combattracker.list'), 'onChildDeleted', onStrengthChanged)
+	DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onStrengthChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
 	DB.addHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
@@ -18,7 +18,7 @@ end
 
 function onClose()
 	DB.removeHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath('combattracker.list'), 'onChildDeleted', onStrengthChanged)
+	DB.removeHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onStrengthChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'size'), 'onUpdate', onSizeChanged)
 	DB.removeHandler(DB.getPath(getDatabaseNode(), 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
