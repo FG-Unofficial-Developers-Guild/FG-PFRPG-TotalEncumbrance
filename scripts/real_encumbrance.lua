@@ -11,7 +11,8 @@ function onInit()
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.isidentified'), 'onUpdate', applyPenalties)
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
 		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', applyPenalties)
-		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildUpdate', applyPenalties)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', applyPenalties)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', applyPenalties)
 	end
 end
 
