@@ -39,7 +39,7 @@ local function handleApplyPenaltiesArgs(node)
 	end
 
 	if not rActor then
-		rActor = ActorManager.getActor("pc", nodePC)
+		rActor = ActorManager.getActor('pc', nodePC)
 	end
 
 	return nodePC, rActor
@@ -57,23 +57,23 @@ local function getSpeedEffects(nodePC, rActor)
 	local bSpeedZero = false
 
 	if
-		EffectManager35E.hasEffectCondition(rActor, "Exhausted")
-		or EffectManager35E.hasEffectCondition(rActor, "Entangled")
+		EffectManager35E.hasEffectCondition(rActor, 'Exhausted')
+		or EffectManager35E.hasEffectCondition(rActor, 'Entangled')
 	then
 		bSpeedHalved = true
 	end
 
 	if
-		EffectManager35E.hasEffectCondition(rActor, "Grappled")
-		or EffectManager35E.hasEffectCondition(rActor, "Paralyzed")
-		or EffectManager35E.hasEffectCondition(rActor, "Petrified")
-		or EffectManager35E.hasEffectCondition(rActor, "Pinned")
+		EffectManager35E.hasEffectCondition(rActor, 'Grappled')
+		or EffectManager35E.hasEffectCondition(rActor, 'Paralyzed')
+		or EffectManager35E.hasEffectCondition(rActor, 'Petrified')
+		or EffectManager35E.hasEffectCondition(rActor, 'Pinned')
 	then
 		bSpeedZero = true
 	end
 
 	--	Check if the character is disabled (at zero remaining hp)
-	if DB.getValue(nodePC, "hp.total", 0) == DB.getValue(nodePC, "hp.wounds", 0) then
+	if DB.getValue(nodePC, 'hp.total', 0) == DB.getValue(nodePC, 'hp.wounds', 0) then
 		bSpeedHalved = true
 	end
 
@@ -392,7 +392,7 @@ local function computePenalties(nodePC)
 
 	--compute speed including total encumberance speed penalty
 	local tEncumbranceSpeed = TEGlobals.tEncumbranceSpeed
-	local nSpeedBase = DB.getValue(nodePC, "speed.base", 0)
+	local nSpeedBase = DB.getValue(nodePC, 'speed.base', 0)
 	local nSpeedTableIndex = nSpeedBase / 5
 
 	nSpeedTableIndex = nSpeedTableIndex + 0.5 - (nSpeedTableIndex + 0.5) % 1
@@ -407,7 +407,7 @@ local function computePenalties(nodePC)
 
 	local bApplySpeedPenalty = true
 
-	if CharManager.hasTrait(nodePC, "Slow and Steady") then
+	if CharManager.hasTrait(nodePC, 'Slow and Steady') then
 		bApplySpeedPenalty = false
 	end
 
@@ -470,12 +470,12 @@ function applyPenalties(node)
 	DB.setValue(nodePC, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
 	DB.setValue(nodePC, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
 
-	DB.setValue(nodePC, "speed.armor", "number", nSpeedPenalty)
+	DB.setValue(nodePC, 'speed.armor', 'number', nSpeedPenalty)
 
 	local nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero = getSpeedEffects(nodePC, rActor)
 
 	--	recalculate total speed from all inputs
-	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, "speed.misc", 0) + DB.getValue(nodePC, "speed.temporary", 0)
+	local nSpeedToSet = nSpeedBase + nSpeedPenalty + nSpeedAdjFromEffects + DB.getValue(nodePC, 'speed.misc', 0) + DB.getValue(nodePC, 'speed.temporary', 0)
 
 	--	round to nearest 5 (or 1 as specified in options list - SPEED_INCREMENT)
 --	if OptionsManager.isOption('SPEED_INCREMENT', '5') then
@@ -490,6 +490,6 @@ function applyPenalties(node)
 		nSpeedToSet = nSpeedToSet / 2
 	end
 
-	DB.setValue(nodePC, "speed.final", "number", nSpeedToSet)
-	DB.setValue(nodePC, "speed.total", "number", nSpeedToSet)
+	DB.setValue(nodePC, 'speed.final', 'number', nSpeedToSet)
+	DB.setValue(nodePC, 'speed.total', 'number', nSpeedToSet)
 end
