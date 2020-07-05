@@ -87,7 +87,7 @@ local function processItemCost(nodePC, sItemCost, sItemName)
 	if string.match(sItemCost, '%-') then
 		local nAnnounce = DB.getValue(nodePC, 'coins.costerrorannouncer', 1)
 
-		if (OptionsManager.isOption('WARN_COST', 'subtle') and nAnnounce == 1) or OptionsManager.isOption('WARN_COST', 'on') then
+		if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
 			local sHoldingPc = DB.getValue(nodePC, 'name', 'unknown player')
 
 			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has an improper value.')
@@ -219,7 +219,9 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		end
 	end
 
-	DB.setValue(nodePC, 'coins.costerrorannouncer', 'number', 0)
+	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
+		DB.setValue(nodePC, 'coins.costerrorannouncer', 'number', 0)
+	end
 
 	if OptionsManager.isOption('CALCULATE_INVENTORY_VALUE', 'on') then
 		local sTotalInvVal = formatCurrency(nTotalInvVal)
