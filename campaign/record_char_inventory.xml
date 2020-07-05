@@ -316,11 +316,11 @@
 			</basicstring>
 		<!-- Inventory and Wealth Totals -->
 			<stringu name="inventorytotal" source="coins.inventorytotal">
-				<anchored to="coinframe" position="insidetopright" offset="15,8" />
+				<anchored to="coinframe" position="insidetopright" offset="15,9" />
 				<readonly />
 			</stringu>
 			<stringu name="wealthtotal" source="coins.wealthtotal">
-				<anchored to="inventorytotal" position="below" offset="13,-1" />
+				<anchored to="coinframe" position="insidetopright" offset="15,23" />
 				<readonly />
 			</stringu>
 		</sheetdata>
