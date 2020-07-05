@@ -118,49 +118,37 @@ local function formatCurrency(n)
 	return left..(num:reverse():gsub('(%d%d%d)',TEGlobals.sDigitDivider):reverse())..right
 end
 
---	Summary: Finds max stat / check penalty tables with appropriate nonzero values
---	Argument: databasenode nodePC is the PC node
---	Argument: table tMaxStat is empty table to represent max stat penalties
---	Argument: table tEqCheckPenalty is empty table to represent check penalty penalties
---	Argument: table tSpellFailure is empty table to represent spell failure penalties
---	Return: nil, however table arguments are directly updated
-local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
-	local nItemCarried
-	local nItemMaxStat
-	local nItemCheckPenalty
-	local nItemSpellFailure
-	local nItemSpeed20
-	local nItemSpeed30
-	local nItemIDed
-	local nItemCount
-	local sItemName
-	local sItemType
-	local sItemSubtype
-	local sItemCost
 
+---	Compile penalties from armor worn by character related to nodeChar
+--	This function fills max stat and check penalty tables with appropriate nonzero values from any child items in the inventorylist node
+--	@param nodeChar databasenode for the PC within charsheet
+--	@param tMaxStat an empty table to be filled with max stat penalties from worn armor and shields
+--	@param tEqCheckPenalty an empty table to be filled with check penalties from worn armor and shields
+--	@param tSpellFailure an empty table to be filled with spell failure penalties from worn armor and shields
+--	@param tSpeed20 an empty table to be filled with the 20-foot speeds of any worn armor and shields
+--	@param tSpeed30 an empty table to be filled with the 30-foot speeds of any worn armor and shields
+local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
 	local tLtArmor = {}
 	local tMedArmor = {}
 	local tHeavyArmor = {}
 	local tShield = {}
-
-	local nTotalInvVal = 0
---	local nTotalInvVal = getTotalCoinWealth(nodePC)
-
 	local bClumsyArmor = false
 
-	for _,v in pairs(DB.getChildren(nodePC, 'inventorylist')) do
-		nItemCarried = DB.getValue(v, 'carried', 0)
-		nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
-		nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
-		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
-		nItemSpeed20 = DB.getValue(v, 'speed20', 0)
-		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
-		nItemIDed = DB.getValue(v, 'isidentified', 1)
-		nItemCount = DB.getValue(v, 'count', 1)
-		sItemName = string.lower(DB.getValue(v, 'name', ''))
-		sItemType = string.lower(DB.getValue(v, 'type', ''))
-		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
-		sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
+	local nTotalInvVal = 0
+
+	for _,v in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
+		local nItemCarried = DB.getValue(v, 'carried', 0)
+		local nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
+		local nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
+		local nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
+		local nItemSpeed20 = DB.getValue(v, 'speed20', 0)
+		local nItemSpeed30 = DB.getValue(v, 'speed30', 0)
+		local nItemIDed = DB.getValue(v, 'isidentified', 1)
+		local nItemCount = DB.getValue(v, 'count', 1)
+		local sItemName = string.lower(DB.getValue(v, 'name', ''))
+		local sItemType = string.lower(DB.getValue(v, 'type', ''))
+		local sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
+		local sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
 
 		if nItemIDed ~= 0 and sItemCost then
 			nItemCost = processItemCost(nodePC, sItemCost, sItemName)
