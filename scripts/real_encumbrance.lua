@@ -11,6 +11,9 @@ function onInit()
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.isidentified'), 'onUpdate', applyPenalties)
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', applyPenalties)
 		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', applyPenalties)
+		DB.addHandler(DB.getPath('charsheet.*.coins.*.name'), 'onUpdate', applyPenalties)
+		DB.addHandler(DB.getPath('charsheet.*.coins.*.amount'), 'onUpdate', applyPenalties)
+		DB.addHandler(DB.getPath('charsheet.*.coins.*.amountA'), 'onUpdate', applyPenalties)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', applyPenalties)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', applyPenalties)
 	end
@@ -25,6 +28,8 @@ local function handleApplyPenaltiesArgs(node)
 
 	if node.getParent().getName() == 'charsheet' then
 		nodeChar = node
+	elseif node.getChild('.....').getName() == 'charsheet' then
+		nodeChar = node.getChild('....')
 	elseif node.getName() == 'inventorylist' then
 		nodeChar = node.getParent()
 	elseif node.getChild( '...' ).getName() == 'inventorylist' then
@@ -232,16 +237,17 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFail
 		end
 	end
 
-	DB.setValue(nodeChar, 'coins.costerrorannouncer', 'number', 0)
-
 	if OptionsManager.isOption('CALCULATE_INVENTORY_VALUE', 'on') then
 		local sWealthVal = formatCurrency(nTotalInvVal + getTotalCoinWealth(nodeChar))
 		local sTotalInvVal = formatCurrency(nTotalInvVal)
 		DB.setValue(nodeChar, 'coins.wealthtotal', 'string', 'Wealth Total: '..sWealthVal..' gp')
 		DB.setValue(nodeChar, 'coins.inventorytotal', 'string', 'Item Total: '..sTotalInvVal..' gp')
 	else
+		DB.setValue(nodeChar, 'coins.wealthtotal', 'string', '')
 		DB.setValue(nodeChar, 'coins.inventorytotal', 'string', '')
 	end
+
+	DB.setValue(nodeChar, 'coins.costerrorannouncer', 'number', 0)
 
 	local nMaxStatFromArmor = -1
 	local nCheckPenaltyFromArmor = 0
