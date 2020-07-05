@@ -32,6 +32,9 @@ function onClose()
 	DB.removeHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 end
 
+---	Locate the effects node within the relevant player character's node within combattracker
+--	@param node the databasenode passed along when this file is initialized
+--	@return nodeEffects path to this PC's databasenode "effects" in the combat tracker
 function getNodeEffects(node)
 	local rActor
 	local nodeEffects
@@ -141,7 +144,10 @@ function onEncumbranceChanged()
 	RealEncumbrance.applyPenalties(nodeChar)
 end
 
---	Determine the total bonus to STR from effects
+---	Determine the total bonus to STR from effects
+--	@param rActor a table containing relevant paths and information on this PC
+--	@param nStrength the PC's base strength score
+--	@return nStrEffectMod the PC's current strength score after all bonuses are applied
 function getStrEffectBonus(rActor, nStrength)
 	if not rActor then
 		return 0
