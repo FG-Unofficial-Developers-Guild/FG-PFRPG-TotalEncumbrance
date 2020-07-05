@@ -22,6 +22,7 @@ function onInit()
 	end
 
 	DB.addHandler(DB.getPath(nodeEffects, 'effects.*.label'), 'onUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(nodeEffects, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
@@ -43,6 +44,7 @@ function onClose()
 	end
 
 	DB.removeHandler(DB.getPath(nodeEffects, 'effects.*.label'), 'onUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(nodeEffects, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.removeHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
@@ -148,13 +150,13 @@ function getStrEffectBonus(rActor, nStrength)
 		return 0
 	end
 
-	local nStrEffectMod = EffectManager35E.getEffectsBonus(rActor, 'STR', true)
+	local nStrEffectMod = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
 
-	if EffectManager35E.hasEffectCondition(rActor, 'Exhausted') then
+	if EffectManagerTE.hasEffectCondition(rActor, 'Exhausted') then
 		nStrEffectMod = nStrEffectMod - 6
-	elseif EffectManager35E.hasEffectCondition(rActor, 'Fatigued') then
+	elseif EffectManagerTE.hasEffectCondition(rActor, 'Fatigued') then
 		nStrEffectMod = nStrEffectMod - 2
-	elseif EffectManager35E.hasEffectCondition(rActor, 'Paralyzed') then
+	elseif EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
 		nStrEffectMod = -1 * nStrength
 	end
 

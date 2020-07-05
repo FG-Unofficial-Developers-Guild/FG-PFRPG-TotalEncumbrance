@@ -41,5 +41,6 @@
 		<script name="OptionsHandlers" file="scripts/options_handlers.lua" />
 		<script name="SpellFailure" file="scripts/spell_failure.lua" />
 		<script name="TEGlobals" file="scripts/encumbrance_globals.lua" />
+		<script name="EffectManagerTE" file="scripts/manager_effect_TE.lua" />
 	</base>
 </root>
