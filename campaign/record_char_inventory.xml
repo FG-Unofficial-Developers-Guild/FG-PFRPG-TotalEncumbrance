@@ -8,8 +8,15 @@
 	<windowclass name="charsheet_inventory" merge="join">
 		<script file="campaign/scripts/char_inv2.lua" />
 		<sheetdata>
+	<!-- Inventory List -->
+			<frame_char name="inventoryframe">
+				<bounds>15,0,-29,-215</bounds>
+			</frame_char>
 
 	<!--Armor-->
+			<frame_char name="armorpenaltyframe" insertbefore="encumbranceframe">
+				<bounds>15,-215,240,58</bounds>
+			</frame_char>
 			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
 				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
 				<hideonvalue>-1</hideonvalue>
@@ -79,14 +86,14 @@
 
 	<!--Encumbrance Frame-->
 			<frame_char name="encumbranceframe">
-				<bounds>15,-147,240,142</bounds>
+				<bounds>15,-157,240,152</bounds>
 			</frame_char>
 			<label name="encumbrance_label">
 				<anchored to="encumbranceframe" position="insidetopleft" offset="15,10" />
 				<static textres="char_label_totalweight" />
 			</label>
 			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="20,40" width="55" height="20" />
+				<anchored to="encumbranceframe" position="insidetopleft" offset="20,42" width="55" height="20" />
 			</simplenumber>
 			<simplenumber name="encumbrancemediumload" source="encumbrance.mediumload" insertbefore="coinframe">
 				<anchored to="encumbrancelightload" position="right" offset="15,0" width="55" />
@@ -95,13 +102,13 @@
 				<anchored to="encumbrancemediumload" position="right" offset="15,0" width="55" />
 			</simplenumber>
 			<simplenumber name="encumbranceliftoverhead" source="encumbrance.liftoverhead" insertbefore="coinframe">
-				<anchored to="encumbrancelightload" position="below" offset="0,15" height="20" />
+				<anchored to="encumbrancelightload" position="below" offset="0,17" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
 			</simplenumber>
 
 		<!--Equipment Total Field-->
 			<simplenumber name="encumbranceload" source="encumbrance.load">
-				<anchored to="encumbranceframe" position="insidebottomright" offset="94,12" width="55" height="20" />
+				<anchored to="encumbranceframe" position="insidebottomright" offset="94,16" width="55" height="20" />
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<readonly />
 				<script>
@@ -117,7 +124,7 @@
 
 		<!--Coin Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
-				<anchored to="encumbranceliftoverhead" position="below" offset="0,15" height="20" />
+				<anchored to="encumbranceliftoverhead" position="below" offset="0,17" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
@@ -136,7 +143,7 @@
 
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbrancepushordrag" position="below" offset="0,15" height="20" />
+				<anchored to="encumbrancepushordrag" position="below" offset="0,17" height="20" />
 				<bottom parent="encumbranceframe"  offset="-5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
@@ -149,7 +156,7 @@
 
 	<!--Coin Frame-->
 			<frame_char name="coinframe">
-				<bounds>255,-205,-29,200</bounds>
+				<bounds>255,-215,-29,210</bounds>
 			</frame_char>
 			<label name="coin_label" merge="replace">
 				<anchored to="coinframe" position="insidetopleft" offset="15,7" />
@@ -160,7 +167,7 @@
 		<!--Carried Coin of Coin Type 1-->
 			<number_dropadd name="coinamount1" >
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinframe" position="insidetopleft" offset="20,30" width="40" height="20" />
+				<anchored to="coinframe" position="insidetopleft" offset="20,42" width="40" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -319,8 +326,13 @@
 				</anchored>
 				<multilinespacing>20</multilinespacing>
 			</basicstring>
+		<!-- Inventory and Wealth Totals -->
 			<stringu name="inventorytotal" source="coins.inventorytotal">
-				<anchored to="coinframe" position="insidetopright" offset="15,10" />
+				<anchored to="coinframe" position="insidetopright" offset="15,9" />
+				<readonly />
+			</stringu>
+			<stringu name="wealthtotal" source="coins.wealthtotal">
+				<anchored to="coinframe" position="insidetopright" offset="15,23" />
 				<readonly />
 			</stringu>
 		</sheetdata>
