@@ -140,7 +140,7 @@ function onEncumbranceChanged()
 	DB.setValue(nodeChar, 'encumbrance.liftoverhead', 'number', nLiftOver)
 	DB.setValue(nodeChar, 'encumbrance.liftoffground', 'number', nLiftOff)
 	DB.setValue(nodeChar, 'encumbrance.pushordrag', 'number', nPushDrag)
-	
+
 	RealEncumbrance.applyPenalties(nodeChar)
 end
 

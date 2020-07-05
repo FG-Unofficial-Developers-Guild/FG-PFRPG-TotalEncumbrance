@@ -219,9 +219,7 @@ local function rawArmorPenalties(nodePC, tMaxStat, tEqCheckPenalty, tSpellFailur
 		end
 	end
 
-	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
-		DB.setValue(nodePC, 'coins.costerrorannouncer', 'number', 0)
-	end
+	DB.setValue(nodePC, 'coins.costerrorannouncer', 'number', 0)
 
 	if OptionsManager.isOption('CALCULATE_INVENTORY_VALUE', 'on') then
 		local sTotalInvVal = formatCurrency(nTotalInvVal)
