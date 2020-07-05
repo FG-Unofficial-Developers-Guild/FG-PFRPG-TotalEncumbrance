@@ -25,6 +25,7 @@
 						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
+				<delaykeyupdate />
 			</basicnumber>
 			<basicnumber name="speedarmor" source="speed.armor">
 				<anchored to="speedbase" position="right" offset="8,0" width="30" />

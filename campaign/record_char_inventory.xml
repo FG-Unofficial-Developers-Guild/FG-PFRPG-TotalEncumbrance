@@ -173,6 +173,7 @@
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
+				<delaykeyupdate />
 				</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 1-->
@@ -180,6 +181,7 @@
 				<tooltip textres="char_tooltip_noncarriedcoin" />
 				<anchored to="coinamount1" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Label of Coin Type 1-->
@@ -197,6 +199,7 @@
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 2-->
@@ -204,6 +207,7 @@
 				<tooltip textres="char_tooltip_noncarriedcoin" />
 				<anchored to="coinamount2" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Label of Coin Type 2-->
@@ -221,6 +225,7 @@
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 3-->
@@ -228,6 +233,7 @@
 				<tooltip textres="char_tooltip_noncarriedcoin" />
 				<anchored to="coinamount3" position="right" offset="10,0" width="40" />
 				<frame name="fielddark" offset="7,5,7,5" />
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Label of Coin Type 3-->
@@ -245,6 +251,7 @@
 					CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 				end
 				</script>
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 4-->
@@ -252,6 +259,7 @@
 				<tooltip textres="char_tooltip_noncarriedcoin" />
 				<anchored to="coinamount4" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
+				<delaykeyupdate />
 			</number_dropadd>
 		<!--Label of Coin Type 4-->
 			<stringu name="coinname4" source="coins.slot4.name">
@@ -268,6 +276,7 @@
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 5-->
@@ -275,6 +284,7 @@
 				<tooltip textres="char_tooltip_noncarriedcoin" />
 				<anchored to="coinamount5" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Label of Coin Type 5-->
@@ -291,6 +301,7 @@
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 6-->
@@ -298,6 +309,7 @@
 				<tooltip textres="char_tooltip_noncarriedcoin" />
 				<anchored to="coinamount6" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
+				<delaykeyupdate />
 			</number_dropadd>
 
 		<!--Label of Coin Type 6-->

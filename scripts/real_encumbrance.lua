@@ -154,41 +154,27 @@ end
 --	@param tSpeed20 an empty table to be filled with the 20-foot speeds of any worn armor and shields
 --	@param tSpeed30 an empty table to be filled with the 30-foot speeds of any worn armor and shields
 local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
-	local nItemCarried
-	local nItemMaxStat
-	local nItemCheckPenalty
-	local nItemSpellFailure
-	local nItemSpeed20
-	local nItemSpeed30
-	local nItemIDed
-	local nItemCount
-	local sItemName
-	local sItemType
-	local sItemSubtype
-	local sItemCost
-
 	local tLtArmor = {}
 	local tMedArmor = {}
 	local tHeavyArmor = {}
 	local tShield = {}
-
-	local nTotalInvVal = 0
-
 	local bClumsyArmor = false
 
-	for _,v in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
-		nItemCarried = DB.getValue(v, 'carried', 0)
-		nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
-		nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
-		nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
-		nItemSpeed20 = DB.getValue(v, 'speed20', 0)
-		nItemSpeed30 = DB.getValue(v, 'speed30', 0)
-		nItemIDed = DB.getValue(v, 'isidentified', 1)
-		nItemCount = DB.getValue(v, 'count', 1)
-		sItemName = string.lower(DB.getValue(v, 'name', ''))
-		sItemType = string.lower(DB.getValue(v, 'type', ''))
-		sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
-		sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
+	local nTotalInvVal = 0
+  
+  for _,v in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
+		local nItemCarried = DB.getValue(v, 'carried', 0)
+		local nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
+		local nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
+		local nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
+		local nItemSpeed20 = DB.getValue(v, 'speed20', 0)
+		local nItemSpeed30 = DB.getValue(v, 'speed30', 0)
+		local nItemIDed = DB.getValue(v, 'isidentified', 1)
+		local nItemCount = DB.getValue(v, 'count', 1)
+		local sItemName = string.lower(DB.getValue(v, 'name', ''))
+		local sItemType = string.lower(DB.getValue(v, 'type', ''))
+		local sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
+		local sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
 
 		if nItemIDed ~= 0 and sItemCost then
 			nItemCost = processItemCost(nodeChar, sItemCost, sItemName)
