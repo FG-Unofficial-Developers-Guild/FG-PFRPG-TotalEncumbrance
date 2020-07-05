@@ -57,17 +57,17 @@ local function getSpeedEffects(nodePC, rActor)
 	local bSpeedZero = false
 
 	if
-		EffectManager35E.hasEffectCondition(rActor, 'Exhausted')
-		or EffectManager35E.hasEffectCondition(rActor, 'Entangled')
+		EffectManagerTE.hasEffectCondition(rActor, 'Exhausted')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Entangled')
 	then
 		bSpeedHalved = true
 	end
 
 	if
-		EffectManager35E.hasEffectCondition(rActor, 'Grappled')
-		or EffectManager35E.hasEffectCondition(rActor, 'Paralyzed')
-		or EffectManager35E.hasEffectCondition(rActor, 'Petrified')
-		or EffectManager35E.hasEffectCondition(rActor, 'Pinned')
+		EffectManagerTE.hasEffectCondition(rActor, 'Grappled')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Petrified')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Pinned')
 	then
 		bSpeedZero = true
 	end
@@ -77,7 +77,7 @@ local function getSpeedEffects(nodePC, rActor)
 		bSpeedHalved = true
 	end
 
-	local nSpeedAdjFromEffects = EffectManager35E.getEffectsBonus(rActor, 'SPEED', true)
+	local nSpeedAdjFromEffects = EffectManagerTE.getEffectsBonus(rActor, 'SPEED', true)
 
 	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
