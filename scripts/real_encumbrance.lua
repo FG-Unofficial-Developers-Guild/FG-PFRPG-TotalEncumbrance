@@ -127,12 +127,22 @@ end
 --	@param nodeChar databasenode of PC within charsheet
 --	@return 10 a temporary number to debug with
 local function getTotalCoinWealth(nodeChar)
-	local nPp = 10 * (DB.getValue(nodeChar, 'coins.slot1.amount', 0) + DB.getValue(nodeChar, 'coins.slot1.amountA', 0))
-	local nGp = DB.getValue(nodeChar, 'coins.slot2.amount', 0) + DB.getValue(nodeChar, 'coins.slot2.amountA', 0)
-	local nSp = .1 * (DB.getValue(nodeChar, 'coins.slot3.amount', 0) + DB.getValue(nodeChar, 'coins.slot3.amountA', 0))
-	local nCp = .01 * (DB.getValue(nodeChar, 'coins.slot4.amount', 0) + DB.getValue(nodeChar, 'coins.slot4.amountA', 0))
+	local nWealth = 0
 
-	return nPp + nGp + nSp + nCp
+	for _,v in pairs(DB.getChildren(nodeChar, 'coins')) do
+		local sDenomination = string.lower(DB.getValue(v, 'name', ''))
+		local nCoinAmount = DB.getValue(v, 'amount', 0) + DB.getValue(v, 'amountA', 0)
+
+		if sDenomination ~= '' then
+			for k,v in pairs(TEGlobals.tDenominations) do
+				if string.match(sDenomination, k) then
+					nWealth = nWealth + (nCoinAmount * v)
+				end
+			end
+		end
+	end
+
+	return nWealth
 end
 
 ---	Compile penalties from armor worn by character related to nodeChar
