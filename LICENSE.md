@@ -1,5 +1,6 @@
 All of the code written expressly for this extension was created by Wil Thieme (bmos) or Paul Caruso.
-You are welcome to reference or fork it for your own purposes, but not to sell it without prior written agreement. If you do make something cool with it, please let me know and provide attribution where appropriate.
+
+Total Encumbrance is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Total Encumbrance is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the [GNU General Public License](https://www.gnu.org/licenses/) for more details.
 
 SmiteWorks owns rights to code sections copied from their rulesets by permission for FG community development.
 'Fantasy Grounds' is a trademark of SmiteWorks USA, LLC. 'Fantasy Grounds' is Copyright 2004-2020 SmiteWorks USA LLC.
@@ -7,8 +8,6 @@ The CoreRPG ruleset and all included files are copyright 2004-2013, Smiteworks U
 The 3.5E ruleset and all included files are copyright 2004-2013, Smiteworks USA LLC.
 The PFRPG ruleset and all included files are copyright 2004-2013, Smiteworks USA LLC.
 
-Rights to original code sections copied from the CoreRPG/MoreCore port of the Coins Weight extension are retained by Alaxandir(AiurJordan).
-https://svn.fantasygrounds.com/forums/showthread.php?57185-Coin-Weight-for-CoreRPG-(MoreCore-compatible)
+Rights to original code sections copied from the [CoreRPG/MoreCore port of the Coins Weight extension by Alaxandir(AiurJordan)](https://svn.fantasygrounds.com/forums/showthread.php?57185-Coin-Weight-for-CoreRPG-(MoreCore-compatible)) remain as specified in that release.
 
-Rights to original code sections copied from original Coins Weight extension by Cedric Zuger and damned are retained by the original authors.
-https://svn.fantasygrounds.com/forums/showthread.php?41109-The-weight-of-the-coins
+Rights to original code sections copied from original [Coins Weight extension by Cedric Zuger and damned](https://svn.fantasygrounds.com/forums/showthread.php?41109-The-weight-of-the-coins) remain as specified in that release.
