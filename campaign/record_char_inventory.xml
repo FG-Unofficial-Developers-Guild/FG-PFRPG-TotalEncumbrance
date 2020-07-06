@@ -53,7 +53,7 @@
 									nMaxStatFromArmor &gt; nMaxStatFromEnc
 									or nMaxStatFromArmor == -1
 								)
-								then
+							then
 								window.armormaxstatbonus.setColor('FFB22929')
 							else
 								window.armormaxstatbonus.setColor('FF000000')
