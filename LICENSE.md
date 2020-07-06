@@ -1,5 +1,5 @@
-All of the code written expressly for this extension was written by Wil Thieme (bmos) or Paul Caruso.
-You are welcome to reference or fork it for your own purposes, but not to sell it. If you do make something cool with it, please let me know and provide attribution where appropriate.
+All of the code written expressly for this extension was created by Wil Thieme (bmos) or Paul Caruso.
+You are welcome to reference or fork it for your own purposes, but not to sell it without prior written agreement. If you do make something cool with it, please let me know and provide attribution where appropriate.
 
 SmiteWorks owns rights to code sections copied from their rulesets by permission for FG community development.
 'Fantasy Grounds' is a trademark of SmiteWorks USA, LLC. 'Fantasy Grounds' is Copyright 2004-2020 SmiteWorks USA LLC.
