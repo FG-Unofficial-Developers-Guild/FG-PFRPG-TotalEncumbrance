@@ -3,7 +3,7 @@
 
 	<properties>
 		<name>Total Encumbrance</name>
-		<version>1.6.4</version>
+		<version>1.7.1</version>
 		<author>bmos (Wil Thieme)</author>
 		<description>An extension that computes and displays the weight of carried coins.</description>
 		<ruleset>
@@ -14,7 +14,7 @@
 		</ruleset>
 	</properties>
 
-	<announcement text="PFRPG Total Encumbrance: This extension applies encumbrance penalties, rolls spell failure chances, weighs PC coins, and patches in support for armor max stat of zero. \nhttps://github.com/bmos/FG-PFRPG-TotalEncumbrance"  icon="EncumberedGuy" font="emotefont" />
+	<announcement text="PFRPG Total Encumbrance: This extension applies encumbrance penalties, rolls spell failure chances, weighs PC coins, and patches in support for armor max stat of zero. https://github.com/bmos/FG-PFRPG-TotalEncumbrance"  icon="EncumberedGuy" font="emotefont" />
 
 	<base>
 		<!-- Icon -->
