@@ -315,7 +315,6 @@ end
 --	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
 --	Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
 local function encumbrancePenalties(nodeChar)
---	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
 	local light = DB.getValue(nodeChar, 'encumbrance.lightload', 0)
 	local medium = DB.getValue(nodeChar, 'encumbrance.mediumload', 0)
 	local total = DB.getValue(nodeChar, 'encumbrance.total', 0)
