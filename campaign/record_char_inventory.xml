@@ -360,10 +360,11 @@
 	<windowclass name="charsheet_encumbrance" merge="join">
 		<frame>charsheethelper</frame>
 		<placement>
-			<size width="300" height="150" />
+			<size width="300" height="135" />
 		</placement>
 		<sizelimits>
-			<minimum width="300" height="150" />
+			<minimum width="300" height="135" />
+			<maximum width="300" height="135" />
 			<dynamic />
 		</sizelimits>
 		<nodelete />
