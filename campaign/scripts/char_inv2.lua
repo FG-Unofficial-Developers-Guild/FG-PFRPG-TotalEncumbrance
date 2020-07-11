@@ -8,10 +8,11 @@ function onInit()
 	DB.setValue(node, 'coins.costerrorannouncer', 'number', 1)
 	onEncumbranceChanged()
 
-	local nodeEffects = getNodeEffects(node)
+	local nodeCharCT = getNodeEffects(node)
 
-	DB.addHandler(DB.getPath(nodeEffects, 'effects.*.label'), 'onUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath(nodeEffects, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
@@ -21,10 +22,11 @@ end
 
 function onClose()
 	local node = getDatabaseNode()
-	local nodeEffects = getNodeEffects(node)
+	local nodeCharCT = getNodeEffects(node)
 
-	DB.removeHandler(DB.getPath(nodeEffects, 'effects.*.label'), 'onUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath(nodeEffects, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.removeHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
@@ -34,22 +36,22 @@ end
 
 ---	Locate the effects node within the relevant player character's node within combattracker
 --	@param node the databasenode passed along when this file is initialized
---	@return nodeEffects path to this PC's databasenode "effects" in the combat tracker
+--	@return nodeCharCT path to this PC's databasenode "effects" in the combat tracker
 function getNodeEffects(node)
 	local rActor
-	local nodeEffects
+	local nodeCharCT
 	if node.getParent().getName() == 'charsheet' then
 		rActor = ActorManager.getActor('pc', node)
-		nodeEffects = DB.findNode(rActor['sCTNode'])
+		nodeCharCT = DB.findNode(rActor['sCTNode'])
 	elseif node.getChild('...').getName() == 'charsheet' then
 		rActor = ActorManager.getActor('pc', node.getParent())
-		nodeEffects = DB.findNode(rActor['sCTNode'])
+		nodeCharCT = DB.findNode(rActor['sCTNode'])
 	elseif node.getChild('....') == 'charsheet' then
 		rActor = ActorManager.getActor('ct', node.getChild('...'))
-		nodeEffects = DB.findNode(rActor['sCTNode'])
+		nodeCharCT = DB.findNode(rActor['sCTNode'])
 	end
 
-	return nodeEffects
+	return nodeCharCT
 end
 
 function onStrengthChanged()
