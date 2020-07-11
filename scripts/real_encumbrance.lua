@@ -16,6 +16,7 @@ function onInit()
 		DB.addHandler(DB.getPath('charsheet.*.coins.*.amountA'), 'onUpdate', applyPenalties)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', applyPenalties)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', applyPenalties)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', applyPenalties)
 	end
 end
 
@@ -28,19 +29,22 @@ local function handleApplyPenaltiesArgs(node)
 
 	if node.getParent().getName() == 'charsheet' then
 		nodeChar = node
-	elseif node.getChild('.....').getName() == 'charsheet' then
-		nodeChar = node.getChild('....')
-	elseif node.getName() == 'inventorylist' then
-		nodeChar = node.getParent()
-	elseif node.getChild( '...' ).getName() == 'inventorylist' then
-		nodeChar = node.getChild( '....' )
-	elseif node.getParent().getName() == 'inventorylist' then
-		nodeChar = node.getChild( '...' )
 	elseif node.getName() == 'hp' then
+		nodeChar = node.getParent()
+	elseif node.getName() == 'inventorylist' then
 		nodeChar = node.getParent()
 	elseif node.getName() == 'effects' then
 		rActor = ActorManager.getActor('ct', node.getParent())
 		nodeChar = DB.findNode(rActor['sCreatureNode'])
+	elseif node.getParent().getName() == 'inventorylist' then
+		nodeChar = node.getChild( '...' )
+	elseif node.getChild( '...' ).getName() == 'inventorylist' then
+		nodeChar = node.getChild( '....' )
+	elseif node.getChild('...').getName() == 'effects' then
+		rActor = ActorManager.getActor('ct', node.getChild('....'))
+		nodeChar = DB.findNode(rActor['sCreatureNode'])
+	elseif node.getChild('.....').getName() == 'charsheet' then
+		nodeChar = node.getChild('....')
 	end
 
 	if not rActor then
