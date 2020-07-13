@@ -162,7 +162,6 @@ function getStrEffectBonus(rActor, nStrength)
 		nStrEffectMod = nStrEffectMod - 6
 	elseif EffectManagerTE.hasEffectCondition(rActor, 'Fatigued') then
 		nStrEffectMod = nStrEffectMod - 2
-	elseif EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
 	end
 
 	if EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
