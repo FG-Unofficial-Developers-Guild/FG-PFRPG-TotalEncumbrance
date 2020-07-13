@@ -146,7 +146,7 @@ function onEncumbranceChanged()
 	RealEncumbrance.applyPenalties(nodeChar)
 end
 
----	Determine the total bonus to STR from effects
+---	Determine the total bonus to carrying capacity from effects STR or CARRY
 --	@param rActor a table containing relevant paths and information on this PC
 --	@param nStrength the PC's base strength score
 --	@return nStrEffectMod the PC's current strength score after all bonuses are applied
@@ -156,6 +156,7 @@ function getStrEffectBonus(rActor, nStrength)
 	end
 
 	local nStrEffectMod = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
+	local nCarryBonus = EffectManagerTE.getEffectsBonus(rActor, 'CARRY', true)
 
 	if EffectManagerTE.hasEffectCondition(rActor, 'Exhausted') then
 		nStrEffectMod = nStrEffectMod - 6
@@ -163,6 +164,10 @@ function getStrEffectBonus(rActor, nStrength)
 		nStrEffectMod = nStrEffectMod - 2
 	elseif EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
 		nStrEffectMod = -1 * nStrength
+	end
+
+	if nCarryBonus then
+		nStrEffectMod = nStrEffectMod + nCarryBonus
 	end
 
 	return nStrEffectMod
