@@ -16,6 +16,8 @@ I was excited to come across Alaxandir's CoreRPG port of Zuger's Coin Weight ext
 # Compatibility and Configuration
 This extension has been tested with FantasyGrounds Classic 3.3.10 and FantasyGrounds Unity 4.0.0 (2020-07-07). It has limited compatibility in Unity (weight encumbrance penalties don't work fully and should be disabled under options).
 
+Compatibility with (URL="https://www.fantasygrounds.com/forums/showthread.php?48977-Advanced-3-5e-and-Pathfinder-effects")[Kelrugem's Advanced Effects extension] (and any mod that contains it) is currently limited until it gets a compatibility update (coming soon).
+
 Any values designed to be user-modifiable are located in scripts/encumbrance_globals.lua and include:
 * Coins per weight unit
 * Classes which have arcane failure in different categories of armor
