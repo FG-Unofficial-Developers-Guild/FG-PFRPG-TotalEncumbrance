@@ -1,5 +1,5 @@
 # TotalEncumbrance
-I was excited to come across Alaxandir's CoreRPG port of Zuger's Coin Weight extension, but it had visual issues in the Pathfinder ruleset. I made a few changes and enabled some extra features that had been left disabled/unfinished in the source mod. After seeing how it worked, it seemed like an obvious next step to extend its functionality to help fill the gaps in the existing functionality around weight, encumbrance, coins, and so forth.
+I was excited to come across Alaxandir's CoreRPG port of Zuger's Coin Weight extension, but it had visual issues in the Pathfinder ruleset. I made a few changes and enabled some extra features that had been left disabled/unfinished in the source mod. After seeing how it worked, it seemed like an obvious next step to extend its functionality to help fill the gaps in the existing functionality around weight, encumbrance, coins, and the like.
 
 # Features
 * Calculate coin weight. Two columns, one weighed and one not. 50 coins is 1 weight unit.
