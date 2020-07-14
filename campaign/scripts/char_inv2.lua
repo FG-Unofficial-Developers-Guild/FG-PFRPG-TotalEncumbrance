@@ -172,9 +172,5 @@ function getStrEffectBonus(rActor, nStrength)
 		nStrEffectMod = nStrEffectMod + nCarryBonus
 	end
 
-	if EffectManagerTE.hasEffectCondition(rActor, 'Ant Haul') then
-		nStrEffectMod = 3 * nStrEffectMod
-	end
-
 	return nStrEffectMod
 end
