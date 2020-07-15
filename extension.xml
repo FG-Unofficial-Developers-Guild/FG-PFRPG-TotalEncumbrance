@@ -14,7 +14,7 @@
 		</ruleset>
 	</properties>
 
-	<announcement text="PFRPG Total Encumbrance: This extension applies encumbrance penalties, rolls spell failure chances, weighs PC coins, and patches in support for armor max stat of zero. https://github.com/bmos/FG-PFRPG-TotalEncumbrance"  icon="EncumberedGuy" font="emotefont" />
+	<announcement text="https://github.com/bmos/FG-PFRPG-TotalEncumbrance\rPFRPG Total Encumbrance:\rThis extension applies encumbrance penalties, rolls spell failure chances, weighs PC coins, calculates character wealth, offers metric unit conversion, and patches in support for armor max stat of zero."  icon="EncumberedGuy" font="emotefont" />
 
 	<base>
 		<!-- Icon -->
