@@ -174,7 +174,8 @@
 					end
 				</script>
 				<delaykeyupdate />
-				</number_dropadd>
+				<tabtarget next="coinamount1a" />
+			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 1-->
 			<number_dropadd name="coinamount1a" source="coins.slot1.amountA">
@@ -182,6 +183,7 @@
 				<anchored to="coinamount1" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<delaykeyupdate />
+				<tabtarget next="coinname1" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 1-->
@@ -189,6 +191,7 @@
 				<anchored to="coinamount1" position="righthigh" offset="60,0" width="20" />
 				<default>pp</default>
 				<delaykeyupdate />
+				<tabtarget next="coinamount2" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 2-->
@@ -201,6 +204,7 @@
 					end
 				</script>
 				<delaykeyupdate />
+				<tabtarget next="coinamount2a" />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 2-->
@@ -209,6 +213,7 @@
 				<anchored to="coinamount2" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<delaykeyupdate />
+				<tabtarget next="coinname2" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 2-->
@@ -216,6 +221,7 @@
 				<anchored to="coinamount2" position="righthigh" offset="60,0" width="20"/>
 				<default>gp</default>
 				<delaykeyupdate />
+				<tabtarget next="coinamount3" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 3-->
@@ -228,6 +234,7 @@
 					end
 				</script>
 				<delaykeyupdate />
+				<tabtarget next="coinamount3a" />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 3-->
@@ -236,6 +243,7 @@
 				<anchored to="coinamount3" position="right" offset="10,0" width="40" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<delaykeyupdate />
+				<tabtarget next="coinname3" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 3-->
@@ -243,6 +251,7 @@
 				<anchored to="coinamount3" position="right" offset="60,0" width="20" />
 				<default>sp</default>
 				<delaykeyupdate />
+				<tabtarget next="coinamount4" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 4-->
@@ -255,6 +264,7 @@
 				end
 				</script>
 				<delaykeyupdate />
+				<tabtarget next="coinamount4a" />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 4-->
@@ -263,12 +273,14 @@
 				<anchored to="coinamount4" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<delaykeyupdate />
+				<tabtarget next="coinname4" />
 			</number_dropadd>
 		<!--Label of Coin Type 4-->
 			<stringu name="coinname4" source="coins.slot4.name">
 				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" />
 				<default>cp</default>
 				<delaykeyupdate />
+				<tabtarget next="coinamount5" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 5-->
@@ -281,6 +293,7 @@
 					end
 				</script>
 				<delaykeyupdate />
+				<tabtarget next="coinamount5a" />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 5-->
@@ -289,12 +302,14 @@
 				<anchored to="coinamount5" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<delaykeyupdate />
+				<tabtarget next="coinname5" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 5-->
 			<stringu name="coinname5" source="coins.slot5.name">
 				<anchored to="coinamount5" position="righthigh" offset="60,0" width="20" />
 				<delaykeyupdate />
+				<tabtarget next="coinamount6" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 6-->
@@ -307,6 +322,7 @@
 					end
 				</script>
 				<delaykeyupdate />
+				<tabtarget next="coinamount6a" />
 			</number_dropadd>
 
 		<!--Non Carried Coin of Coin Type 6-->
@@ -315,12 +331,14 @@
 				<anchored to="coinamount6" position="righthigh" offset="10,0" width="40" height="20" />
 				<frame name="fielddark" offset="7,5,7,5" />
 				<delaykeyupdate />
+				<tabtarget next="coinname6" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 6-->
 			<stringu name="coinname6" source="coins.slot6.name">
 				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
 				<delaykeyupdate />
+				<tabtarget next="coinother" />
 			</stringu>
 		<!-- Coins 'Other' Text Box -->
 			<basicstring name="coinother">
