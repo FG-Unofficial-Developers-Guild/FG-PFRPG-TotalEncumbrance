@@ -14,7 +14,7 @@ I was excited to come across [Alaxandir's CoreRPG port](https://www.fantasygroun
 
 
 # Compatibility and Configuration
-This extension has been tested with FantasyGrounds Classic 3.3.10 and FantasyGrounds Unity 4.0.0 (2020-07-07). It has limited compatibility in Unity (weight encumbrance penalties don't work fully and should be disabled under options).
+This extension has been tested with FantasyGrounds Classic 3.3.11 and FantasyGrounds Unity 4.0.0 (2020-07-07). It has limited compatibility in Unity (weight encumbrance penalties don't work fully and should be disabled under options).
 
 Compatibility with [Kelrugem's Advanced Effects extension](https://www.fantasygrounds.com/forums/showthread.php?48977-Advanced-3-5e-and-Pathfinder-effects) (and any mod that contains it) is currently limited until it gets a compatibility update (coming soon).
 
