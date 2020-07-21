@@ -8,36 +8,36 @@ function onInit()
 	DB.setValue(node, 'coins.costerrorannouncer', 'number', 1)
 	onEncumbranceChanged()
 
-	local nodeCharCT = getNodeEffects(node)
+	local nodeCharCT = getNodeCharCT(node)
 
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
-	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
-	DB.addHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
+	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onStrengthChanged)
+	DB.addHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 end
 
 function onClose()
 	local node = getDatabaseNode()
-	local nodeCharCT = getNodeEffects(node)
+	local nodeCharCT = getNodeCharCT(node)
 
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
-	DB.removeHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onEncumbranceChanged)
-	DB.removeHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onEncumbranceChanged)
+	DB.removeHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onStrengthChanged)
+	DB.removeHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 end
 
 ---	Locate the effects node within the relevant player character's node within combattracker
 --	@param node the databasenode passed along when this file is initialized
 --	@return nodeCharCT path to this PC's databasenode "effects" in the combat tracker
-function getNodeEffects(node)
+function getNodeCharCT(node)
 	local rActor
 	local nodeCharCT
 	if node.getParent().getName() == 'charsheet' then
