@@ -33,7 +33,7 @@
 			</basicnumber>
 			<label_fieldtop name="speedarmor_label">
 				<anchored to="speedarmor" />
-				<static textres="char_label_combatarmor" />
+				<static textres="char_label_speedpenalty" />
 			</label_fieldtop>
 		</sheetdata>
 	</windowclass>
