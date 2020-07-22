@@ -6,7 +6,7 @@ I was excited to come across [Alaxandir's CoreRPG port](https://www.fantasygroun
 * Automate encumbrance penalties based on total weight and current carrying capacity.
 * Color-code the numbers in the penalties boxes to indicate their source. Red is for encumbrance and black is for armor.
 * Options to enable/disable each extension component.
-* Automatically roll arcane spell failure chance when appropriate. Alternately, prompt user to roll via a chat message including the spell failure chance.
+* Automatically roll arcane spell failure chance [when appropriate](https://www.fantasygrounds.com/forums/showthread.php?48977-Advanced-3-5e-and-Pathfinder-effects&p=528377&viewfull=1#post528377). Alternately, prompt user to roll via a chat message including the spell failure chance.
 * Carrying capacities update live when strength-modifying effects are applied/changed/removed.
 * Armor can now have a max dex of zero, although it's a workaround. See the encumbrance_globals.lua section below.
 * Speed penalties auto-change based on weight encumbrance and effects.
