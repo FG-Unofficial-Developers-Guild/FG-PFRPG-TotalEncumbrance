@@ -453,13 +453,6 @@
 					end
 				</script>
 			</number_charinv>
-			<number_charinv name="weight">
-				<script>
-					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script>
-			</number_charinv>
 			<button_char_inv_carried name="carried">
 				<anchored width="20" height="20">
 					<top offset="2" />
@@ -471,19 +464,6 @@
 					end
 				</script>
 			</button_char_inv_carried>
-			<number_charinv name="weight">
-				<anchored width="30" height="20">
-					<top offset="2" />
-					<right parent="rightanchor" anchor="left" relation="relative" offset="-10" />
-				</anchored>
-				<delaykeyupdate />
-				<tabtarget prev="location" />
-				<script>
-					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script>
-			</number_charinv>
 		</sheetdata>
 	</windowclass>
 	
