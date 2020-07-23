@@ -50,8 +50,8 @@
 							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
 								and nMaxStatFromEnc ~= -1
 								and (
-									nMaxStatFromArmor == -1
-									or nMaxStatFromArmor &lt; nMaxStatFromEnc
+									nMaxStatFromArmor &gt; nMaxStatFromEnc
+									or nMaxStatFromArmor == -1
 								)
 							then
 								window.armormaxstatbonus.setColor('FFB22929')
@@ -65,8 +65,8 @@
 							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
 								and nCheckPenaltyFromEnc ~= 0
 								and (
-									nCheckPenaltyFromArmor == 0 
-									or nCheckPenaltyFromArmor &lt; nCheckPenaltyFromEnc
+									nCheckPenaltyFromArmor &gt; nCheckPenaltyFromEnc
+									or nCheckPenaltyFromArmor == 0
 								)
 							then
 								window.armorcheckpenalty.setColor('FFB22929')
