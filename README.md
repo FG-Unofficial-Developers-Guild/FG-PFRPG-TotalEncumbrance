@@ -13,7 +13,7 @@ I was excited to come across [Alaxandir's CoreRPG port](https://www.fantasygroun
 
 
 # Compatibility and Configuration
-This extension has been tested with FantasyGrounds Classic 3.3.11 and FantasyGrounds Unity 4.0.0 (2020-07-07). It has limited compatibility in Unity (weight encumbrance penalties don't work fully and should be disabled under options).
+This extension has been tested with FantasyGrounds Classic 3.3.11 and FantasyGrounds Unity 4.0.0 (2020-07-16).
 
 In-game controls for enabling/disabling/configuring some extension components are in FantasyGrounds' "Options" menu.
 Any values designed to be user-modifiable are located in [scripts/encumbrance_globals.lua](https://github.com/bmos/FG-PFRPG-TotalEncumbrance/blob/master/scripts/encumbrance_globals.lua) and include:
