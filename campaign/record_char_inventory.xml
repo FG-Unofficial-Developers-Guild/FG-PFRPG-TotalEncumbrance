@@ -46,7 +46,7 @@
 
 						if nPenaltiesActive == 0 then
 							window.armormaxstatbonus.setColor('7F000000')
-						elseif Interface.getVersion() &lt; 4 then -- use less than comparison if version is Classic
+						elseif Interface.getVersion() &lt; 4 then
 							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
 								and nMaxStatFromEnc ~= -1
 								and (
@@ -58,7 +58,7 @@
 							else
 								window.armormaxstatbonus.setColor('FF000000')
 							end
-						else -- use greater than comparison if version is Unity
+						else
 							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
 								and nMaxStatFromEnc ~= -1
 								and (
@@ -73,7 +73,7 @@
 						end
 						if nPenaltiesActive == 0 then
 							window.armorcheckpenalty.setColor('7F000000')
-						elseif Interface.getVersion() &lt; 4 then -- use less than comparison if version is Classic
+						elseif Interface.getVersion() &lt; 4 then
 							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
 								and nCheckPenaltyFromEnc ~= 0
 								and (
@@ -85,7 +85,7 @@
 							else
 								window.armorcheckpenalty.setColor('FF000000')
 							end
-						else -- use greater than comparison if version is Unity
+						else
 							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
 								and nCheckPenaltyFromEnc ~= 0
 								and (
