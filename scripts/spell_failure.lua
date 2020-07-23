@@ -6,9 +6,11 @@ function onInit()
 	ActionsManager.registerResultHandler("spellfailure", spellFailureMessage)
 end
 
----	Determine if arcane failure chance should be rolled
---	This is triggered when a spell's cast button is clicked
---	@see record_spell_entry.xml usePower()
+---	This function determines if arcane failure chance should be rolled.
+--	It is triggered when a spell's cast button is clicked.
+--	Other functions are called to determine whether a roll should be performed.
+--	@see isArcaneCaster()
+--	@see bStillSpell()
 function arcaneSpellFailure(nodeSpell)
 	local nodeSpellset = nodeSpell.getChild('.....')
 	local nSpellFailureChance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
@@ -34,10 +36,12 @@ function arcaneSpellFailure(nodeSpell)
 	end
 end
 
----	Determine if spell is arcane
---	Compare spellset with arcane casters list (requires spell class to be only the name of the class)
+---	This function compares the spellset name to one of the tables of arcane caster classes in TEGlobals
+--	Some classes are able to ignore arcane failure chance in certain armor categories,.
+--	To accomodate this, the function gets the current armor type as calculated by RealEncumbrance.
+--	This armor type is used to select which table of classes to be checked for spell failure applicability.
 --	@param nodeSpellset databasenode of the spellset that the cast spell is from
---	@return bArcaneCaster boolean value for whether the spellset used is a match
+--	@return bArcaneCaster boolean value for whether the spellset used is a match for any in the table
 function isArcaneCaster(nodeSpellset)
 	local sPlayerSpellset = string.lower(DB.getValue(nodeSpellset, 'label'))
 
@@ -82,7 +86,7 @@ function isArcaneCaster(nodeSpellset)
 	return bArcaneCaster
 end
 
----	Converts from a CSV string to a table
+---	This function converts CSVs from a string to a table of values
 --	@param s input, a string of CSVs
 --	@return t output, an indexed table of values
 function fromCSV(s)
@@ -98,8 +102,10 @@ function fromCSV(s)
 	return t
 end
 
----	Determine if the spell cast requires somatic compenents
---	Determine if the spell cast requires somatic compenents
+---	This function determines if the spell cast requires somatic compenents.
+--	To do this, it gets the value of the components string and passes it to the fromCSV function.
+--	The resulting table is then checked for an S character.
+--	@see fromCSV
 --	@param nodeSpell database node of the spell being cast
 --	@return bStillSpell boolean value, true if spell has no somatic compenents
 function isSomaticSpell(nodeSpell)
@@ -119,10 +125,10 @@ function isSomaticSpell(nodeSpell)
 	return bStillSpell
 end
 
----	Roll percentile dice to determine spell failure/success
---	@return nodeChar This is the charsheet databasenode of the player character that is casting the spell
+---	This function rolls typed percentile dice identified as a spell failure roll including the failure threshold.
+--	@param nodeChar This is the charsheet databasenode of the player character that is casting the spell
 --	@param rActor This is a table containing database paths and identifying data about the player character
---	@param nSpellFailureChance the percentage chance that the spell being cast will fail
+--	@param nSpellFailureChance The numerical chance that the spell being cast will fail
 function rollDice(nodeChar, rActor, nSpellFailureChance)
 	local rRoll = {}
 	rRoll.sType = 'spellfailure'
@@ -133,7 +139,9 @@ function rollDice(nodeChar, rActor, nSpellFailureChance)
 	ActionsManager.roll(nodeChar, rActor, rRoll)
 end
 
----	Determine success/failure and output to chat
+---	This function determines whether the spell failure roll was a success or failure.
+--	This is triggered when a roll of sType 'spellfailure' is performed.
+--	After checking for success/failure, it outputs the result to chat.
 --	@param rSource the character casting the spell
 --	@param rRoll a table of details/parameters about the roll being performed
 function spellFailureMessage(rSource, rTarget, rRoll)
