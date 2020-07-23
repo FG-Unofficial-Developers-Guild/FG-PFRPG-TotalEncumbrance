@@ -109,14 +109,14 @@ end
 --	@param nodeSpell database node of the spell being cast
 --	@return bStillSpell boolean value, true if spell has no somatic compenents
 function isSomaticSpell(nodeSpell)
-	local sComponents = DB.getValue(nodeSpell,'components')
+	local sComponents = string.lower(DB.getValue(nodeSpell,'components'))
 	local bStillSpell = true
 
 	if sComponents then
 		local tComponents = fromCSV(sComponents)
 
 		for _,v in pairs(tComponents) do
-			if v == 'S' or v == ' S' then
+			if v == 's' or v == ' s' then
 				bStillSpell = false
 			end
 		end
