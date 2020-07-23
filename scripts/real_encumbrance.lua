@@ -472,7 +472,6 @@ function applyPenalties(node)
 
 	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodeChar)
 
-
 	DB.setValue(nodeChar, 'encumbrance.armormaxstatbonus', 'number', nMaxStatToSet)
 	DB.setValue(nodeChar, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
 	DB.setValue(nodeChar, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
@@ -489,7 +488,6 @@ function applyPenalties(node)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 	end
-
 
 	DB.setValue(nodeChar, 'speed.armor', 'number', nSpeedPenalty)
 
