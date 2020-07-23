@@ -6,14 +6,15 @@ function onInit()
 	ActionsManager.registerResultHandler("spellfailure", spellFailureMessage)
 end
 
---	When a spell's cast button is clicked, determine if arcane failure chance should be rolled.
---	Trigger location: record_spell_entry.xml usePower()
+---	Determine if arcane failure chance should be rolled
+--	This is triggered when a spell's cast button is clicked
+--	@see record_spell_entry.xml usePower()
 function arcaneSpellFailure(nodeSpell)
 	local nodeSpellset = nodeSpell.getChild('.....')
 	local nSpellFailureChance = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.spellfailure')
 
 	local nodeChar = nodeSpellset.getChild('...')
-	local rActor = ActorManager.getActor('pc', nodeChar);
+	local rActor = ActorManager.getActor('pc', nodeChar)
 
 	if nSpellFailureChance ~= 0 then
 		-- if true, rolls failure chance
@@ -33,9 +34,11 @@ function arcaneSpellFailure(nodeSpell)
 	end
 end
 
---	Determine if the spell is from a spellset that is on the arcane casters list
+---	Determine if spell is arcane
+--	Compare spellset with arcane casters list (requires spell class to be only the name of the class)
+--	@param nodeSpellset databasenode of the spellset that the cast spell is from
+--	@return bArcaneCaster boolean value for whether the spellset used is a match
 function isArcaneCaster(nodeSpellset)
-	--	Gets name of the spell class being used to cast the spell that triggers this (requires spell class to be only the name of the class)
 	local sPlayerSpellset = string.lower(DB.getValue(nodeSpellset, 'label'))
 
 	local nArmorCategory = DB.getValue(nodeSpellset.getChild('...'), 'encumbrance.armorcategory')
@@ -43,26 +46,26 @@ function isArcaneCaster(nodeSpellset)
 
 	bArcaneCaster = false
 
-	if nArmorCategory == 3 then --if PC has is wearing heavy armor
+	if nArmorCategory == 3 then -- if PC is wearing heavy armor
 		for _,v in pairs(TEGlobals.tArcaneClass_HeavyArmor) do
 			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
-	elseif nArmorCategory == 2 then --if PC has is wearing medium armor
+	elseif nArmorCategory == 2 then -- if PC is wearing medium armor
 		for _,v in pairs(TEGlobals.tArcaneClass_MedArmor) do
 			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
-	elseif nArmorCategory == 1 then --if PC has is wearing light armor
+	elseif nArmorCategory == 1 then -- if PC is wearing light armor
 		for _,v in pairs(TEGlobals.tArcaneClass_LtArmor) do
 			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
 			end
 		end
 	end
-	if nShieldEquipped == 2 then -- if PC has a tower shield equipped
+	if nShieldEquipped == 2 then -- if PC has a tower shield equipped, same as heavy armor
 		for _,v in pairs(TEGlobals.tArcaneClass_HeavyArmor) do
 			if string.lower(v) == sPlayerSpellset then
 				bArcaneCaster = true
@@ -79,7 +82,9 @@ function isArcaneCaster(nodeSpellset)
 	return bArcaneCaster
 end
 
---	Convert from CSV string to table (converts a single line of a CSV file)
+---	Converts from a CSV string to a table
+--	@param s input, a string of CSVs
+--	@return t output, an indexed table of values
 function fromCSV(s)
 	s = s .. ','        -- ending comma
 	local t = {}        -- table to collect fields
@@ -93,7 +98,10 @@ function fromCSV(s)
 	return t
 end
 
---	Determine if the spell requires somatic compenents
+---	Determine if the spell cast requires somatic compenents
+--	Determine if the spell cast requires somatic compenents
+--	@param nodeSpell database node of the spell being cast
+--	@return bStillSpell boolean value, true if spell has no somatic compenents
 function isSomaticSpell(nodeSpell)
 	local sComponents = DB.getValue(nodeSpell,'components')
 	local bStillSpell = true
@@ -111,11 +119,10 @@ function isSomaticSpell(nodeSpell)
 	return bStillSpell
 end
 
---	Rolls percentile dice
---	sType: unique identifier
---	aDice: 2d10, one tens column and one ones column
---	sDesc: title of roll to be output to chat
---	nTarget: number to roll against (current nSpellFailureChance)
+---	Roll percentile dice to determine spell failure/success
+--	@return nodeChar This is the charsheet databasenode of the player character that is casting the spell
+--	@param rActor This is a table containing database paths and identifying data about the player character
+--	@param nSpellFailureChance the percentage chance that the spell being cast will fail
 function rollDice(nodeChar, rActor, nSpellFailureChance)
 	local rRoll = {}
 	rRoll.sType = 'spellfailure'
@@ -126,7 +133,9 @@ function rollDice(nodeChar, rActor, nSpellFailureChance)
 	ActionsManager.roll(nodeChar, rActor, rRoll)
 end
 
---	Determines success/failure and outputs to chat
+---	Determine success/failure and output to chat
+--	@param rSource the character casting the spell
+--	@param rRoll a table of details/parameters about the roll being performed
 function spellFailureMessage(rSource, rTarget, rRoll)
 	local rMessage = ActionsManager.createActionMessage(rSource, rRoll)
 
