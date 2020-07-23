@@ -148,6 +148,11 @@
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
+				<script>
+					function onValueChanged()
+						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+					end
+				</script>
 			</simplenumber>
 			<label_fieldtop name="totalload_label">
 				<anchored to="totalload" />

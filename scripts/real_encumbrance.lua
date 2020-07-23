@@ -160,7 +160,7 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFail
 
 	local nTotalInvVal = 0
   
-  for _,v in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
+	for _,v in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
 		local nItemCarried = DB.getValue(v, 'carried', 0)
 		local nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
 		local nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
