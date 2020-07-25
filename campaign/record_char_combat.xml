@@ -8,26 +8,6 @@
 	<windowclass name="charsheet_combat" merge="join">
 		<script file="campaign/scripts/char_combat.lua" />
 		<sheetdata>
-			<!-- Defenses - Armor -->
-			<number_charcombatabilitymod_static name="touchacstatmod">
-				<anchored to="ffacstatmod" />
-				<source><name>encumbrance.armormaxstatbonus</name></source>
-				<source><name>encumbrance.armormaxstatbonusactive</name></source>
-				<script>
-					function onSourceUpdate()
-						local nMaxMod = -1;
-						local bMaxActive = sources["encumbrance.armormaxstatbonusactive"].getValue()
-						if bMaxActive &gt; -1 then
-							nMaxMod = window.getDatabaseNode().getChild('encumbrance').getChild('armormaxstatbonus').getValue()
-						end
-
-						local nAbility = getAbilityBonus(nMaxMod);
-
-						setValue(calculateSources() + nAbility);
-					end
-				</script>
-			</number_charcombatabilitymod_static>
-
 			<!-- this is here to trigger speed recalculation when character sheet is opened (so that the speed total is correct) -->
 			<number_charspeed name="speedfinal" source="speed.total">
 				<anchored to="speedframe" position="insidetopleft" offset="78,16" width="32" height="20" />
