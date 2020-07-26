@@ -6,7 +6,7 @@ I was excited to come across [Alaxandir's CoreRPG port](https://www.fantasygroun
 * Automate encumbrance penalties based on total weight and current carrying capacity.
 * Color-code the numbers in the penalties boxes to indicate their source. Red is for encumbrance and black is for armor.
 * Roll arcane spell failure chance [when appropriate](https://www.fantasygrounds.com/forums/showthread.php?48977-Advanced-3-5e-and-Pathfinder-effects&p=528377&viewfull=1#post528377). Alternately, based on option toggle, prompt user to roll via a chat message which includes the spell failure chance.
-* Update carrying capacities when strength-modifying effects are applied/changed/removed. Currently supported: 'STR: N'(increases strength and carrying capacity), 'CARRY: N'(increases only carrying capacity), and 'Ant Haul'(triples carrying capacity).
+* Update carrying capacities when strength-modifying effects are applied/changed/removed. Currently supported: 'STR: N'(increases strength score and carrying capacity), 'CARRY: N'(increases strength score only for calculating carrying capacity), and 'Ant Haul'(triples carrying capacity).
 * ~Allow equipped armor to impose a max dex of zero. See the last section of the Compatibility and Configuration section, below.~
 * Auto-change speed penalties based on weight encumbrance and some supported Pathfinder conditions.
 * Compute and display total inventory value and net worth at the top of the treasure box on the Inventory tab.
