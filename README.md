@@ -6,14 +6,14 @@ I was excited to come across [Alaxandir's CoreRPG port](https://www.fantasygroun
 * Automate encumbrance penalties based on total weight and current carrying capacity.
 * Color-code the numbers in the penalties boxes to indicate their source. Red is for encumbrance and black is for armor.
 * Roll arcane spell failure chance [when appropriate](https://www.fantasygrounds.com/forums/showthread.php?48977-Advanced-3-5e-and-Pathfinder-effects&p=528377&viewfull=1#post528377). Alternately, based on option toggle, prompt user to roll via a chat message which includes the spell failure chance.
-* Update carrying capacities when strength-modifying effects are applied/changed/removed.
-* Allow equipped armor to impose a max dex of zero. See the last section of the Compatibility and Configuration section, below.
+* Update carrying capacities when strength-modifying effects are applied/changed/removed. Currently supported: 'STR: N' and 'Ant Haul'.
+* ~Allow equipped armor to impose a max dex of zero. See the last section of the Compatibility and Configuration section, below.~
 * Auto-change speed penalties based on weight encumbrance and some supported Pathfinder conditions.
 * Compute and display total inventory value and net worth at the top of the treasure box on the Inventory tab.
 
 
 # Compatibility and Configuration
-This extension has been tested with [FantasyGrounds Classic](https://www.fantasygrounds.com/home/FantasyGroundsClassic.php) 3.3.11 and [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) 4.0.0 (2020-07-16). The "Allow equipped armor to impose a max dex of zero" feature doesn't work in Unity yet.
+This extension has been tested with [FantasyGrounds Classic](https://www.fantasygrounds.com/home/FantasyGroundsClassic.php) 3.3.11 and [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) 4.0.0 (2020-07-16). The "Allow equipped armor to impose a max dex of zero" feature doesn't work yet.
 
 In-game controls for enabling/disabling/configuring some extension components are in FantasyGrounds' "Options" menu.
 Any values designed to be user-modifiable are located in [scripts/encumbrance_globals.lua](https://github.com/bmos/FG-PFRPG-TotalEncumbrance/blob/master/scripts/encumbrance_globals.lua) and include:
