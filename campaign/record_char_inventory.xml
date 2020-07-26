@@ -344,6 +344,7 @@
 				<delaykeyupdate />
 				<tabtarget next="coinname4" />
 			</number_dropadd>
+			
 		<!--Label of Coin Type 4-->
 			<stringu name="coinname4" source="coins.slot4.name">
 				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" />
