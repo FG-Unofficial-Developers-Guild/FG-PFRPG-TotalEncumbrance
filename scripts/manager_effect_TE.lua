@@ -469,6 +469,9 @@ function hasEffect(rActor, sEffect, rTarget, bTargetedOnly, bIgnoreEffectTargets
 				end
 				
 			end
+			if nMatch > 0 and nActive ~= 2 then
+				table.insert(aMatch, v);
+			end
 		end
 	end
 	
