@@ -22,5 +22,5 @@ Any values designed to be user-modifiable are located in [scripts/encumbrance_gl
 * The encumbrance penalties imposed by medium or heavy encumbrance
 * A list of armor that is supposed to have a maximum dex penalty of zero (as FG didn't support this and I wanted half-plate to work right without manual corrections)
 
-# Video Demonstration
-[![v1.6.0 demo](https://i.imgur.com/DZnOvIF.jpg)](https://www.youtube.com/watch?v=Tj2rDt4oeL8 "Total Encumbrance - v1.6.0 - Click to Watch!")
+# Video Demonstration (click for video)
+[<img src="https://i.ytimg.com/vi_webp/Tj2rDt4oeL8/sddefault.webp">](https://youtu.be/Tj2rDt4oeL8)
