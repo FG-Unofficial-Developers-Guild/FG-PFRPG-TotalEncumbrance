@@ -100,6 +100,11 @@ function onEncumbranceChanged()
 
 	nHeavy = math.floor(nHeavy * DB.getValue(nodeChar, 'encumbrance.carrymult', 1) * nUnit)
 
+	-- Check for ant haul spell attached to PC on combat tracker. If found, triple their carrying capacity.
+	if EffectManagerTE.hasEffectCondition(rActor, 'Ant Haul') then
+		nHeavy = nHeavy * 3
+	end
+	
 	local nLight = math.floor(nHeavy / 3)
 	local nMedium = math.floor((nHeavy / 3) * 2)
 	local nLiftOver = nHeavy
