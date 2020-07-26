@@ -23,4 +23,4 @@ Any values designed to be user-modifiable are located in [scripts/encumbrance_gl
 * A list of armor that is supposed to have a maximum dex penalty of zero (as FG didn't support this and I wanted half-plate to work right without manual corrections)
 
 # Video Demonstration (click for video)
-[<img src="https://i.ytimg.com/vi_webp/Tj2rDt4oeL8/sddefault.webp">](https://youtu.be/Tj2rDt4oeL8)
+[<img src="https://i.ytimg.com/vi_webp/Tj2rDt4oeL8/maxresdefault.webp">](https://youtu.be/Tj2rDt4oeL8)
