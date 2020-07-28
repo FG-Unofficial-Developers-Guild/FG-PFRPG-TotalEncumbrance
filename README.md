@@ -5,7 +5,7 @@ I was excited to come across [Alaxandir's CoreRPG port](https://www.fantasygroun
 * Calculate coin weight. Two columns, one weighed and one not. 50 coins is 1 pound. (If using kg, leave this as coins per pound; the conversion will be done automatically)
 * Automate encumbrance penalties based on total weight and current carrying capacity.
 * Color-code the numbers in the penalties boxes to indicate their source. Red is for encumbrance and black is for armor.
-* Roll arcane spell failure chance [when appropriate](https://www.fantasygrounds.com/forums/showthread.php?48977-Advanced-3-5e-and-Pathfinder-effects&p=528377&viewfull=1#post528377). Alternately, based on option toggle, prompt user to roll via a chat message which includes the spell failure chance.
+* Roll arcane spell failure chance [when appropriate](https://www.fantasygrounds.com/forums/showthread.php?48977-Advanced-3-5e-and-Pathfinder-effects&p=528377&viewfull=1#post528377). Alternately, based on option toggle, prompt user to roll via a chat message which includes the spell failure chance. The trigger for this roll is the "cast" button for the spell on the actions tab.
 * Update carrying capacities when strength-modifying effects are applied/changed/removed. Currently supported: 'STR: N'(increases strength score and carrying capacity), 'CARRY: N'(increases strength score only for calculating carrying capacity), and 'Ant Haul'(triples carrying capacity).
 * ~Allow equipped armor to impose a max dex of zero. See the last section of the Compatibility and Configuration section, below.~
 * Auto-change speed penalties based on weight encumbrance and some supported Pathfinder conditions.
