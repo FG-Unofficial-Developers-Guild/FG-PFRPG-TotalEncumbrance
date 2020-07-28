@@ -28,6 +28,7 @@
 
 		<!-- Templates -->
 		<includefile source="campaign/template_char.xml" />
+		<includefile source="campaign/template_spell.xml" />
 
 		<!-- Strings -->
 		<includefile source="strings/strings_total_encumbrance.xml" />
