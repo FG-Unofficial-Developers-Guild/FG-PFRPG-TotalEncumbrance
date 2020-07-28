@@ -6,30 +6,15 @@
 -->
 
 <root>
-	<windowclass name="spell_header" merge="join">
-		<margins control="0,0,0,2" />
-		<!-- this is here so line 27 could be added to triggger spell failure chance calculations when spells are cast -->
-		<script>
-			function onInit()
-				if not ActorManager.isPC(getDatabaseNode().getChild('.......')) then
-					shortdescription.setVisible(false)
-					actionsmini.setVisible(true)
+	<template name="spell_action_castbutton" merge="join">
+		<button_spellaction name="castbutton">
+			<anchored position="insidetopleft" offset="2,2" />
+			<script>
+				function onButtonPress()
+					action()
+					SpellFailure.arcaneSpellFailure(window.getDatabaseNode().getChild('...'))
 				end
-			end
-
-			function activatePower()
-				parentcontrol.window.activatePower()
-			end
-
-			function usePower()
-				parentcontrol.window.usePower()
-
-				SpellFailure.arcaneSpellFailure(getDatabaseNode())
-			end
-
-			function onSpellCounterUpdate()
-				parentcontrol.window.windowlist.window.onSpellCounterUpdate()
-			end
-		</script>
-	</windowclass>
+			</script>
+		</button_spellaction>
+	</template>
 </root>
