@@ -85,16 +85,26 @@ local function getSpeedEffects(nodeChar, rActor)
 	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
 
+---  This function posts a message in the chat window if the item cost contains a hyphen or a slash.
+local function announceImproperCost(nodeChar, sItemName)
+	local nAnnounce = DB.getValue(nodeChar, 'coins.costerrorannouncer', 1)
+
+	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
+		local sHoldingPc = DB.getValue(nodeChar, 'name', 'unknown player')
+
+		ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has its cost entered wrong and is being ignored.')
+	end
+end
+
 ---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(nodeChar, sItemCost, sItemName)
 	if string.match(sItemCost, '%-') then
-		local nAnnounce = DB.getValue(nodeChar, 'coins.costerrorannouncer', 1)
+		announceImproperCost(nodeChar, sItemName)
 
-		if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
-			local sHoldingPc = DB.getValue(nodeChar, 'name', 'unknown player')
-
-			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has an improper value.')
-		end
+		return 0
+	end
+	if string.match(sItemCost, '%/') then
+		announceImproperCost(nodeChar, sItemName)
 
 		return 0
 	end
