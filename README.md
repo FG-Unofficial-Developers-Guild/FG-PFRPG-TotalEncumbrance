@@ -9,6 +9,7 @@ The spell failure compenent previously included here is now available as [its ow
 * Update carrying capacities when strength-modifying effects are applied/changed/removed. Currently supported: 'STR: N'(increases strength score and carrying capacity), 'CARRY: N'(increases strength score only for calculating carrying capacity), and 'Ant Haul'(triples carrying capacity).
 * Auto-change speed penalties based on weight encumbrance and some supported Pathfinder conditions.
 * Compute and display total inventory value and net worth at the top of the treasure box on the Inventory tab.
+* Reduce armor check penalty by one if you have [the Armor Expert trait](https://www.d20pfsrd.com/traits/combat-traits/armor-expert/).
 
 # Compatibility and Configuration
 This extension has been tested with [FantasyGrounds Classic](https://www.fantasygrounds.com/home/FantasyGroundsClassic.php) 3.3.11 and works quite well.
