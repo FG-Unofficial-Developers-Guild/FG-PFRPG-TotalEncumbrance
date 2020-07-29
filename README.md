@@ -7,7 +7,6 @@ The spell failure compenent previously included here is now available as [its ow
 * Automate encumbrance penalties based on total weight and current carrying capacity.
 * Color-code the numbers in the penalties boxes to indicate their source. Red is for encumbrance and black is for armor.
 * Update carrying capacities when strength-modifying effects are applied/changed/removed. Currently supported: 'STR: N'(increases strength score and carrying capacity), 'CARRY: N'(increases strength score only for calculating carrying capacity), and 'Ant Haul'(triples carrying capacity).
-* ~Allow equipped armor to impose a max dex of zero. See the last section of the Compatibility and Configuration section, below.~
 * Auto-change speed penalties based on weight encumbrance and some supported Pathfinder conditions.
 * Compute and display total inventory value and net worth at the top of the treasure box on the Inventory tab.
 
@@ -19,7 +18,6 @@ In-game controls for enabling/disabling/configuring some extension components ar
 Any values designed to be user-modifiable are located in [scripts/encumbrance_globals.lua](https://github.com/bmos/FG-PFRPG-TotalEncumbrance/blob/master/scripts/encumbrance_globals.lua) and include:
 * How many coins weigh one pound
 * The encumbrance penalties imposed by medium or heavy encumbrance
-* A list of armor that is supposed to have a maximum dex penalty of zero (as FG didn't support this and I wanted half-plate to work right without manual corrections)
 
 # Video Demonstration (click for video)
 [<img src="https://i.ytimg.com/vi_webp/Tj2rDt4oeL8/maxresdefault.webp">](https://youtu.be/Tj2rDt4oeL8)
