@@ -524,6 +524,7 @@
 					<top offset="25" />
 					<right anchor="center" offset="-50" />
 				</anchored>
+				<displaysign />
 			</basicnumber>
 			<label_fieldtop>
 				<anchored to="encstradj" />
@@ -534,6 +535,7 @@
 					<top offset="25" />
 					<right anchor="center" offset="30" />
 				</anchored>
+				<displaysign />
 				<readonly />
 			</basicnumber>
 			<label_fieldtop>
