@@ -9,7 +9,6 @@
 	<string name="opt_lab_weight_enc">Encumbrance: Weight Penalties</string>
 	<string name="opt_lab_coin_weight">Encumbrance: Calculate Coin Weight</string>
 	<string name="opt_lab_enc_color">Encumbrance: Color-Coded Penalties</string>
-	<string name="opt_lab_spell_fail">Encumbrance: Automate Spell Failure</string>
 	<string name="opt_lab_inv_value">Encumbrance: Calculate Inventory Value</string>
 	<string name="opt_lab_enc_unit">Encumbrance: Encumbrance Units</string>
 	<string name="opt_lab_warn_cost">Encumbrance: Designate Incorrect Costs</string>
@@ -28,10 +27,6 @@
 	
 	<string name="enc_opt_inv_value_on">Enabled</string>
 	<string name="enc_opt_inv_value_off">Disabled</string>
-	
-	<string name="enc_opt_fail_on">Auto Roll</string>
-	<string name="enc_opt_fail_prompt">Prompt Roll</string>
-	<string name="enc_opt_fail_off">Disabled</string>
 	
 	<string name="enc_opt_enc_unit_lb">Pounds</string>
 	<string name="enc_opt_enc_unit_kg">Kilograms-Lazy</string>
