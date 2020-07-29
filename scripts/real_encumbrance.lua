@@ -219,25 +219,6 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFail
 			if nItemSpeed30 ~= 0 then
 				table.insert(tSpeed30, nItemSpeed30)
 			end
-
-			if sItemType == 'armor' then
-				if sItemSubtype == 'light' then
-					table.insert(tLtArmor, '1')
-				elseif sItemSubtype == 'medium' then
-					table.insert(tMedArmor, '2')
-				elseif sItemSubtype == 'heavy' then
-					table.insert(tHeavyArmor, '3')
-				end
-
-				if sItemName == 'tower' then
-					table.insert(tHeavyArmor, '3')
-				elseif
-					sItemSubtype == 'shield'
-					or sItemSubtype == 'magic shield'
-				then
-					table.insert(tShield, 'i like turtles')
-				end
-			end
 		end
 	end
 
