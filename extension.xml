@@ -3,7 +3,7 @@
 
 	<properties>
 		<name>Total Encumbrance</name>
-		<version>1.7.6</version>
+		<version>1.7.8</version>
 		<author>bmos (Wil Thieme)</author>
 		<description>rThis extension applies encumbrance penalties, weighs PC coins, calculates character wealth, offers metric unit conversion, and recalculates carrying capacity taking into account STR effects and Ant Haul.</description>
 		<ruleset>
