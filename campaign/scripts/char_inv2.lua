@@ -2,6 +2,26 @@
 --	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
+---	Locate the effects node within the relevant player character's node within combattracker
+--	@param node the databasenode passed along when this file is initialized
+--	@return nodeCharCT path to this PC's databasenode "effects" in the combat tracker
+local function getNodeCharCT(node)
+	local rActor
+	local nodeCharCT
+	if node.getParent().getName() == 'charsheet' then
+		rActor = ActorManager.getActor('pc', node)
+		nodeCharCT = DB.findNode(rActor['sCTNode'])
+	elseif node.getChild('...').getName() == 'charsheet' then
+		rActor = ActorManager.getActor('pc', node.getParent())
+		nodeCharCT = DB.findNode(rActor['sCTNode'])
+	elseif node.getChild('....') == 'charsheet' then
+		rActor = ActorManager.getActor('ct', node.getChild('...'))
+		nodeCharCT = DB.findNode(rActor['sCTNode'])
+	end
+
+	return nodeCharCT
+end
+
 function onInit()
 	local node = getDatabaseNode()
 
@@ -34,24 +54,33 @@ function onClose()
 	DB.removeHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 end
 
----	Locate the effects node within the relevant player character's node within combattracker
---	@param node the databasenode passed along when this file is initialized
---	@return nodeCharCT path to this PC's databasenode "effects" in the combat tracker
-function getNodeCharCT(node)
-	local rActor
-	local nodeCharCT
-	if node.getParent().getName() == 'charsheet' then
-		rActor = ActorManager.getActor('pc', node)
-		nodeCharCT = DB.findNode(rActor['sCTNode'])
-	elseif node.getChild('...').getName() == 'charsheet' then
-		rActor = ActorManager.getActor('pc', node.getParent())
-		nodeCharCT = DB.findNode(rActor['sCTNode'])
-	elseif node.getChild('....') == 'charsheet' then
-		rActor = ActorManager.getActor('ct', node.getChild('...'))
-		nodeCharCT = DB.findNode(rActor['sCTNode'])
+---	Determine the total bonus to carrying capacity from effects STR or CARRY
+--	@param rActor a table containing relevant paths and information on this PC
+--	@param nStrength the PC's base strength score
+--	@return nStrEffectMod the PC's current strength score after all bonuses are applied
+local function getStrEffectBonus(rActor, nStrength)
+	if not rActor then
+		return 0
 	end
 
-	return nodeCharCT
+	local nStrEffectMod = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
+	local nCarryBonus = EffectManagerTE.getEffectsBonus(rActor, 'CARRY', true)
+
+	if EffectManagerTE.hasEffectCondition(rActor, 'Exhausted') then
+		nStrEffectMod = nStrEffectMod - 6
+	elseif EffectManagerTE.hasEffectCondition(rActor, 'Fatigued') then
+		nStrEffectMod = nStrEffectMod - 2
+	end
+
+	if EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
+		nStrEffectMod = -1 * nStrEffectMod
+	end
+
+	if nCarryBonus then
+		nStrEffectMod = nStrEffectMod + nCarryBonus
+	end
+
+	return nStrEffectMod
 end
 
 function onStrengthChanged()
@@ -149,33 +178,4 @@ function onEncumbranceChanged()
 	DB.setValue(nodeChar, 'encumbrance.pushordrag', 'number', nPushDrag)
 
 	RealEncumbrance.applyPenalties(nodeChar)
-end
-
----	Determine the total bonus to carrying capacity from effects STR or CARRY
---	@param rActor a table containing relevant paths and information on this PC
---	@param nStrength the PC's base strength score
---	@return nStrEffectMod the PC's current strength score after all bonuses are applied
-function getStrEffectBonus(rActor, nStrength)
-	if not rActor then
-		return 0
-	end
-
-	local nStrEffectMod = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
-	local nCarryBonus = EffectManagerTE.getEffectsBonus(rActor, 'CARRY', true)
-
-	if EffectManagerTE.hasEffectCondition(rActor, 'Exhausted') then
-		nStrEffectMod = nStrEffectMod - 6
-	elseif EffectManagerTE.hasEffectCondition(rActor, 'Fatigued') then
-		nStrEffectMod = nStrEffectMod - 2
-	end
-
-	if EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
-		nStrEffectMod = -1 * nStrEffectMod
-	end
-
-	if nCarryBonus then
-		nStrEffectMod = nStrEffectMod + nCarryBonus
-	end
-
-	return nStrEffectMod
 end
