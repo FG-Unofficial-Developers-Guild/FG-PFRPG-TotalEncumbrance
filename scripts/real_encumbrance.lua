@@ -259,9 +259,8 @@ end
 --	Argument: number light is medium encumbrance threshold for PC
 --	Argument: number medium is heavy encumbrance threshold for PC
 --	Argument: number total is current total encumbrance for PC
---	Return: number for max stat penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
---	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty, spell failure chance)
---	Return: number for spell failure chance based solely on encumbrance (max stat, check penalty, spell failure chance)
+--	Return: number for max stat penalty based solely on encumbrance (max stat, check penalty)
+--	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty)
 local function encumbrancePenalties(nodeChar)
 	local light = DB.getValue(nodeChar, 'encumbrance.lightload', 0)
 	local medium = DB.getValue(nodeChar, 'encumbrance.mediumload', 0)
@@ -269,13 +268,13 @@ local function encumbrancePenalties(nodeChar)
 
 	if total > medium then -- heavy load
 		DB.setValue(nodeChar, 'encumbrance.encumbrancelevel', 'number', 3)
-		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty, nil
+		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty
 	elseif total > light then -- medium load
 		DB.setValue(nodeChar, 'encumbrance.encumbrancelevel', 'number', 2)
-		return TEGlobals.nMediumMaxStat, TEGlobals.nMediumCheckPenalty, nil
+		return TEGlobals.nMediumMaxStat, TEGlobals.nMediumCheckPenalty
 	else -- light load
 		DB.setValue(nodeChar, 'encumbrance.encumbrancelevel', 'number', 1)
-		return nil, nil, nil
+		return nil, nil
 	end
 end
 
@@ -283,10 +282,9 @@ end
 --	Argument: databasenode nodeChar is the PC node
 --	Argument: table holding nonzero max stat penalties from armor / shields
 --	Argument: table holding nonzero check penalty penalties from armor / shields
---	Argument: table holding nonzero spell failure penalties from armor / shields
 --	Return: nil, however table arguments are directly updated
 local function rawEncumbrancePenalties(nodeChar, tMaxStat, tCheckPenalty)
-	local nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodeChar)
+	local nMaxStatFromEnc, nCheckPenaltyFromEnc = encumbrancePenalties(nodeChar)
 
 	DB.setValue(nodeChar, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
 	DB.setValue(nodeChar, 'encumbrance.checkpenaltyfromenc', 'number', nCheckPenaltyFromEnc ~= nil and nCheckPenaltyFromEnc or 0)
@@ -306,7 +304,6 @@ end
 --	Argument: databasenode nodeChar is the PC node
 --	Return: number holding armor max stat penalty
 --	Return: number holding armor check penalty
---	Return: number holding armor spell failure penalty
 local function computePenalties(nodeChar)
 	local tMaxStat = {}
 	local tEqCheckPenalty = {}
@@ -324,7 +321,6 @@ local function computePenalties(nodeChar)
 
 	local nMaxStatToSet = -1
 	local nCheckPenaltyToSet = 0
-	local nSpellFailureToSet = 0
 	local nSpeedPenalty20 = 0
 	local nSpeedPenalty30 = 0
 
@@ -397,7 +393,7 @@ local function computePenalties(nodeChar)
 		end
 	end
 
-	return nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase
+	return nMaxStatToSet, nCheckPenaltyToSet, nSpeedPenalty, nSpeedBase
 end
 
 --	Summary: Recomputes penalties and updates max stat and check penalty
@@ -405,17 +401,15 @@ end
 function applyPenalties(node)
 	local nodeChar, rActor = handleApplyPenaltiesArgs(node)
 
-	local nMaxStatToSet, nCheckPenaltyToSet, nSpellFailureToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodeChar)
+	local nMaxStatToSet, nCheckPenaltyToSet, nSpeedPenalty, nSpeedBase = computePenalties(nodeChar)
 
 	DB.setValue(nodeChar, 'encumbrance.armormaxstatbonus', 'number', nMaxStatToSet)
 	DB.setValue(nodeChar, 'encumbrance.armorcheckpenalty', 'number', nCheckPenaltyToSet)
-	DB.setValue(nodeChar, 'encumbrance.armorspellfailure', 'number', nSpellFailureToSet)
 
 	--	enable armor encumbrance when needed
 	if
 		nMaxStatToSet ~= -1
 		or nCheckPenaltyToSet ~= 0
-		or nSpellFailureToSet ~= 0
 	then
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 1)
