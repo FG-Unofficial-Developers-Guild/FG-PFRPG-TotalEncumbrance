@@ -178,6 +178,7 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpeed20, 
 		local nItemIDed = DB.getValue(v, 'isidentified', 1)
 		local nItemCount = DB.getValue(v, 'count', 1)
 		local sItemName = string.lower(DB.getValue(v, 'name', ''))
+		local sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
 		local sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
 
 		if nItemIDed ~= 0 and sItemCost then
@@ -194,13 +195,21 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpeed20, 
 			end
 
 			if
-				nItemMaxStat ~= 0
-				or bClumsyArmor
+				nItemMaxStat ~= 0 or bClumsyArmor
 			then
 				table.insert(tMaxStat, nItemMaxStat)
 			end
 
 			if nItemCheckPenalty ~= 0 then
+				
+				if CharManager.hasTrait(nodeChar, 'Armor Expert') then
+					if not string.match(sItemSubtype, 'shield', 1) then
+						nItemCheckPenalty = nItemCheckPenalty + 1
+					end
+				end
+				
+				if nItemCheckPenalty > 0 then nItemCheckPenalty = 0 end				
+				
 				table.insert(tEqCheckPenalty, nItemCheckPenalty)
 			end
 
