@@ -23,12 +23,10 @@
 		<!-- Records -->
 		<includefile source="campaign/record_char_inventory.xml" />
 		<includefile source="campaign/record_char_main.xml" />
-		<includefile source="campaign/record_spell_entry.xml" />
 		<includefile source="campaign/record_char_combat.xml" />
 
 		<!-- Templates -->
 		<includefile source="campaign/template_char.xml" />
-		<includefile source="campaign/template_spell.xml" />
 
 		<!-- Strings -->
 		<includefile source="strings/strings_total_encumbrance.xml" />
@@ -40,7 +38,6 @@
 		<script name="RealEncumbrance" file="scripts/real_encumbrance.lua" />
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
 		<script name="OptionsHandlers" file="scripts/options_handlers.lua" />
-		<script name="SpellFailure" file="scripts/spell_failure.lua" />
 		<script name="TEGlobals" file="scripts/encumbrance_globals.lua" />
 		<script name="EffectManagerTE" file="scripts/manager_effect_TE.lua" />
 	</base>

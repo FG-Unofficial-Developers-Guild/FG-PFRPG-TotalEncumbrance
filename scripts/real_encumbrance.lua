@@ -280,39 +280,6 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFail
 
 	DB.setValue(nodeChar, 'encumbrance.speed20fromarmor', 'number', nSpeed20FromArmor ~= nil and nSpeed20FromArmor or 0)
 	DB.setValue(nodeChar, 'encumbrance.speed30fromarmor', 'number', nSpeed30FromArmor ~= nil and nSpeed30FromArmor or 0)
-
-	local nHeavyArmorCount = table.getn(tHeavyArmor)
-	local nMedArmorCount = table.getn(tMedArmor)
-	local nLtArmorCount = table.getn(tLtArmor)
-	local nShieldCount = table.getn(tShield)
-
-	if
-		nHeavyArmorCount ~= 0
-		and nHeavyArmorCount ~= nil
-	then
-		DB.setValue(nodeChar, 'encumbrance.armorcategory', 'number', 3)
-	elseif
-			nMedArmorCount ~= 0
-			and nMedArmorCount ~= nil
-	then
-		DB.setValue(nodeChar, 'encumbrance.armorcategory', 'number', 2)
-	elseif
-		nLtArmorCount ~= 0
-		and nLtArmorCount ~= nil
-	then
-		DB.setValue(nodeChar, 'encumbrance.armorcategory', 'number', 1)
-	else
-		DB.setValue(nodeChar, 'encumbrance.armorcategory', 'number', 0)
-	end
-
-	if
-		nShieldCount ~= 0
-		and nShieldCount ~= nil
-	then
-		DB.setValue(nodeChar, 'encumbrance.shieldequipped', 'number', 1)
-	else
-		DB.setValue(nodeChar, 'encumbrance.shieldequipped', 'number', 0)
-	end
 end
 
 --	Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
