@@ -158,10 +158,9 @@ end
 --	@param nodeChar databasenode for the PC within charsheet
 --	@param tMaxStat an empty table to be filled with max stat penalties from worn armor and shields
 --	@param tEqCheckPenalty an empty table to be filled with check penalties from worn armor and shields
---	@param tSpellFailure an empty table to be filled with spell failure penalties from worn armor and shields
 --	@param tSpeed20 an empty table to be filled with the 20-foot speeds of any worn armor and shields
 --	@param tSpeed30 an empty table to be filled with the 30-foot speeds of any worn armor and shields
-local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
+local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpeed20, tSpeed30)
 	local tLtArmor = {}
 	local tMedArmor = {}
 	local tHeavyArmor = {}
@@ -174,14 +173,11 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFail
 		local nItemCarried = DB.getValue(v, 'carried', 0)
 		local nItemMaxStat = DB.getValue(v, 'maxstatbonus', 0)
 		local nItemCheckPenalty = DB.getValue(v, 'checkpenalty', 0)
-		local nItemSpellFailure = DB.getValue(v, 'spellfailure', 0)
 		local nItemSpeed20 = DB.getValue(v, 'speed20', 0)
 		local nItemSpeed30 = DB.getValue(v, 'speed30', 0)
 		local nItemIDed = DB.getValue(v, 'isidentified', 1)
 		local nItemCount = DB.getValue(v, 'count', 1)
 		local sItemName = string.lower(DB.getValue(v, 'name', ''))
-		local sItemType = string.lower(DB.getValue(v, 'type', ''))
-		local sItemSubtype = string.lower(DB.getValue(v, 'subtype', ''))
 		local sItemCost = string.lower(DB.getValue(v, 'cost', '0 gp'))
 
 		if nItemIDed ~= 0 and sItemCost then
@@ -206,10 +202,6 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFail
 
 			if nItemCheckPenalty ~= 0 then
 				table.insert(tEqCheckPenalty, nItemCheckPenalty)
-			end
-
-			if nItemSpellFailure ~= 0 then
-				table.insert(tSpellFailure, nItemSpellFailure)
 			end
 
 			if nItemSpeed20 ~= 0 then
@@ -293,7 +285,7 @@ end
 --	Argument: table holding nonzero check penalty penalties from armor / shields
 --	Argument: table holding nonzero spell failure penalties from armor / shields
 --	Return: nil, however table arguments are directly updated
-local function rawEncumbrancePenalties(nodeChar, tMaxStat, tCheckPenalty, tSpellFailure)
+local function rawEncumbrancePenalties(nodeChar, tMaxStat, tCheckPenalty)
 	local nMaxStatFromEnc, nCheckPenaltyFromEnc, nSpellFailureFromEnc = encumbrancePenalties(nodeChar)
 
 	DB.setValue(nodeChar, 'encumbrance.maxstatbonusfromenc', 'number', nMaxStatFromEnc ~= nil and nMaxStatFromEnc or -1)
@@ -307,12 +299,6 @@ local function rawEncumbrancePenalties(nodeChar, tMaxStat, tCheckPenalty, tSpell
 		if nCheckPenaltyFromEnc ~= nil then
 			table.insert(tCheckPenalty, nCheckPenaltyFromEnc)
 		end
-		--[[ I think we could support spell failure by encumbrance with this pending using a value of a setting in encumbrancePenalties.
-		For now, it can be removed
-
-		if nSpellFailureFromEnc ~= nil then
-			table.insert(tSpellFailure, nSpellFailureFromEnc)
-		end --]]
 	end
 end
 
@@ -325,17 +311,16 @@ local function computePenalties(nodeChar)
 	local tMaxStat = {}
 	local tEqCheckPenalty = {}
 	local tCheckPenalty = {}
-	local tSpellFailure = {}
 	local tSpeed20 = {}
 	local tSpeed30 = {}
 
-	rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpellFailure, tSpeed20, tSpeed30)
+	rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpeed20, tSpeed30)
 
 	if table.getn(tEqCheckPenalty) ~= 0 then
 		table.insert(tCheckPenalty, LibTotalEncumbrance.tableSum(tEqCheckPenalty)) -- add equipment total to overall table for comparison with encumbrance
 	end
 
-	rawEncumbrancePenalties(nodeChar, tMaxStat, tCheckPenalty, tSpellFailure)
+	rawEncumbrancePenalties(nodeChar, tMaxStat, tCheckPenalty)
 
 	local nMaxStatToSet = -1
 	local nCheckPenaltyToSet = 0
@@ -349,14 +334,6 @@ local function computePenalties(nodeChar)
 
 	if table.getn(tCheckPenalty) ~= 0 then
 		 nCheckPenaltyToSet = math.min(unpack(tCheckPenalty)) -- this would sum penalties on multi-equipped shields / armor & encumbrance
-	end
-
-	if table.getn(tSpellFailure) ~= 0 then
-		 nSpellFailureToSet = LibTotalEncumbrance.tableSum(tSpellFailure) -- this would sum penalties on multi-equipped armor
-
-		if nSpellFailureToSet > 100 then
-			nSpellFailureToSet = 100
-		end
 	end
 
 	if table.getn(tSpeed20) ~= 0 then
