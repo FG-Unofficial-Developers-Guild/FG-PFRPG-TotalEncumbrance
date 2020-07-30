@@ -153,6 +153,22 @@ local function getTotalCoinWealth(nodeChar)
 	return nWealth
 end
 
+---	This function checks for special abilities.
+function hasSpecialAbility(nodeChar, sSpecAbil)
+	if not sSpecAbil then
+		return false
+	end
+
+	local sLowerSpecAbil = string.lower(sSpecAbil)
+	
+	for _,vNode in pairs(DB.getChildren(nodeChar, "specialabilitylist")) do
+		if string.match(StringManager.trim(DB.getValue(vNode, "name", ""):lower()), sLowerSpecAbil .. ' %d', 1) then
+			return true
+		end
+	end
+	return false
+end
+
 ---	Compile penalties from armor worn by character related to nodeChar
 --	This function fills max stat and check penalty tables with appropriate nonzero values from any child items in the inventorylist node
 --	@param nodeChar databasenode for the PC within charsheet
@@ -194,6 +210,20 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpeed20, 
 				end
 			end
 
+			if hasSpecialAbility(nodeChar, 'Armor Training') and
+				not string.match(sItemSubtype, 'shield', 1) then
+
+				if DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 15 then
+					nItemMaxStat = nItemMaxStat + 4
+				elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 11 then
+					nItemMaxStat = nItemMaxStat + 3
+				elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 7 then
+					nItemMaxStat = nItemMaxStat + 2
+				elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 3 then
+					nItemMaxStat = nItemMaxStat + 1
+				end
+			end
+
 			if
 				nItemMaxStat ~= 0 or bClumsyArmor
 			then
@@ -201,9 +231,19 @@ local function rawArmorPenalties(nodeChar, tMaxStat, tEqCheckPenalty, tSpeed20, 
 			end
 
 			if nItemCheckPenalty ~= 0 then
-				
 				if CharManager.hasTrait(nodeChar, 'Armor Expert') then
 					if not string.match(sItemSubtype, 'shield', 1) then
+						nItemCheckPenalty = nItemCheckPenalty + 1
+					end
+				end
+				if hasSpecialAbility(nodeChar, 'Armor Training') and not string.match(sItemSubtype, 'shield', 1) then
+					if DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 15 then
+						nItemCheckPenalty = nItemCheckPenalty + 4
+					elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 11 then
+						nItemCheckPenalty = nItemCheckPenalty + 3
+					elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 7 then
+						nItemCheckPenalty = nItemCheckPenalty + 2
+					elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 3 then
 						nItemCheckPenalty = nItemCheckPenalty + 1
 					end
 				end
