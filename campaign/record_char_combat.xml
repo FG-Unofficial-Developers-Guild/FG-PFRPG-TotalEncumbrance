@@ -8,30 +8,6 @@
 	<windowclass name="charsheet_combat" merge="join">
 		<script file="campaign/scripts/char_combat.lua" />
 		<sheetdata>
-			<!-- this is here to trigger speed recalculation when character sheet is opened (so that the speed total is correct) -->
-			<number_charspeed name="speedfinal" source="speed.total">
-				<anchored to="speedframe" position="insidetopleft" offset="78,16" width="32" height="20" />
-				<!-- <script>
-					function onInit()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script> -->
-			</number_charspeed>
-			<!-- this is here to trigger speed recalculation if base speed is changed -->
-			<basicnumber name="speedbase" source="speed.base" merge="replace">
-				<anchored to="speedframe" position="insidetopleft" offset="12,54" width="30" height="20" />
-				<!-- <script>
-					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script> -->
-				<delaykeyupdate />
-				<min>0</min>
-			</basicnumber>
-			<basicnumber name="speedarmor" source="speed.armor">
-				<anchored to="speedbase" position="right" offset="8,0" width="30" />
-				<hideonvalue>0</hideonvalue>
-			</basicnumber>
 			<label_fieldtop name="speedarmor_label">
 				<anchored to="speedarmor" />
 				<static textres="char_label_speedpenalty" />

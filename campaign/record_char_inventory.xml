@@ -388,6 +388,7 @@
 				<delaykeyupdate />
 				<tabtarget next="coinother" />
 			</stringu>
+			
 		<!-- Coins 'Other' Text Box -->
 			<basicstring name="coinother">
 				<anchored>
@@ -398,6 +399,7 @@
 				</anchored>
 				<multilinespacing>20</multilinespacing>
 			</basicstring>
+			
 		<!-- Wealth Total -->
 			<stringu name="wealthtotal" source="coins.wealthtotal">
 				<anchored to="coinframe" position="insidetopright" offset="15,10" />

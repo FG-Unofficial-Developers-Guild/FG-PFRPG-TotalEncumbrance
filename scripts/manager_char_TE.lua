@@ -14,25 +14,21 @@ function onInit()
 end
 
 function onHealthChanged(node)
-	local nodeChar = node.getParent()
-	calcItemArmorClass(nodeChar)
+	calcItemArmorClass(node.getParent())
 end
 
 function onSpeedChanged(node)
-	local nodeChar = node.getChild('...')
-	calcItemArmorClass(nodeChar)
+	calcItemArmorClass(node.getChild('...'))
 end
 
 function onEffectChanged(node)
 	local rActor = ActorManager.getActor('ct', node.getChild('....'))
-	local nodeChar = DB.findNode(rActor['sCreatureNode'])
-	calcItemArmorClass(nodeChar)
+	calcItemArmorClass(DB.findNode(rActor['sCreatureNode']))
 end
 
 function onEffectRemoved(node)
 	local rActor = ActorManager.getActor('ct', node.getChild('..'))
-	local nodeChar = DB.findNode(rActor['sCreatureNode'])
-	calcItemArmorClass(nodeChar)
+	calcItemArmorClass(DB.findNode(rActor['sCreatureNode']))
 end
 
 --	Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
