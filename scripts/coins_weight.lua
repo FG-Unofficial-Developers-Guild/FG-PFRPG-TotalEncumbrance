@@ -40,7 +40,6 @@ local function computeCoins(nodeChar)
 			end
 		end
 	end
-	DB.setValue(nodeChar, 'coins.costerrorannouncer', 'number', 0)
 
 	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
 	nTotalCoinWeight = math.floor(nTotalCoins / (TEGlobals.nCoinsPerUnit * nUnit))

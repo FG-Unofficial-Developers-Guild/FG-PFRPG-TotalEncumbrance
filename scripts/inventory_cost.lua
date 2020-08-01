@@ -13,10 +13,8 @@ end
 ---  This function posts a message in the chat window if the item cost contains a hyphen or a slash.
 local function announceImproperCost(nodeChar, sItemName)
 	local nAnnounce = DB.getValue(nodeChar, 'coins.costerrorannouncer', 1)
-
 	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
 		local sHoldingPc = DB.getValue(nodeChar, 'name', 'unknown character')
-
 		ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has its cost entered wrong and is being ignored.')
 	end
 end
@@ -61,5 +59,7 @@ function calculateInvCost(node)
 		end
 	end
 	
+	if OptionsManager.isOption('WARN_COST', 'subtle') then DB.setValue(nodeChar, 'coins.costerrorannouncer', 'number', 0) end	
+
 	DB.setValue(nodeChar, 'coins.invtotalval', 'number', nTotalInvVal)
 end
