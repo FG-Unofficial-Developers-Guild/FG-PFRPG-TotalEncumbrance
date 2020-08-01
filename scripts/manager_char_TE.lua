@@ -2,9 +2,32 @@
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
---
--- ARMOR MANAGEMENT
---
+function onInit()
+	if User.isHost() then
+		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', onHealthChanged)
+		DB.addHandler(DB.getPath('charsheet.*.wounds'), 'onChildUpdate', onHealthChanged)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onEffectChanged)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onEffectRemoved)
+	end
+end
+
+function onHealthChanged(node)
+	local nodeChar = node.getParent()
+	calcItemArmorClass(nodeChar)
+end
+
+function onEffectChanged(node)
+	local rActor = ActorManager.getActor('ct', node.getChild('....'))
+	local nodeChar = DB.findNode(rActor['sCreatureNode'])
+	calcItemArmorClass(nodeChar)
+end
+
+function onEffectRemoved(node)
+	local rActor = ActorManager.getActor('ct', node.getChild('..'))
+	local nodeChar = DB.findNode(rActor['sCreatureNode'])
+	calcItemArmorClass(nodeChar)
+end
 
 --	Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
 --	Argument: number light is medium encumbrance threshold for PC
@@ -41,6 +64,45 @@ local function hasSpecialAbility(nodeChar, sSpecAbil)
 	end
 	
 	return false
+end
+
+--	Summary: Determine the total bonus to character's speed from effects
+--	Argument: rActor containing the PC's charsheet and combattracker nodes
+--	Return: total bonus to speed from effects formatted as 'SPEED: n' in the combat tracker
+local function getSpeedEffects(nodeChar)
+	local rActor = ActorManager.getActor('pc', nodeChar)
+
+	if not rActor then
+		return 0, false
+	end
+
+	local bSpeedHalved = false
+	local bSpeedZero = false
+
+	if
+		EffectManagerTE.hasEffectCondition(rActor, 'Exhausted')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Entangled')
+	then
+		bSpeedHalved = true
+	end
+
+	if
+		EffectManagerTE.hasEffectCondition(rActor, 'Grappled')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Petrified')
+		or EffectManagerTE.hasEffectCondition(rActor, 'Pinned')
+	then
+		bSpeedZero = true
+	end
+
+	--	Check if the character is disabled (at zero remaining hp)
+	if DB.getValue(nodeChar, 'hp.total', 0) == DB.getValue(nodeChar, 'hp.wounds', 0) then
+		bSpeedHalved = true
+	end
+
+	local nSpeedAdjFromEffects = EffectManagerTE.getEffectsBonus(rActor, 'SPEED', true)
+
+	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
 
 function calcItemArmorClass(nodeChar)
@@ -171,12 +233,14 @@ function calcItemArmorClass(nodeChar)
 	end
 	DB.setValue(nodeChar, 'encumbrance.armorcheckpenalty', 'number', nMainCheckPenalty)
 	DB.setValue(nodeChar, 'encumbrance.spellfailure', 'number', nMainSpellFailure)
-	
+
 	local bApplySpeedPenalty = true
 	if CharManager.hasTrait(nodeChar, 'Slow and Steady') then
 		bApplySpeedPenalty = false
 	end
-
+	
+	local nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero = getSpeedEffects(nodeChar)
+	
 	local nSpeedBase = DB.getValue(nodeChar, 'speed.base', 0)
 	local nSpeedArmor = 0
 	if bApplySpeedPenalty then
@@ -186,7 +250,9 @@ function calcItemArmorClass(nodeChar)
 			nSpeedArmor = nMainSpeed20 - 20
 		end
 	end
+	
 	DB.setValue(nodeChar, 'speed.armor', 'number', nSpeedArmor)
-	local nSpeedTotal = nSpeedBase + nSpeedArmor + DB.getValue(nodeChar, 'speed.misc', 0) + DB.getValue(nodeChar, 'speed.temporary', 0)
-	DB.setValue(nodeChar, 'speed.final', 'number', nSpeedTotal)
+	local nSpeedTotal = nSpeedBase + nSpeedArmor + DB.getValue(nodeChar, 'speed.misc', 0) + DB.getValue(nodeChar, 'speed.temporary', 0) + nSpeedAdjFromEffects
+	if bSpeedHalved then nSpeedTotal = nSpeedTotal / 2 elseif bSpeedZero then nSpeedTotal = 0 end
+	DB.setValue(nodeChar, 'speed.total', 'number', nSpeedTotal)
 end
