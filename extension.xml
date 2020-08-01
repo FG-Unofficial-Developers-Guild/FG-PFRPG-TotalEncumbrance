@@ -22,7 +22,6 @@
 
 		<!-- Records -->
 		<includefile source="campaign/record_char_inventory.xml" />
-		<includefile source="campaign/record_char_main.xml" />
 		<includefile source="campaign/record_char_combat.xml" />
 
 		<!-- Templates -->
@@ -36,6 +35,7 @@
 		<script name="LibTotalEncumbrance" file="scripts/lib_total_encumbrance.lua" />
 		<script name="CoinsWeight" file="scripts/coins_weight.lua" />
 		<script name="RealEncumbrance" file="scripts/real_encumbrance.lua" />
+		<script name="CharManagerTE" file="scripts/manager_char_TE.lua" />
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
 		<script name="OptionsHandlers" file="scripts/options_handlers.lua" />
 		<script name="TEGlobals" file="scripts/encumbrance_globals.lua" />
