@@ -440,7 +440,9 @@
 				<readonly />
 				<script>
 					function onInit()
-						setValue('Net Worth: ' .. LibTotalEncumbrance.formatCurrency(window.inventorytotal.getValue() + window.coinstotal.getValue()) .. ' gp')
+						local nNetWorth = LibTotalEncumbrance.round(window.inventorytotal.getValue() + window.coinstotal.getValue(), 2)
+						local sNetWorth = LibTotalEncumbrance.formatCurrency(nNetWorth)
+						setValue('Net Worth: ' .. sNetWorth .. ' gp')
 					end
 				</script>
 			</stringu>

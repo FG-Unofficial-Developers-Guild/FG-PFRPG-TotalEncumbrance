@@ -2,7 +2,7 @@
 --	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
--function onInit()
+function onInit()
 	if User.isHost() then
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', calculateInvCost)
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.isidentified'), 'onUpdate', calculateInvCost)
@@ -44,16 +44,19 @@ end
 
 ---	This function calculates the total value of every identified item in the player's inventory.
 --	It then writes it to the DB for use during net worth calculation.
-function calculateInvCost(nodeChar)
+function calculateInvCost(node)
+	local nodeChar = node.getChild('....')
+	if node.getParent().getName() == 'charsheet' then nodeChar = node
+	elseif node.getName() == 'inventorylist' then nodeChar = node.getParent() end
 	local nTotalInvVal = 0
 	for _,v in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
 		local nItemIDed = DB.getValue(v, 'isidentified', 0)
-		local sItemName = string.lower(DB.getValue(v, 'name', ''))
-		local sItemCost = string.lower(DB.getValue(v, 'cost'))
+		local sItemName = DB.getValue(v, 'name', '')
+		local sItemCost = DB.getValue(v, 'cost')
 		local nItemCount = DB.getValue(v, 'count', 1)
 
 		if sItemCost and nItemIDed ~= 0 then
-			nItemCost = processItemCost(nodeChar, sItemCost, sItemName)
+			local nItemCost = processItemCost(nodeChar, string.lower(sItemCost), string.lower(sItemName))
 			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
 		end
 	end

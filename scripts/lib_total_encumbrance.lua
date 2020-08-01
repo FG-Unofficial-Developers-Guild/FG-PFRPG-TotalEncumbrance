@@ -23,6 +23,12 @@ function formatCurrency(n)
 	return left..(num:reverse():gsub('(%d%d%d)',TEGlobals.sDigitDivider):reverse())..right
 end
 
+---	This function rounds to the specified number of decimals
+function round(number, decimals)
+    local power = 10^decimals
+    return math.floor(number * power) / power
+end
+
 --- Provide the appropriate weight unit (pounds or kilograms) depending on the GM's choice
 --	@return nUnit Desired multipler (to convert pounds to kilograms)
 function getEncWeightUnit()
