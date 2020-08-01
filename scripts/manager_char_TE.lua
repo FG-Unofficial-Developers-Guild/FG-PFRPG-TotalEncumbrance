@@ -111,8 +111,7 @@ function calcItemArmorClass(nodeChar)
 				else
 					for _,v in pairs(TEGlobals.tClumsyArmorTypes) do
 						if string.find(string.lower(DB.getValue(vNode, 'name', 0)), string.lower(v)) then
-							nMainMaxStatBonus = 0
-														
+							nMainMaxStatBonus = 0					
 							break
 						end
 					end
@@ -146,15 +145,27 @@ function calcItemArmorClass(nodeChar)
 
 	--	Bring in encumbrance penalties
 	local nEncMaxStatBonus, nEncCheckPenalty = encumbrancePenalties(nodeChar)
-	if nEncMaxStatBonus then nMainMaxStatBonus = math.min(nMainMaxStatBonus, nEncMaxStatBonus) end
-	if nEncCheckPenalty then nMainCheckPenalty = math.min(nMainCheckPenalty, nEncCheckPenalty) end
+	if nEncMaxStatBonus then
+		nMainMaxStatBonus = math.min(nMainMaxStatBonus, nEncMaxStatBonus)
+		DB.setValue(nodeChar, 'encumbrance.maxstatbonusfromenc', 'number', nEncMaxStatBonus)
+	else
+		DB.setValue(nodeChar, 'encumbrance.maxstatbonusfromenc', 'number', nil)
+	end
+	if nEncCheckPenalty then
+		nMainCheckPenalty = math.min(nMainCheckPenalty, nEncCheckPenalty)
+		DB.setValue(nodeChar, 'encumbrance.checkpenaltyfromenc', 'number', nEncCheckPenalty)
+	else
+		DB.setValue(nodeChar, 'encumbrance.checkpenaltyfromenc', 'number', nil)
+	end
 	
 	DB.setValue(nodeChar, 'ac.sources.armor', 'number', nMainArmorTotal)
 	DB.setValue(nodeChar, 'ac.sources.shield', 'number', nMainShieldTotal)
 	if nMainMaxStatBonus < 999 then
+		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonus', 'number', nMainMaxStatBonus)
 	else
+		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonus', 'number', 999)
 	end

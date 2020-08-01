@@ -88,10 +88,6 @@ function onCarriedChanged(nodeField)
 				end
 			end
 		end
-		
-		if ItemManager2.isArmor(nodeItem) then
-			CharManagerTE.calcItemArmorClass(nodeChar);
-		end
 	end
 	
 	onEncumbranceChanged();
