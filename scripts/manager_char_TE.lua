@@ -6,6 +6,7 @@ function onInit()
 	if User.isHost() then
 		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', onHealthChanged)
 		DB.addHandler(DB.getPath('charsheet.*.wounds'), 'onChildUpdate', onHealthChanged)
+		DB.addHandler(DB.getPath('charsheet.*.speed.base'), 'onUpdate', onSpeedChanged)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onEffectChanged)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onEffectRemoved)
@@ -14,6 +15,11 @@ end
 
 function onHealthChanged(node)
 	local nodeChar = node.getParent()
+	calcItemArmorClass(nodeChar)
+end
+
+function onSpeedChanged(node)
+	local nodeChar = node.getChild('...')
 	calcItemArmorClass(nodeChar)
 end
 
@@ -41,10 +47,13 @@ local function encumbrancePenalties(nodeChar)
 	local total = DB.getValue(nodeChar, 'encumbrance.total', 0)
 
 	if total > medium then -- heavy load
+		DB.setValue(nodeChar, 'encumbrance.encumbrancelevel', 'number', 2)
 		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty
 	elseif total > light then -- medium load
+		DB.setValue(nodeChar, 'encumbrance.encumbrancelevel', 'number', 1)
 		return TEGlobals.nMediumMaxStat, TEGlobals.nMediumCheckPenalty
 	else -- light load
+		DB.setValue(nodeChar, 'encumbrance.encumbrancelevel', 'number', 0)
 		return nil, nil
 	end
 end
@@ -242,12 +251,43 @@ function calcItemArmorClass(nodeChar)
 	local nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero = getSpeedEffects(nodeChar)
 	
 	local nSpeedBase = DB.getValue(nodeChar, 'speed.base', 0)
+
+	--compute speed including total encumberance speed penalty
+	local tEncumbranceSpeed = TEGlobals.tEncumbranceSpeed
+	local nSpeedTableIndex = nSpeedBase / 5
+
+	nSpeedTableIndex = nSpeedTableIndex + 0.5 - (nSpeedTableIndex + 0.5) % 1
+
+	local nSpeedPenaltyFromEnc = 0
+
+	if tEncumbranceSpeed[nSpeedTableIndex] then
+		nSpeedPenaltyFromEnc = tEncumbranceSpeed[nSpeedTableIndex] - nSpeedBase
+	end
+
+	local bApplySpeedPenalty = true
+
+	if CharManager.hasTrait(nodeChar, 'Slow and Steady') then
+		bApplySpeedPenalty = false
+	end
+
 	local nSpeedArmor = 0
+
 	if bApplySpeedPenalty then
 		if (nSpeedBase >= 30) and (nMainSpeed30 > 0) then
 			nSpeedArmor = nMainSpeed30 - 30
 		elseif (nSpeedBase < 30) and (nMainSpeed20 > 0) then
 			nSpeedArmor = nMainSpeed20 - 20
+		end
+	
+		local nEncumbranceLevel = DB.getValue(nodeChar, 'encumbrance.encumbrancelevel', 0)
+
+		if nEncumbranceLevel >= 1 then
+			if (nSpeedArmor ~= 0) and (nSpeedPenaltyFromEnc ~= 0)
+			then
+				nSpeedArmor = math.min(nSpeedPenaltyFromEnc, nSpeedArmor)
+			elseif nSpeedPenaltyFromEnc then
+				nSpeedArmor = nSpeedPenaltyFromEnc
+			end
 		end
 	end
 	
