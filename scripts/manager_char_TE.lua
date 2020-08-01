@@ -6,6 +6,26 @@
 -- ARMOR MANAGEMENT
 --
 
+--	Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
+--	Argument: number light is medium encumbrance threshold for PC
+--	Argument: number medium is heavy encumbrance threshold for PC
+--	Argument: number total is current total encumbrance for PC
+--	Return: number for max stat penalty based solely on encumbrance (max stat, check penalty)
+--	Return: number for check penalty penalty based solely on encumbrance (max stat, check penalty)
+local function encumbrancePenalties(nodeChar)
+	local light = DB.getValue(nodeChar, 'encumbrance.lightload', 0)
+	local medium = DB.getValue(nodeChar, 'encumbrance.mediumload', 0)
+	local total = DB.getValue(nodeChar, 'encumbrance.total', 0)
+
+	if total > medium then -- heavy load
+		return TEGlobals.nHeavyMaxStat, TEGlobals.nHeavyCheckPenalty
+	elseif total > light then -- medium load
+		return TEGlobals.nMediumMaxStat, TEGlobals.nMediumCheckPenalty
+	else -- light load
+		return nil, nil
+	end
+end
+
 ---	This function checks for special abilities.
 local function hasSpecialAbility(nodeChar, sSpecAbil)
 	if not sSpecAbil then
@@ -85,7 +105,7 @@ function calcItemArmorClass(nodeChar)
 						end
 					end
 					
-					if nMainMaxStatBonus > 0 then nMainMaxStatBonus = math.min(nMainMaxStatBonus, nMaxStatBonus)
+					if nMaxStatBonus and nMainMaxStatBonus < 999 then nMainMaxStatBonus = math.min(nMainMaxStatBonus, nMaxStatBonus)
 					else nMainMaxStatBonus = nMaxStatBonus
 					end
 				else
@@ -97,7 +117,7 @@ function calcItemArmorClass(nodeChar)
 						end
 					end
 				end
-				
+								
 				local nCheckPenalty = DB.getValue(vNode, 'checkpenalty', 0)
 				if nCheckPenalty < 0 then
 					if not bIsShield and CharManager.hasTrait(nodeChar, 'Armor Expert') then
@@ -123,6 +143,11 @@ function calcItemArmorClass(nodeChar)
 			end
 		end
 	end
+
+	--	Bring in encumbrance penalties
+	local nEncMaxStatBonus, nEncCheckPenalty = encumbrancePenalties(nodeChar)
+	if nEncMaxStatBonus then nMainMaxStatBonus = math.min(nMainMaxStatBonus, nEncMaxStatBonus) end
+	if nEncCheckPenalty then nMainCheckPenalty = math.min(nMainCheckPenalty, nEncCheckPenalty) end
 	
 	DB.setValue(nodeChar, 'ac.sources.armor', 'number', nMainArmorTotal)
 	DB.setValue(nodeChar, 'ac.sources.shield', 'number', nMainShieldTotal)

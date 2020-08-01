@@ -101,6 +101,8 @@ function onEncumbranceChanged()
 	if CharManager.updateEncumbrance then
 		CharManager.updateEncumbrance(window.getDatabaseNode());
 	end
+	
+	CharManagerTE.calcItemArmorClass(window.getDatabaseNode());
 end
 
 function onListChanged()
