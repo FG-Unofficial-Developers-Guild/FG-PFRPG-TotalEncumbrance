@@ -6,7 +6,7 @@
 
 <root>
 	<windowclass name="charsheet_inventory" merge="join">
-		<script file="campaign/scripts/char_inv2.lua" />
+		<script file="campaign/scripts/char_inv_TE.lua" />
 		<sheetdata>
 	<!-- Inventory List -->
 			<frame_char name="inventoryframe">
