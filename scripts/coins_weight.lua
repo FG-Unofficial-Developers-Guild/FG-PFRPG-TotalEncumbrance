@@ -46,7 +46,7 @@ local function computeCoins(nodeChar)
 	nTotalCoinWeight = math.floor(nTotalCoins / (TEGlobals.nCoinsPerUnit * nUnit))
 
 	DB.setValue(nodeChar, 'encumbrance.treasure', 'number', nTotalCoinWeight)
-	DB.setValue(nodeChar, 'coins.coinstotal', 'number', nWealth)
+	DB.setValue(nodeChar, 'coins.coinstotalval', 'number', nWealth)
 end
 
 --	This function is called when a coin field is changed

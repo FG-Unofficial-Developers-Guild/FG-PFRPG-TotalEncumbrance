@@ -58,5 +58,5 @@ function calculateInvCost(nodeChar)
 		end
 	end
 	
-	DB.setValue(nodeChar, 'coins.inventorytotal', 'number', nTotalInvVal)
+	DB.setValue(nodeChar, 'coins.invtotalval', 'number', nTotalInvVal)
 end
