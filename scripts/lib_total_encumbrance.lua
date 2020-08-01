@@ -15,6 +15,14 @@ function tableSum(t)
 	return nSum
 end
 
+---	Returns a string formatted with commas inserted every three digits from the left side of the decimal place
+--	@param n The number to be reformatted.
+function formatCurrency(n)
+	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+
+	return left..(num:reverse():gsub('(%d%d%d)',TEGlobals.sDigitDivider):reverse())..right
+end
+
 --- Provide the appropriate weight unit (pounds or kilograms) depending on the GM's choice
 --	@return nUnit Desired multipler (to convert pounds to kilograms)
 function getEncWeightUnit()
