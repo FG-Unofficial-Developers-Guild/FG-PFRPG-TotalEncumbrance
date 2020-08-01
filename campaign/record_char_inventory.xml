@@ -17,15 +17,13 @@
 			<frame_char name="armorpenaltyframe" insertbefore="encumbranceframe">
 				<bounds>15,-215,240,58</bounds>
 			</frame_char>
-			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
-				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
+			<basicnumber name="armormaxstatbonus">
 				<hideonvalue>999</hideonvalue>
 				<default>999</default>
 				<min>0</min>
 				<max>999</max>
 			</basicnumber>
-			<basicnumber name="armorcheckpenalty" source="encumbrance.armorcheckpenalty" insertbefore="encumbranceframe">
-				<anchored to="armormaxstatbonus" position="right" offset="15,0" width="35" />
+			<basicnumber name="armorcheckpenalty">
 				<hideonvalue>0</hideonvalue>
 				<max>0</max>
 			</basicnumber>
@@ -104,8 +102,7 @@
 					end
 				</script> -->
 			</buttonfield>
-			<basicnumber name="spellfailure" source="encumbrance.spellfailure" insertbefore="encumbranceframe">
-				<anchored to="armorcheckpenalty" position="right" offset="15,0" width="35" />
+			<basicnumber name="spellfailure">
 				<hideonvalue>0</hideonvalue>
 				<min>0</min>
 				<max>100</max>
@@ -185,7 +182,7 @@
 				<bounds>255,-215,-29,210</bounds>
 			</frame_char>
 			<label name="coin_label" merge="replace">
-				<anchored to="coinframe" position="insidetopleft" offset="15,7" />
+				<anchored to="coinframe" position="insidetopleft" offset="15,10" />
 				<static textres="char_label_money" />
 			</label>
 
@@ -437,7 +434,7 @@
 				</anchored>
 				<multilinespacing>20</multilinespacing>
 			</basicstring>
-		<!-- Inventory and Wealth Totals -->
+		<!-- Wealth Total -->
 			<stringu name="wealthtotal" source="coins.wealthtotal">
 				<anchored to="coinframe" position="insidetopright" offset="15,9" />
 				<readonly />

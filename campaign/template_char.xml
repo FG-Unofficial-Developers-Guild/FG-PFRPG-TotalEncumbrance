@@ -5,7 +5,7 @@
 -->
 
 <root>
-	<template name="list_charinv">
+	<template name="list_charinv" merge="join">
 		<windowlist>
 			<child></child>
 			<child><backcolor>1A40301E</backcolor></child>
