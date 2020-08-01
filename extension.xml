@@ -34,7 +34,6 @@
 		<!-- Scripts -->
 		<script name="LibTotalEncumbrance" file="scripts/lib_total_encumbrance.lua" />
 		<script name="CoinsWeight" file="scripts/coins_weight.lua" />
-		<script name="RealEncumbrance" file="scripts/real_encumbrance.lua" />
 		<script name="CharManagerTE" file="scripts/manager_char_TE.lua" />
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
 		<script name="OptionsHandlers" file="scripts/options_handlers.lua" />
