@@ -436,13 +436,19 @@
 			</basicstring>
 		<!-- Wealth Total -->
 			<stringu name="wealthtotal" source="coins.wealthtotal">
-				<anchored to="coinframe" position="insidetopright" offset="15,9" />
+				<anchored to="coinframe" position="insidetopright" offset="15,10" />
 				<readonly />
 				<script>
 					function onInit()
 						local nNetWorth = LibTotalEncumbrance.round(window.inventorytotal.getValue() + window.coinstotal.getValue(), 2)
 						local sNetWorth = LibTotalEncumbrance.formatCurrency(nNetWorth)
 						setValue('Net Worth: ' .. sNetWorth .. ' gp')
+						onValueChanged()
+					end
+					function onValueChanged()
+						if getValue() == 'Net Worth: 0 gp' then setVisible(false)
+						else setVisible(true)
+						end
 					end
 				</script>
 			</stringu>
