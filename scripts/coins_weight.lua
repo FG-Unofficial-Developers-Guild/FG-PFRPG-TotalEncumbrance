@@ -7,8 +7,7 @@ function recomputeTotalWeight(nodeWin)
 	local rActor = ActorManager.getActor('pc', nodeWin)
 	local nodeChar = DB.findNode(rActor['sCreatureNode'])
 
-	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
-	local nEqLoad = DB.getValue(nodeChar, 'encumbrance.load') * nUnit
+	local nEqLoad = DB.getValue(nodeChar, 'encumbrance.load') * TEGlobals.getEncWeightUnit()
 
 	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg-full') then
 		nEqLoad = DB.getValue(nodeChar, 'encumbrance.load')
@@ -41,11 +40,13 @@ local function computeCoins(nodeChar)
 		end
 	end
 
-	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
-	nTotalCoinWeight = math.floor(nTotalCoins / (TEGlobals.nCoinsPerUnit * nUnit))
+	nTotalCoinWeight = (nTotalCoins / TEGlobals.nCoinsPerUnit) * TEGlobals.getEncWeightUnit()
+	local nTotalCoinWeightToSet =	nTotalCoinWeight + 0.5 - (nTotalCoinWeight + 0.5) % 1
 
-	DB.setValue(nodeChar, 'encumbrance.treasure', 'number', nTotalCoinWeight)
+	DB.setValue(nodeChar, 'encumbrance.treasure', 'number', nTotalCoinWeightToSet)
 	DB.setValue(nodeChar, 'coins.coinstotalval', 'number', nWealth)
+	
+	recomputeTotalWeight(nodeChar)
 end
 
 --	This function is called when a coin field is changed

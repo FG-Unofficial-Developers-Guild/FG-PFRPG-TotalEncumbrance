@@ -119,11 +119,6 @@
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
-				<script>
-					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
-					end
-				</script>
 			</simplenumber>
 			<label_fieldtop name="treasureload_label">
 			<anchored to="treasureload" />

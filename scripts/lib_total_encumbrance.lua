@@ -28,15 +28,3 @@ function round(number, decimals)
     local power = 10^decimals
     return math.floor(number * power) / power
 end
-
---- Provide the appropriate weight unit (pounds or kilograms) depending on the GM's choice
---	@return nUnit Desired multipler (to convert pounds to kilograms)
-function getEncWeightUnit()
-	local nUnit = 0.45359237
-
-	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'lb') then
-		nUnit = 1
-	end
-	
-	return nUnit
-end

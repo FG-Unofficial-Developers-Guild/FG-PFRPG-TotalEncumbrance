@@ -38,6 +38,7 @@ function onInit()
 	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
+	DB.addHandler(DB.getPath('options.ENCUMBRANCE_UNIT'), 'onUpdate', onEncumbranceChanged)
 end
 
 function onClose()
@@ -122,8 +123,6 @@ function onEncumbranceChanged()
 --	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
 		nStrength = nStrength + nStrEffectMod - nStrengthDamage
 --	end
-
-	local nUnit = LibTotalEncumbrance.getEncWeightUnit()
 	
 	if nStrength > 0 then
 		if nStrength <= 10 then
@@ -132,8 +131,8 @@ function onEncumbranceChanged()
 			nHeavy = 1.25 * math.pow(2, math.floor(nStrength / 5)) * math.floor((20 * math.pow(2, math.fmod(nStrength, 5) / 5)) + 0.5)
 		end
 	end
-
-	nHeavy = math.floor(nHeavy * DB.getValue(nodeChar, 'encumbrance.carrymult', 1) * nUnit)
+	
+	nHeavy = math.floor(nHeavy * DB.getValue(nodeChar, 'encumbrance.carrymult', 1) * TEGlobals.getEncWeightUnit())
 
 	-- Check for ant haul spell attached to PC on combat tracker. If found, triple their carrying capacity.
 	if EffectManagerTE.hasEffectCondition(rActor, 'Ant Haul') then
@@ -182,4 +181,7 @@ function onEncumbranceChanged()
 	DB.setValue(nodeChar, 'encumbrance.liftoverhead', 'number', nLiftOver)
 	DB.setValue(nodeChar, 'encumbrance.liftoffground', 'number', nLiftOff)
 	DB.setValue(nodeChar, 'encumbrance.pushordrag', 'number', nPushDrag)
+	
+	-- This helps with automatically changing the weight units when the option is toggled
+	CoinsWeight.onCoinsValueChanged(nodeChar)
 end

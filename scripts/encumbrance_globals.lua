@@ -15,6 +15,18 @@ function onInit()
 	end
 end
 
+--- Provide the appropriate weight unit (pounds or kilograms) depending on the GM's choice
+--	@return nUnit Desired multipler (to convert pounds to kilograms)
+function getEncWeightUnit()
+	local nUnit = 0.45359237
+
+	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'lb') then
+		nUnit = 1
+	end
+	
+	return nUnit
+end
+
 --	Change coinsperunit to the number of coins that equals 1 pound (even if using kg, the conversion is automatic)
 nCoinsPerUnit = 50
 
