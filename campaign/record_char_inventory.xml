@@ -38,26 +38,28 @@
 
 					function onValueChanged()
 						local nodeEncumbrance = getDatabaseNode().getParent()
-						local nCheckPenaltyFromEnc = DB.getValue(nodeEncumbrance, 'checkpenaltyfromenc')
-						local nCheckPenalty = DB.getValue(nodeEncumbrance, 'armorcheckpenalty')
+						local nodeChar = nodeEncumbrance.getParent()
+						
+						CharManagerTE.calcItemArmorClass(nodeChar)
+
 						local nMaxStatFromEnc = DB.getValue(nodeEncumbrance, 'maxstatbonusfromenc')
 						local nMaxStat = DB.getValue(nodeEncumbrance, 'armormaxstatbonus')
-
 						if getValue() == 0 then
 							window.armormaxstatbonus.setColor('7F000000')
 						else
-							if nMaxStatFromEnc and (nMaxStat &gt; nMaxStatFromEnc or nMaxStat == 999)
-							then
+							if nMaxStatFromEnc == nMaxStat then
 								window.armormaxstatbonus.setColor('FFB22929')
 							else
 								window.armormaxstatbonus.setColor('FF000000')
 							end
 						end
+
+						local nCheckPenaltyFromEnc = DB.getValue(nodeEncumbrance, 'checkpenaltyfromenc')
+						local nCheckPenalty = DB.getValue(nodeEncumbrance, 'armorcheckpenalty')
 						if getValue() == 0 then
 							window.armorcheckpenalty.setColor('7F000000')
 						else
-							if nCheckPenaltyFromEnc and (nCheckPenalty &gt; nCheckPenaltyFromEnc or nCheckPenalty == 0)
-							then
+							if nCheckPenaltyFromEnc == nCheckPenalty then
 								window.armorcheckpenalty.setColor('FFB22929')
 							else
 								window.armorcheckpenalty.setColor('FF000000')
