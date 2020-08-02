@@ -6,7 +6,7 @@
 
 <root>
 	<windowclass name="charsheet_inventory" merge="join">
-		<script file="campaign/scripts/char_inv2.lua" />
+		<script file="campaign/scripts/char_inv_TE.lua" />
 		<sheetdata>
 	<!-- Inventory List -->
 			<frame_char name="inventoryframe">
@@ -17,13 +17,13 @@
 			<frame_char name="armorpenaltyframe" insertbefore="encumbranceframe">
 				<bounds>15,-215,240,58</bounds>
 			</frame_char>
-			<basicnumber name="armormaxstatbonus" source="encumbrance.armormaxstatbonus" insertbefore="encumbranceframe">
-				<anchored to="armorpenaltyframe" position="insidetopleft" offset="85,24" width="35" height="20" />
-				<hideonvalue>-1</hideonvalue>
-				<min>-1</min>
+			<basicnumber name="armormaxstatbonus">
+				<hideonvalue>999</hideonvalue>
+				<default>999</default>
+				<min>0</min>
+				<max>999</max>
 			</basicnumber>
-			<basicnumber name="armorcheckpenalty" source="encumbrance.armorcheckpenalty" insertbefore="encumbranceframe">
-				<anchored to="armormaxstatbonus" position="right" offset="15,0" width="35" />
+			<basicnumber name="armorcheckpenalty">
 				<hideonvalue>0</hideonvalue>
 				<max>0</max>
 			</basicnumber>
@@ -37,73 +37,38 @@
 					end
 
 					function onValueChanged()
-						local nodeCheckPenalty = getDatabaseNode().getParent()
-						local nCheckPenaltyFromEnc = DB.getValue(nodeCheckPenalty, 'checkpenaltyfromenc')
-						local nCheckPenaltyFromArmor = DB.getValue(nodeCheckPenalty, 'checkpenaltyfromarmor')
-						local nMaxStatFromEnc = DB.getValue(nodeCheckPenalty, 'maxstatbonusfromenc')
-						local nMaxStatFromArmor = DB.getValue(nodeCheckPenalty, 'maxstatbonusfromarmor')
-						local nPenaltiesActive = DB.getValue(nodeCheckPenalty, 'armormaxstatbonusactive')
+						local nodeEncumbrance = getDatabaseNode().getParent()
+						local nodeChar = nodeEncumbrance.getParent()
+						
+						CharManagerTE.calcItemArmorClass(nodeChar)
 
-						if nPenaltiesActive == 0 then
+						local nMaxStatFromEnc = DB.getValue(nodeEncumbrance, 'maxstatbonusfromenc')
+						local nMaxStat = DB.getValue(nodeEncumbrance, 'armormaxstatbonus')
+						if getValue() == 0 then
 							window.armormaxstatbonus.setColor('7F000000')
-						elseif Interface.getVersion() &lt; 4 then
-							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
-								and nMaxStatFromEnc ~= -1
-								and (
-									nMaxStatFromArmor &gt; nMaxStatFromEnc
-									or nMaxStatFromArmor == -1
-								)
-							then
-								window.armormaxstatbonus.setColor('FFB22929')
-							else
-								window.armormaxstatbonus.setColor('FF000000')
-							end
 						else
-							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
-								and nMaxStatFromEnc ~= -1
-								and (
-									nMaxStatFromArmor &lt; nMaxStatFromEnc
-									or nMaxStatFromArmor == -1
-								)
-							then
+							if nMaxStatFromEnc == nMaxStat then
 								window.armormaxstatbonus.setColor('FFB22929')
 							else
 								window.armormaxstatbonus.setColor('FF000000')
 							end
 						end
-						if nPenaltiesActive == 0 then
-							window.armorcheckpenalty.setColor('7F000000')
-						elseif Interface.getVersion() &lt; 4 then
-							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
-								and nCheckPenaltyFromEnc ~= 0
-								and (
-									nCheckPenaltyFromArmor &gt; nCheckPenaltyFromEnc
-									or nCheckPenaltyFromArmor == 0
-								)
-							then
-								window.armorcheckpenalty.setColor('FFB22929')
-							else
-								window.armorcheckpenalty.setColor('FF000000')
-							end
-						else
-							if OptionsManager.isOption('ENCUMBRANCE_COLORS', 'on')
-								and nCheckPenaltyFromEnc ~= 0
-								and (
-									nCheckPenaltyFromArmor &lt; nCheckPenaltyFromEnc
-									or nCheckPenaltyFromArmor == 0
-								)
-							then
-								window.armorcheckpenalty.setColor('FFB22929')
-							else
-								window.armorcheckpenalty.setColor('FF000000')
-							end
 
+						local nCheckPenaltyFromEnc = DB.getValue(nodeEncumbrance, 'checkpenaltyfromenc')
+						local nCheckPenalty = DB.getValue(nodeEncumbrance, 'armorcheckpenalty')
+						if getValue() == 0 then
+							window.armorcheckpenalty.setColor('7F000000')
+						else
+							if nCheckPenaltyFromEnc == nCheckPenalty then
+								window.armorcheckpenalty.setColor('FFB22929')
+							else
+								window.armorcheckpenalty.setColor('FF000000')
+							end
 						end
 					end
 				</script>
 			</buttonfield>
-			<basicnumber name="spellfailure" source="encumbrance.spellfailure" insertbefore="encumbranceframe">
-				<anchored to="armorcheckpenalty" position="right" offset="15,0" width="35" />
+			<basicnumber name="spellfailure">
 				<hideonvalue>0</hideonvalue>
 				<min>0</min>
 				<max>100</max>
@@ -154,12 +119,6 @@
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
-				<script>
-					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script>
 			</simplenumber>
 			<label_fieldtop name="treasureload_label">
 			<anchored to="treasureload" />
@@ -173,11 +132,6 @@
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
-				<script>
-					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script>
 			</simplenumber>
 			<label_fieldtop name="totalload_label">
 				<anchored to="totalload" />
@@ -189,7 +143,7 @@
 				<bounds>255,-215,-29,210</bounds>
 			</frame_char>
 			<label name="coin_label" merge="replace">
-				<anchored to="coinframe" position="insidetopleft" offset="15,7" />
+				<anchored to="coinframe" position="insidetopleft" offset="15,10" />
 				<static textres="char_label_money" />
 			</label>
 
@@ -201,7 +155,6 @@
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
@@ -214,7 +167,7 @@
 				<anchored to="coinamount1" position="righthigh" offset="10,0" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<frame name="fielddark" offset="7,5,7,5" />
@@ -227,7 +180,7 @@
 				<anchored to="coinamount1" position="righthigh" offset="60,0" width="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<default>pp</default>
@@ -242,7 +195,6 @@
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
@@ -255,7 +207,7 @@
 				<anchored to="coinamount2" position="righthigh" offset="10,0" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<frame name="fielddark" offset="7,5,7,5" />
@@ -268,7 +220,7 @@
 				<anchored to="coinamount2" position="righthigh" offset="60,0" width="20"/>
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<default>gp</default>
@@ -283,7 +235,6 @@
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
@@ -296,7 +247,7 @@
 				<anchored to="coinamount3" position="right" offset="10,0" width="40" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<frame name="fielddark" offset="7,5,7,5" />
@@ -309,7 +260,7 @@
 				<anchored to="coinamount3" position="right" offset="60,0" width="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<default>sp</default>
@@ -324,7 +275,6 @@
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
@@ -337,7 +287,7 @@
 				<anchored to="coinamount4" position="righthigh" offset="10,0" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<frame name="fielddark" offset="7,5,7,5" />
@@ -350,7 +300,7 @@
 				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<default>cp</default>
@@ -365,7 +315,6 @@
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
@@ -378,7 +327,7 @@
 				<anchored to="coinamount5" position="righthigh" offset="10,0" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<frame name="fielddark" offset="7,5,7,5" />
@@ -391,7 +340,7 @@
 				<anchored to="coinamount5" position="righthigh" offset="60,0" width="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
@@ -405,7 +354,6 @@
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
@@ -418,7 +366,7 @@
 				<anchored to="coinamount6" position="righthigh" offset="10,0" width="40" height="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<frame name="fielddark" offset="7,5,7,5" />
@@ -431,12 +379,13 @@
 				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
 				<script>
 					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
+						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
 				<tabtarget next="coinother" />
 			</stringu>
+			
 		<!-- Coins 'Other' Text Box -->
 			<basicstring name="coinother">
 				<anchored>
@@ -447,53 +396,51 @@
 				</anchored>
 				<multilinespacing>20</multilinespacing>
 			</basicstring>
-		<!-- Inventory and Wealth Totals -->
-			<stringu name="inventorytotal" source="coins.inventorytotal">
-				<anchored to="coinframe" position="insidetopright" offset="15,9" />
-				<readonly />
-			</stringu>
+			
+		<!-- Wealth Total -->
 			<stringu name="wealthtotal" source="coins.wealthtotal">
-				<anchored to="coinframe" position="insidetopright" offset="15,23" />
+				<anchored to="coinframe" position="insidetopright" offset="15,10" />
 				<readonly />
+				<script>
+					function onInit()
+						local nNetWorth = LibTotalEncumbrance.round(window.inventorytotal.getValue() + window.coinstotal.getValue(), 2)
+						local sNetWorth = LibTotalEncumbrance.formatCurrency(nNetWorth)
+						setValue('Net Worth: ' .. sNetWorth .. ' gp')
+						onValueChanged()
+					end
+					function onValueChanged()
+						if getValue() == 'Net Worth: 0 gp' then setVisible(false)
+						else setVisible(true)
+						end
+					end
+				</script>
 			</stringu>
+			<basicnumber name="inventorytotal" source="coins.invtotalval">
+				<anchored to="coinframe" position="insidetopright" offset="15,23" />
+				<default>0</default>
+				<readonly />
+				<invisible />
+				<script>
+					function onValueChanged()
+						window.wealthtotal.onInit()
+					end
+				</script>
+			</basicnumber>
+			<basicnumber name="coinstotal" source="coins.coinstotalval">
+				<anchored to="coinframe" position="insidetopright" offset="15,23" />
+				<default>0</default>
+				<readonly />
+				<invisible />
+				<script>
+					function onValueChanged()
+						window.wealthtotal.onInit()
+					end
+				</script>
+			</basicnumber>
 		</sheetdata>
 	</windowclass>
 	
-	<windowclass name="char_invitem" merge="join">
-		<sheetdata>
-		<script>
-			function onInit()
-				getDatabaseNode().onDelete = onDelete
-			end
-			function onDelete(node)
-				ItemManager.onCharRemoveEvent(node)
-			end
-		</script>
-			<number_charinv name="count">
-				<bounds>5,2,20,20</bounds>
-				<tabtarget next="name" />
-				<default>1</default>
-				<script>
-					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script>
-			</number_charinv>
-			<button_char_inv_carried name="carried">
-				<anchored width="20" height="20">
-					<top offset="2" />
-					<right parent="rightanchor" anchor="left" relation="relative" offset="-5" />
-				</anchored>
-				<script>
-					function onValueChanged()
-						RealEncumbrance.applyPenalties(window.getDatabaseNode())
-					end
-				</script>
-			</button_char_inv_carried>
-		</sheetdata>
-	</windowclass>
-	
-	<!-- Encumbrance pop-up for strength score modification via effect or manual box -->
+	<!-- Encumbrance pop-up for strength score modification via effect or manual "str adj" box -->
 	<windowclass name="charsheet_encumbrance" merge="join">
 		<frame>charsheethelper</frame>
 		<placement>
