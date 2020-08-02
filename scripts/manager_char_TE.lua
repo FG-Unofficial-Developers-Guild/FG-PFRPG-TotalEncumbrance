@@ -227,17 +227,15 @@ function calcItemArmorClass(nodeChar)
 	
 	DB.setValue(nodeChar, 'ac.sources.armor', 'number', nMainArmorTotal)
 	DB.setValue(nodeChar, 'ac.sources.shield', 'number', nMainShieldTotal)
-	DB.setValue(nodeChar, 'encumbrance.armormaxstatbonus', 'number', nMainMaxStatBonus + 1)
 	DB.setValue(nodeChar, 'encumbrance.armormaxstatbonus', 'number', nMainMaxStatBonus)
 
-	if nMainMaxStatBonus < 999 then
+	if nMainMaxStatBonus < 999 or nMainCheckPenalty < 0 then
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 	else
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 1)
 		DB.setValue(nodeChar, 'encumbrance.armormaxstatbonusactive', 'number', 0)
 	end
-	DB.setValue(nodeChar, 'encumbrance.armorcheckpenalty', 'number', nMainCheckPenalty - 1)
 	DB.setValue(nodeChar, 'encumbrance.armorcheckpenalty', 'number', nMainCheckPenalty)
 	DB.setValue(nodeChar, 'encumbrance.spellfailure', 'number', nMainSpellFailure)
 
