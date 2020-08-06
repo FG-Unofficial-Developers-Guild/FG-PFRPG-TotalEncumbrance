@@ -49,7 +49,7 @@ function calculateInvCost(node)
 	elseif node.getName() == 'inventorylist' then nodeChar = node.getParent() end
 	local nTotalInvVal = 0
 	for _,v in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
-		local nItemIDed = DB.getValue(v, 'isidentified', 0)
+		local nItemIDed = DB.getValue(v, 'isidentified', 1)
 		local sItemName = DB.getValue(v, 'name', '')
 		local sItemCost = DB.getValue(v, 'cost')
 		local nItemCount = DB.getValue(v, 'count', 1)
