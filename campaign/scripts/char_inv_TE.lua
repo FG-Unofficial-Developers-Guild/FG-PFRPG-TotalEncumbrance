@@ -30,9 +30,9 @@ function onInit()
 
 	local nodeCharCT = getNodeCharCT(node)
 
-	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onStrengthChanged)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onEffectChanged)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onEffectChanged)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onEffectRemoved)
 	DB.addHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onStrengthChanged)
@@ -44,14 +44,24 @@ function onClose()
 	local node = getDatabaseNode()
 	local nodeCharCT = getNodeCharCT(node)
 
-	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onStrengthChanged)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', onEffectChanged)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', onEffectChanged)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', onEffectRemoved)
 	DB.removeHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.removeHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 	DB.removeHandler(DB.getPath('options.ENCUMBRANCE_UNIT'), 'onUpdate', onEncumbranceChanged)
+end
+
+function onEffectChanged(node)
+	onStrengthChanged()
+	CharManagerTE.onEffectChanged(node)
+end
+
+function onEffectRemoved(node)
+	onStrengthChanged()
+	CharManagerTE.onEffectRemoved(node)
 end
 
 ---	Determine the total bonus to carrying capacity from effects STR or CARRY
