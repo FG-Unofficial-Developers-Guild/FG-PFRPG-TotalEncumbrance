@@ -1,5 +1,6 @@
 # TotalEncumbrance
 I was excited to come across [Alaxandir's CoreRPG port](https://www.fantasygrounds.com/forums/showthread.php?57185-Coin-Weight-for-CoreRPG-(MoreCore-compatible)) of [Zuger's Coin Weight extension](https://svn.fantasygrounds.com/forums/showthread.php?41109-The-weight-of-the-coins), but it had visual issues in the Pathfinder ruleset. I made a few changes and enabled some extra features that had been left disabled/unfinished in the source mod. After seeing how it worked, it seemed like an obvious next step to extend its functionality to help fill the gaps in the existing functionality around weight, encumbrance, coins, and the like. At this point, the coin weight aspect is a tiny piece of this extension.
+
 The spell failure compenent previously included here is now available as [its own extension](https://github.com/bmos/FG-PFRPG-Spell-Failure).
 
 # Features
