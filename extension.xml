@@ -3,7 +3,7 @@
 
 	<properties>
 		<name>Total Encumbrance</name>
-		<version>2.0.1</version>
+		<version>2.0.2</version>
 		<author>bmos (Wil Thieme)</author>
 		<description>rThis extension applies encumbrance penalties, weighs PC coins, calculates character wealth, offers metric unit conversion, and recalculates carrying capacity taking into account STR effects and Ant Haul.</description>
 		<ruleset>
@@ -14,7 +14,7 @@
 		</ruleset>
 	</properties>
 
-	<announcement text="https://github.com/bmos/FG-PFRPG-TotalEncumbrance\rPFRPG Total Encumbrance v2.0.1:\rThis extension applies encumbrance penalties, weighs PC coins, calculates character wealth, offers metric unit conversion, and recalculates carrying capacity taking into account STR effects and Ant Haul."  icon="EncumberedGuy" font="emotefont" />
+	<announcement text="https://github.com/bmos/FG-PFRPG-TotalEncumbrance\rPFRPG Total Encumbrance v2.0.2:\rThis extension applies encumbrance penalties, weighs PC coins, calculates character wealth, offers metric unit conversion, and recalculates carrying capacity taking into account STR effects and Ant Haul."  icon="EncumberedGuy" font="emotefont" />
 
 	<base>
 		<!-- Icon -->
