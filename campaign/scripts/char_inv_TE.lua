@@ -36,7 +36,6 @@ function onInit()
 	DB.addHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onStrengthChanged)
-	DB.addHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onStrengthChanged)
 	DB.addHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
 	DB.addHandler(DB.getPath('options.ENCUMBRANCE_UNIT'), 'onUpdate', onEncumbranceChanged)
 end
@@ -51,8 +50,8 @@ function onClose()
 	DB.removeHandler(DB.getPath(node, 'abilities.strength'), 'onChildUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'size'), 'onUpdate', onSizeChanged)
 	DB.removeHandler(DB.getPath(node, 'encumbrance.stradj'), 'onUpdate', onStrengthChanged)
-	DB.removeHandler(DB.getPath(node, 'encumbrance.strbonusfromeffects'), 'onUpdate', onStrengthChanged)
 	DB.removeHandler(DB.getPath(node, 'encumbrance.carrymult'), 'onUpdate', onEncumbranceChanged)
+	DB.removeHandler(DB.getPath('options.ENCUMBRANCE_UNIT'), 'onUpdate', onEncumbranceChanged)
 end
 
 ---	Determine the total bonus to carrying capacity from effects STR or CARRY
