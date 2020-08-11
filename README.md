@@ -20,4 +20,4 @@ Any values designed to be user-modifiable are located in [scripts/encumbrance_gl
 * The encumbrance penalties imposed by medium or heavy encumbrance
 
 # Video Demonstration (click for video)
-[<img src="https://i.ytimg.com/vi_webp/y-jzwaN5i6s/maxresdefault.webp">](https://youtu.be/y-jzwaN5i6s)
+[<img src="https://i.ytimg.com/vi_webp/y-jzwaN5i6s/hqdefault.webp">](https://youtu.be/y-jzwaN5i6s)
