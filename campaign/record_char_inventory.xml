@@ -40,8 +40,6 @@
 						local nodeEncumbrance = getDatabaseNode().getParent()
 						local nodeChar = nodeEncumbrance.getParent()
 						
-						CharManagerTE.calcItemArmorClass(nodeChar)
-
 						local nMaxStatFromEnc = DB.getValue(nodeEncumbrance, 'maxstatbonusfromenc')
 						local nMaxStat = DB.getValue(nodeEncumbrance, 'armormaxstatbonus')
 						if getValue() == 0 then
