@@ -2,89 +2,6 @@
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
-function parseEffectComp(s)
-	local sType = nil;
-	local aDice = {};
-	local nMod = 0;
-	local aRemainder = {};
-	local nRemainderIndex = 1;
-	
-	local aWords, aWordStats = StringManager.parseWords(s, "%.%[%]%(%):");
-	if #aWords > 0 then
-		sType = aWords[1]:match("^([^:]+):");
-		if sType then
-			nRemainderIndex = 2;
-			
-			local sValueCheck = aWords[1]:sub(#sType + 2);
-			if sValueCheck ~= "" then
-				table.insert(aWords, 2, sValueCheck);
-				table.insert(aWordStats, 2, { startpos = aWordStats[1].startpos + #sType + 1, endpos = aWordStats[1].endpos });
-				aWords[1] = aWords[1]:sub(1, #sType + 1);
-				aWordStats[1].endpos = #sType + 1;
-			end
-			
-			if #aWords > 1 then
-				if StringManager.isDiceString(aWords[2]) then
-					aDice, nMod = StringManager.convertStringToDice(aWords[2]);
-					nRemainderIndex = 3;
-				end
-			end
-		end
-		
-		if nRemainderIndex <= #aWords then
-			while nRemainderIndex <= #aWords and aWords[nRemainderIndex]:match("^%[%d?%a+%]$") do
-				table.insert(aRemainder, aWords[nRemainderIndex]);
-				nRemainderIndex = nRemainderIndex + 1;
-			end
-		end
-		
-		if nRemainderIndex <= #aWords then
-			local sRemainder = s:sub(aWordStats[nRemainderIndex].startpos);
-			local nStartRemainderPhrase = 1;
-			local i = 1;
-			while i < #sRemainder do
-				local sCheck = sRemainder:sub(i, i);
-				if sCheck == "," then
-					local sRemainderPhrase = sRemainder:sub(nStartRemainderPhrase, i - 1);
-					if sRemainderPhrase and sRemainderPhrase ~= "" then
-						sRemainderPhrase = StringManager.trim(sRemainderPhrase);
-						table.insert(aRemainder, sRemainderPhrase);
-					end
-					nStartRemainderPhrase = i + 1;
-				elseif sCheck == "(" then
-					while i < #sRemainder do
-						if sRemainder:sub(i, i) == ")" then
-							break;
-						end
-						i = i + 1;
-					end
-				elseif sCheck == "[" then
-					while i < #sRemainder do
-						if sRemainder:sub(i, i) == "]" then
-							break;
-						end
-						i = i + 1;
-					end
-				end
-				i = i + 1;
-			end
-			local sRemainderPhrase = sRemainder:sub(nStartRemainderPhrase, #sRemainder);
-			if sRemainderPhrase and sRemainderPhrase ~= "" then
-				sRemainderPhrase = StringManager.trim(sRemainderPhrase);
-				table.insert(aRemainder, sRemainderPhrase);
-			end
-		end
-	end
-
-	return  {
-		type = sType or "", 
-		mod = nMod, 
-		dice = aDice, 
-		remainder = aRemainder, 
-		original = StringManager.trim(s)
-	};
-end
-
 function getEffectsByType(rActor, sEffectType, aFilter, rFilterActor, bTargetedOnly)
 	if not rActor then
 		return {};
@@ -123,17 +40,17 @@ function getEffectsByType(rActor, sEffectType, aFilter, rFilterActor, bTargetedO
 				-- Look for type/subtype match
 				local nMatch = 0;
 				for kEffectComp, sEffectComp in ipairs(aEffectComps) do
-					local rEffectComp = parseEffectComp(sEffectComp);
+					local rEffectComp = EffectManager35E.parseEffectComp(sEffectComp);
 					-- Handle conditionals
 					if rEffectComp.type == "IF" then
-						if not checkConditional(rActor, v, rEffectComp.remainder) then
+						if not EffectManager35E.checkConditional(rActor, v, rEffectComp.remainder) then
 							break;
 						end
 					elseif rEffectComp.type == "IFT" then
 						if not rFilterActor then
 							break;
 						end
-						if not checkConditional(rFilterActor, v, rEffectComp.remainder, rActor) then
+						if not EffectManager35E.checkConditional(rFilterActor, v, rEffectComp.remainder, rActor) then
 							break;
 						end
 						bTargeted = true;
@@ -443,17 +360,17 @@ function hasEffect(rActor, sEffect, rTarget, bTargetedOnly, bIgnoreEffectTargets
 			-- Iterate through each effect component looking for a type match
 			local nMatch = 0;
 			for kEffectComp, sEffectComp in ipairs(aEffectComps) do
-				local rEffectComp = parseEffectComp(sEffectComp);
+				local rEffectComp = EffectManager35E.parseEffectComp(sEffectComp);
 				-- Check conditionals
 				if rEffectComp.type == "IF" then
-					if not checkConditional(rActor, v, rEffectComp.remainder) then
+					if not EffectManager35E.checkConditional(rActor, v, rEffectComp.remainder) then
 						break;
 					end
 				elseif rEffectComp.type == "IFT" then
 					if not rTarget then
 						break;
 					end
-					if not checkConditional(rTarget, v, rEffectComp.remainder, rActor) then
+					if not EffectManager35E.checkConditional(rTarget, v, rEffectComp.remainder, rActor) then
 						break;
 					end
 				
@@ -478,123 +395,5 @@ function hasEffect(rActor, sEffect, rTarget, bTargetedOnly, bIgnoreEffectTargets
 	if #aMatch > 0 then
 		return true;
 	end
-	return false;
-end
-
-function checkConditional(rActor, nodeEffect, aConditions, rTarget, aIgnore)
-	local bReturn = true;
-	
-	if not aIgnore then
-		aIgnore = {};
-	end
-	table.insert(aIgnore, nodeEffect.getNodeName());
-	
-	for _,v in ipairs(aConditions) do
-		local sLower = v:lower();
-		if sLower == DataCommon.healthstatusfull then
-			local nPercentWounded = ActorManager2.getPercentWounded("ct", ActorManager.getCTNode(rActor));
-			if nPercentWounded > 0 then
-				bReturn = false;
-				break;
-			end
-		elseif sLower == DataCommon.healthstatushalf then
-			local nPercentWounded = ActorManager2.getPercentWounded("ct", ActorManager.getCTNode(rActor));
-			if nPercentWounded < .5 then
-				bReturn = false;
-				break;
-			end
-		elseif sLower == DataCommon.healthstatuswounded then
-			local nPercentWounded = ActorManager2.getPercentWounded("ct", ActorManager.getCTNode(rActor));
-			if nPercentWounded == 0 then
-				bReturn = false;
-				break;
-			end
-		elseif StringManager.contains(DataCommon.conditions, sLower) then
-			if not checkConditionalHelper(rActor, sLower, rTarget, aIgnore) then
-				bReturn = false;
-				break;
-			end
-		elseif StringManager.contains(DataCommon.conditionaltags, sLower) then
-			if not checkConditionalHelper(rActor, sLower, rTarget, aIgnore) then
-				bReturn = false;
-				break;
-			end
-		else
-			local sAlignCheck = sLower:match("^align%s*%(([^)]+)%)$");
-			local sSizeCheck = sLower:match("^size%s*%(([^)]+)%)$");
-			local sTypeCheck = sLower:match("^type%s*%(([^)]+)%)$");
-			local sCustomCheck = sLower:match("^custom%s*%(([^)]+)%)$");
-			if sAlignCheck then
-				if not ActorManager2.isAlignment(rActor, sAlignCheck) then
-					bReturn = false;
-					break;
-				end
-			elseif sSizeCheck then
-				if not ActorManager2.isSize(rActor, sSizeCheck) then
-					bReturn = false;
-					break;
-				end
-			elseif sTypeCheck then
-				if not ActorManager2.isCreatureType(rActor, sTypeCheck) then
-					bReturn = false;
-					break;
-				end
-			elseif sCustomCheck then
-				if not checkConditionalHelper(rActor, sCustomCheck, rTarget, aIgnore) then
-					bReturn = false;
-					break;
-				end
-			end
-		end
-	end
-	
-	table.remove(aIgnore);
-	
-	return bReturn;
-end
-
-function checkConditionalHelper(rActor, sEffect, rTarget, aIgnore)
-	if not rActor then
-		return false;
-	end
-	
-	for _,v in pairs(DB.getChildren(ActorManager.getCTNode(rActor), "effects")) do
-		local nActive = DB.getValue(v, "isactive", 0);
-		if nActive ~= 0 and not StringManager.contains(aIgnore, v.getNodeName()) then
-			-- Parse each effect label
-			local sLabel = DB.getValue(v, "label", "");
-			local aEffectComps = EffectManager.parseEffect(sLabel);
-
-			-- Iterate through each effect component looking for a type match
-			for _,sEffectComp in ipairs(aEffectComps) do
-				local rEffectComp = parseEffectComp(sEffectComp);
-				
-				--Check conditionals
-				if rEffectComp.type == "IF" then
-					if not checkConditional(rActor, v, rEffectComp.remainder, nil, aIgnore) then
-						break;
-					end
-				elseif rEffectComp.type == "IFT" then
-					if not rTarget then
-						break;
-					end
-					if not checkConditional(rTarget, v, rEffectComp.remainder, rActor, aIgnore) then
-						break;
-					end
-				
-				-- Check for match
-				elseif rEffectComp.original:lower() == sEffect then
-					if EffectManager.isTargetedEffect(v) then
-						if EffectManager.isEffectTarget(v, rTarget) then
-							return true;
-						end
-					else
-						return true;
-					end
-				end
-			end
-		end
-	end
-	
 	return false;
 end
