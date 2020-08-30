@@ -21,8 +21,9 @@
 		<icon name="EncumberedGuy" file="graphics/encumbered_guy.png" />
 
 		<!-- Records -->
-		<includefile source="campaign/record_char_inventory.xml" />
 		<includefile source="campaign/record_char_combat.xml" />
+		<includefile source="campaign/record_char_inventory.xml" />
+		<includefile source="campaign/record_char_main.xml" />
 
 		<!-- Templates -->
 		<includefile source="campaign/template_char.xml" />
