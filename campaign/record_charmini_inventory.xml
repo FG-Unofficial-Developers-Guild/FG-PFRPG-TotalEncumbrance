@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charsheetmini_inventory" merge="join">
+		<sheetdata>
+			<frame_char name="mini_coinframe">
+				<bounds>0,10,-5,85</bounds>
+			</frame_char>
+			<number_dropadd name="coinamount1" source="coins.slot1.amount">
+				<tooltip textres="char_tooltip_carriedcoin" />
+				<anchored to="mini_coinframe" width="50" height="18">
+					<top offset="30" />
+					<right anchor="center" offset="-65" />
+				</anchored>
+			</number_dropadd>
+			<number_dropadd name="coinamount1a" source="coins.slot1.amountA">
+				<tooltip textres="char_tooltip_noncarriedcoin" />
+				<anchored to="coinamount1" position="below" offset="0,3" height="18" />
+			</number_dropadd>
+			<genericcontrol>
+				<anchored to="coinamount1" position="above" offset="0,2" height="18" />
+				<icon>char_coin</icon>
+				<iconcolor>FFFFFF</iconcolor>
+			</genericcontrol>
+			<number_dropadd name="coinamount2" source="coins.slot2.amount">
+				<tooltip textres="char_tooltip_carriedcoin" />
+				<anchored to="mini_coinframe" width="50" height="18">
+					<top offset="30" />
+					<right anchor="center" offset="-5" />
+				</anchored>
+			</number_dropadd>
+			<genericcontrol>
+				<anchored to="coinamount2" position="above" offset="0,2" height="18" />
+				<icon>char_coin</icon>
+				<iconcolor>FFDF4B</iconcolor>
+			</genericcontrol>
+			<number_dropadd name="coinamount2a" source="coins.slot2.amountA">
+				<tooltip textres="char_tooltip_noncarriedcoin" />
+				<anchored to="coinamount2" position="below" offset="0,3" height="18" />
+			</number_dropadd>
+			<number_dropadd name="coinamount3" source="coins.slot3.amount">
+				<tooltip textres="char_tooltip_carriedcoin" />
+				<anchored to="mini_coinframe" width="50" height="18">
+					<top offset="30" />
+					<left anchor="center" offset="5" />
+				</anchored>
+			</number_dropadd>
+			<number_dropadd name="coinamount3a" source="coins.slot3.amountA">
+				<tooltip textres="char_tooltip_noncarriedcoin" />
+				<anchored to="coinamount3" position="below" offset="0,3" height="18" />
+			</number_dropadd>
+			<genericcontrol>
+				<anchored to="coinamount3" position="above" offset="0,2" height="18" />
+				<icon>char_coin</icon>
+				<iconcolor>E3E3E3</iconcolor>
+			</genericcontrol>
+			<number_dropadd name="coinamount4" source="coins.slot4.amount">
+				<tooltip textres="char_tooltip_carriedcoin" />
+				<anchored to="mini_coinframe" width="50" height="18">
+					<top offset="30" />
+					<left anchor="center" offset="65" />
+				</anchored>
+			</number_dropadd>
+			<number_dropadd name="coinamount4a" source="coins.slot4.amountA">
+				<tooltip textres="char_tooltip_noncarriedcoin" />
+				<anchored to="coinamount4" position="below" offset="0,3" height="18" />
+			</number_dropadd>
+			<genericcontrol>
+				<anchored to="coinamount4" position="above" offset="0,2" height="18" />
+				<icon>char_coin</icon>
+				<iconcolor>DDA15B</iconcolor>
+			</genericcontrol>
+
+			<frame_char name="mini_inventoryframe">
+				<bounds>0,90,-5,-15</bounds>
+			</frame_char>
+		</sheetdata>
+	</windowclass>
+</root>
