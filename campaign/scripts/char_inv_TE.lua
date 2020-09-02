@@ -14,7 +14,7 @@ local function getNodeCharCT(node)
 	elseif node.getChild('...').getName() == 'charsheet' then
 		rActor = ActorManager.getActor('pc', node.getParent())
 		nodeCharCT = DB.findNode(rActor['sCTNode'])
-	elseif node.getChild('....') == 'charsheet' then
+	elseif node.getChild('....').getName() == 'charsheet' then -- this might not be necessary
 		rActor = ActorManager.getActor('ct', node.getChild('...'))
 		nodeCharCT = DB.findNode(rActor['sCTNode'])
 	end
