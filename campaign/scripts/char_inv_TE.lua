@@ -56,12 +56,10 @@ end
 
 function onEffectChanged(node)
 	onStrengthChanged()
-	CharManagerTE.onEffectChanged(node)
 end
 
 function onEffectRemoved(node)
 	onStrengthChanged()
-	CharManagerTE.onEffectRemoved(node)
 end
 
 ---	Determine the total bonus to carrying capacity from effects STR or CARRY

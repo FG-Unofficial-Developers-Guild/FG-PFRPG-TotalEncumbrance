@@ -7,9 +7,6 @@ function onInit()
 		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', onHealthChanged)
 		DB.addHandler(DB.getPath('charsheet.*.wounds'), 'onChildUpdate', onHealthChanged)
 		DB.addHandler(DB.getPath('charsheet.*.speed.base'), 'onUpdate', onSpeedChanged)
-		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
-		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onEffectChanged)
-		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onEffectRemoved)
 	end
 end
 
@@ -19,16 +16,6 @@ end
 
 function onSpeedChanged(node)
 	calcItemArmorClass(node.getChild('...'))
-end
-
-function onEffectChanged(node)
-	local rActor = ActorManager.getActor('ct', node.getChild('....'))
-	calcItemArmorClass(DB.findNode(rActor['sCreatureNode']))
-end
-
-function onEffectRemoved(node)
-	local rActor = ActorManager.getActor('ct', node.getChild('..'))
-	calcItemArmorClass(DB.findNode(rActor['sCreatureNode']))
 end
 
 --	Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
