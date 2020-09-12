@@ -26,14 +26,18 @@ end
 
 ---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(nodeChar, sItemCost, sItemName)
-	if sItemCost == '-' then
+	if not string.match(sItemCost, '%d+') then
 		return 0
-	elseif string.match(sItemCost, '%/') then
+	elseif string.match(sItemCost, '(%d%s%a+)%/') or string.match(sItemCost, '(%d%s%a+)%-') then
 		announceImproperCost(nodeChar, sItemName, true)
-		sItemCost = string.match(sItemCost, "(.+)%/") -- thanks to FeatherRin on FG Forums for the inspiration
-	elseif string.match(sItemCost, '%-') then
-		announceImproperCost(nodeChar, sItemName, true)
-		sItemCost = string.match(sItemCost, "(.+)%-") -- thanks to FeatherRin on FG Forums for the inspiration
+		sItemCost = string.match(sItemCost, '%d+%s%a+') -- thanks to FeatherRin on FG Forums for the inspiration
+		Debug.chat(sItemCost)
+	elseif string.match(sItemCost, '%-+') then
+		announceImproperCost(nodeChar, sItemName)
+		return 0
+	elseif string.match(sItemCost, '%/+') then
+		announceImproperCost(nodeChar, sItemName)
+		return 0
 	end
 
 	local sTrimmedItemCost = sItemCost:gsub('[^0-9.-]', '')
