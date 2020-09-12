@@ -12,20 +12,28 @@ function onInit()
 end
 
 ---  This function posts a message in the chat window if the item cost contains a hyphen or a slash.
-local function announceImproperCost(nodeChar, sItemName)
+local function announceImproperCost(nodeChar, sItemName, bLowestUsed)
 	local nAnnounce = DB.getValue(nodeChar, 'coins.costerrorannouncer', 1)
 	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
 		local sHoldingPc = DB.getValue(nodeChar, 'name', 'unknown character')
-		ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has its cost entered wrong and is being ignored.')
+		if bLowestUsed then
+			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has its cost entered as a range of values and the lowest listed value is being used.')
+		else
+			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has its cost entered wrong and is being ignored.')
+		end
 	end
 end
 
 ---	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(nodeChar, sItemCost, sItemName)
-	if string.match(sItemCost, '%-') or string.match(sItemCost, '%/') then
-		announceImproperCost(nodeChar, sItemName)
-
+	if sItemCost == '-' then
 		return 0
+	elseif string.match(sItemCost, '%/') then
+		announceImproperCost(nodeChar, sItemName, true)
+		sItemCost = string.match(sItemCost, "(.+)%/") -- thanks to FeatherRin on FG Forums for the inspiration
+	elseif string.match(sItemCost, '%-') then
+		announceImproperCost(nodeChar, sItemName, true)
+		sItemCost = string.match(sItemCost, "(.+)%-") -- thanks to FeatherRin on FG Forums for the inspiration
 	end
 
 	local sTrimmedItemCost = sItemCost:gsub('[^0-9.-]', '')
