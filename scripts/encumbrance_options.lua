@@ -3,10 +3,6 @@
 --
 
 function onInit()
-	registerOptions()
-end
-
-function registerOptions()
 	OptionsManager.registerOption2('ENCUMBRANCE_UNIT', false, 'option_header_game', 'opt_lab_enc_unit', 'option_entry_cycler', 
 		{ labels = 'enc_opt_enc_unit_kg|enc_opt_enc_unit_kg-full', values = 'kg|kg-full', baselabel = 'enc_opt_enc_unit_lb', baseval = 'lb', default = 'lb' })
 
