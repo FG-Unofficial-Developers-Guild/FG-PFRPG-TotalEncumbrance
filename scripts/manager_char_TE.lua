@@ -279,3 +279,32 @@ function calcItemArmorClass(nodeChar)
 	if bSpeedHalved then nSpeedTotal = nSpeedTotal / 2 elseif bSpeedZero then nSpeedTotal = 0 end
 	DB.setValue(nodeChar, 'speed.total', 'number', nSpeedTotal)
 end
+
+local function isWeightless(nodeItem)
+	local sItemLoc = DB.getValue(nodeItem, "location", '')
+	local nItemCarried = DB.getValue(nodeItem, "carried", 0)
+	
+	if (string.find(sItemLoc, 'holding') or string.find(sItemLoc, 'portable hole') or string.find(sItemLoc, 'efficient quiver')) and (nItemCarried ~= 2) then
+		Debug.chat(sItemLoc)
+		return true
+	end
+end
+
+function updateEncumbrance(nodeChar)
+	local nEncTotal = 0;
+
+	local nCount, nWeight;
+	for _,vNode in pairs(DB.getChildren(nodeChar, "inventorylist")) do
+		if DB.getValue(vNode, "carried", 0) ~= 0 and not isWeightless(vNode) then
+			nCount = DB.getValue(vNode, "count", 0);
+			if nCount < 1 then
+				nCount = 1;
+			end
+			nWeight = DB.getValue(vNode, "weight", 0);
+			
+			nEncTotal = nEncTotal + (nCount * nWeight);
+		end
+	end
+
+	DB.setValue(nodeChar, "encumbrance.load", "number", nEncTotal);
+end

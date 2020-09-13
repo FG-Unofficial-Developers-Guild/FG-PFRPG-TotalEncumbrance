@@ -24,6 +24,7 @@ function onInit()
 	DB.addHandler(DB.getPath(node, "*.speed30"), "onUpdate", onArmorChanged);
 	DB.addHandler(DB.getPath(node, "*.carried"), "onUpdate", onCarriedChanged);
 	DB.addHandler(DB.getPath(node, "*.weight"), "onUpdate", onEncumbranceChanged);
+	DB.addHandler(DB.getPath(node, "*.location"), "onUpdate", onEncumbranceChanged);
 	DB.addHandler(DB.getPath(node, "*.count"), "onUpdate", onEncumbranceChanged);
 	DB.addHandler(DB.getPath(node), "onChildDeleted", onEncumbranceChanged);
 end
@@ -40,6 +41,7 @@ function onClose()
 	DB.removeHandler(DB.getPath(node, "*.speed30"), "onUpdate", onArmorChanged);
 	DB.removeHandler(DB.getPath(node, "*.carried"), "onUpdate", onCarriedChanged);
 	DB.removeHandler(DB.getPath(node, "*.weight"), "onUpdate", onEncumbranceChanged);
+	DB.removeHandler(DB.getPath(node, "*.location"), "onUpdate", onEncumbranceChanged);
 	DB.removeHandler(DB.getPath(node, "*.count"), "onUpdate", onEncumbranceChanged);
 	DB.removeHandler(DB.getPath(node), "onChildDeleted", onEncumbranceChanged);
 end
@@ -94,8 +96,8 @@ function onCarriedChanged(nodeField)
 end
 
 function onEncumbranceChanged()
-	if CharManager.updateEncumbrance then
-		CharManager.updateEncumbrance(window.getDatabaseNode());
+	if CharManagerTE.updateEncumbrance then
+		CharManagerTE.updateEncumbrance(window.getDatabaseNode());
 	end
 	
 	CharManagerTE.calcItemArmorClass(window.getDatabaseNode());
