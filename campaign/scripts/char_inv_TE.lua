@@ -64,9 +64,8 @@ end
 
 ---	Determine the total bonus to carrying capacity from effects STR or CARRY
 --	@param rActor a table containing relevant paths and information on this PC
---	@param nStrength the PC's base strength score
 --	@return nStrEffectMod the PC's current strength score after all bonuses are applied
-local function getStrEffectBonus(rActor, nStrength)
+local function getStrEffectBonus(rActor)
 	if not rActor then
 		return 0
 	end
@@ -123,7 +122,7 @@ function onEncumbranceChanged()
 
 	nStrength = nStrength + nStrengthAdj
 	
-	local nStrEffectMod = getStrEffectBonus(rActor, nStrength)
+	local nStrEffectMod = getStrEffectBonus(rActor)
 	DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
 
 --	modify onEncumbranceChanged to include STR effects in calculating carrying capacity (only if CARRY_CAPACITY_FROM_EFFECTS is enabled in options)
