@@ -72,7 +72,6 @@ local function getStrEffectBonus(rActor, nStrength)
 	end
 
 	local nStrEffectMod = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
-	local nCarryBonus = EffectManagerTE.getEffectsBonus(rActor, 'CARRY', true)
 
 	if EffectManagerTE.hasEffectCondition(rActor, 'Exhausted') then
 		nStrEffectMod = nStrEffectMod - 6
@@ -84,6 +83,7 @@ local function getStrEffectBonus(rActor, nStrength)
 		nStrEffectMod = -1 * nStrEffectMod
 	end
 
+	local nCarryBonus = EffectManagerTE.getEffectsBonus(rActor, 'CARRY', true)
 	if nCarryBonus then
 		nStrEffectMod = nStrEffectMod + nCarryBonus
 	end
