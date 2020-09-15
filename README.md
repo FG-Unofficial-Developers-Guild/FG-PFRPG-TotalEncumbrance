@@ -10,9 +10,10 @@ The spell failure compenent previously included here is now available as [its ow
 * Include the [Armor Expert trait](https://www.d20pfsrd.com/traits/combat-traits/armor-expert/), [Muscle of the Society trait](https://www.d20pfsrd.com/traits/combat-traits/muscle-of-the-society/), and [Armor Training fighter class feature](https://www.d20pfsrd.com/classes/Core-Classes/Fighter/#Armor_Training_Ex) in carry capacity and armor calculations.
 * Auto-change speed based on weight encumbrance and some supported Pathfinder conditions.
 * Compute and display total net worth (all items + coins) at the top of the treasure box on the Inventory tab.
+* Provide rudimentary support for extraplanar storage by ignoring the weight of carried items that aren't equipped and have the terms "holding", "portable hole", or "efficient quiver" in the location field. "Handy haversack" will be added in the next update as I forgot about that when adding this feature.
 
 # Compatibility and Configuration
-This extension has been tested with [FantasyGrounds Classic](https://www.fantasygrounds.com/home/FantasyGroundsClassic.php) 3.3.11 and [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) 4.0.0 (2020-08-05).
+This extension has been tested with [FantasyGrounds Classic](https://www.fantasygrounds.com/home/FantasyGroundsClassic.php) 3.3.11 and [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) 4.0.0 (2020-09-03).
 
 In-game controls for enabling/disabling/configuring some extension components are in FantasyGrounds' "Options" menu.
 Any values designed to be user-modifiable are located in [scripts/encumbrance_globals.lua](https://github.com/bmos/FG-PFRPG-TotalEncumbrance/blob/master/scripts/encumbrance_globals.lua) and include:
