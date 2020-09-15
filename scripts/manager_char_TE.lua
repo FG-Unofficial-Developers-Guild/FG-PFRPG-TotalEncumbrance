@@ -283,7 +283,7 @@ end
 local function isWeightless(nodeItem)
 	local sItemLoc = string.lower(DB.getValue(nodeItem, "location", ''))
 	local nItemCarried = DB.getValue(nodeItem, "carried", 0)
-	if (string.find(sItemLoc, 'holding') or string.find(sItemLoc, 'portable hole') or string.find(sItemLoc, 'efficient quiver')) and (nItemCarried ~= 2) then
+	if (string.find(sItemLoc, 'holding') or string.find(sItemLoc, 'portable hole') or string.find(sItemLoc, 'efficient quiver') or string.find(sItemLoc, 'handy haversack')) and (nItemCarried ~= 2) then
 		return true
 	end
 end
