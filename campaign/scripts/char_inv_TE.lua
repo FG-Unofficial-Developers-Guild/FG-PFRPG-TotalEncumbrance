@@ -70,8 +70,8 @@ local function getStrEffectBonus(rActor)
 		return 0
 	end
 
-	local nStrEffectMod = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
-
+	local nStrEffectMod = 0
+	
 	if EffectManagerTE.hasEffectCondition(rActor, 'Exhausted') then
 		nStrEffectMod = nStrEffectMod - 6
 	elseif EffectManagerTE.hasEffectCondition(rActor, 'Fatigued') then
@@ -81,6 +81,9 @@ local function getStrEffectBonus(rActor)
 	if EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
 		nStrEffectMod = -1 * nStrEffectMod
 	end
+
+	local nStrEffects = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
+	if nStrEffects and not DataCommon.isPFRPG() then nStrEffectMod = nStrEffectMod + nStrEffects end
 
 	local nCarryBonus = EffectManagerTE.getEffectsBonus(rActor, 'CARRY', true)
 	if nCarryBonus then
