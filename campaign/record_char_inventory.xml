@@ -104,10 +104,12 @@
 						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
 					end
 				</script>
+				<invisible />
 			</simplenumber>
 			<label_fieldtop name="encumbranceload_label">
 				<anchored to="encumbranceload" />
 				<static textres="char_label_totalweight2" />
+				<invisible />
 			</label_fieldtop>
 
 		<!--Coin Total Field-->
@@ -117,10 +119,12 @@
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
+				<invisible />
 			</simplenumber>
 			<label_fieldtop name="treasureload_label">
-			<anchored to="treasureload" />
+				<anchored to="treasureload" />
 				<static textres="char_label_treasureload" />
+				<invisible />
 			</label_fieldtop>
 
 		<!--Total Field-->
