@@ -8,15 +8,7 @@
 	<windowclass name="charsheet_inventory" merge="join">
 		<script file="campaign/scripts/char_inv_TE.lua" />
 		<sheetdata>
-	<!-- Inventory List -->
-			<frame_char name="inventoryframe">
-				<bounds>15,0,-29,-215</bounds>
-			</frame_char>
-
 	<!--Armor-->
-			<frame_char name="armorpenaltyframe" insertbefore="encumbranceframe">
-				<bounds>15,-215,240,58</bounds>
-			</frame_char>
 			<basicnumber name="armormaxstatbonus">
 				<hideonvalue>999</hideonvalue>
 				<default>999</default>
@@ -73,31 +65,13 @@
 			</basicnumber>
 
 	<!--Encumbrance Frame-->
-			<frame_char name="encumbranceframe">
-				<bounds>15,-157,240,152</bounds>
-			</frame_char>
 			<label name="encumbrance_label">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="15,10" />
+				<anchored offset="15,16" />
 				<static textres="char_label_totalweight" />
 			</label>
-			<simplenumber name="encumbrancelightload" source="encumbrance.lightload" insertbefore="coinframe">
-				<anchored to="encumbranceframe" position="insidetopleft" offset="20,42" width="55" height="20" />
-			</simplenumber>
-			<simplenumber name="encumbrancemediumload" source="encumbrance.mediumload" insertbefore="coinframe">
-				<anchored to="encumbrancelightload" position="right" offset="15,0" width="55" />
-			</simplenumber>
-			<simplenumber name="encumbranceheavyload" source="encumbrance.heavyload" insertbefore="coinframe">
-				<anchored to="encumbrancemediumload" position="right" offset="15,0" width="55" />
-			</simplenumber>
-			<simplenumber name="encumbranceliftoverhead" source="encumbrance.liftoverhead" insertbefore="coinframe">
-				<anchored to="encumbrancelightload" position="below" offset="0,17" height="20" />
-				<frame name="fieldlight" offset="7,5,7,5" />
-			</simplenumber>
-
+			
 		<!--Equipment Total Field-->
 			<simplenumber name="encumbranceload" source="encumbrance.load">
-				<anchored to="encumbranceframe" position="insidebottomright" offset="94,16" width="55" height="20" />
-				<frame name="fieldlight" offset="7,5,7,5" />
 				<readonly />
 				<script>
 					function onValueChanged()
@@ -106,31 +80,21 @@
 				</script>
 				<invisible />
 			</simplenumber>
-			<label_fieldtop name="encumbranceload_label">
-				<anchored to="encumbranceload" />
-				<static textres="char_label_totalweight2" />
-				<invisible />
-			</label_fieldtop>
 
 		<!--Coin Total Field-->
 			<simplenumber name="treasureload" source="encumbrance.treasure">
-				<anchored to="encumbranceliftoverhead" position="below" offset="0,17" height="20" />
-				<bottom parent="encumbranceframe"  offset="-5"/>
+				<anchored to="encumbranceheavyload" position="above" offset="0,17" height="20" />
+				<top parent="encumbranceframe"  offset="5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
 				<invisible />
 			</simplenumber>
-			<label_fieldtop name="treasureload_label">
-				<anchored to="treasureload" />
-				<static textres="char_label_treasureload" />
-				<invisible />
-			</label_fieldtop>
 
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbrancepushordrag" position="below" offset="0,17" height="20" />
-				<bottom parent="encumbranceframe"  offset="-5"/>
+				<anchored to="encumbranceheavyload" position="above" offset="0,17" height="20" />
+				<top parent="encumbranceframe"  offset="5"/>
 				<frame name="fieldlight" offset="7,5,7,5" />
 				<font>sheetlabel</font>
 				<readonly />
@@ -141,19 +105,15 @@
 			</label_fieldtop>
 
 	<!--Coin Frame-->
-			<frame_char name="coinframe">
-				<bounds>255,-215,-29,210</bounds>
-			</frame_char>
 			<label name="coin_label" merge="replace">
-				<anchored to="coinframe" position="insidetopleft" offset="15,10" />
+				<anchored to="coinframe" position="insidetopleft" offset="15,7" />
 				<static textres="char_label_money" />
 			</label>
-
 
 		<!--Carried Coin of Coin Type 1-->
 			<number_dropadd name="coinamount1" >
 				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinframe" position="insidetopleft" offset="20,42" width="40" height="20" />
+				<anchored to="coinframe" position="insidetopleft" offset="20,30" width="40" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
