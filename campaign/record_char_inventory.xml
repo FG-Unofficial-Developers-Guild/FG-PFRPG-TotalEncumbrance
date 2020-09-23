@@ -81,16 +81,6 @@
 				<invisible />
 			</simplenumber>
 
-		<!--Coin Total Field-->
-			<simplenumber name="treasureload" source="encumbrance.treasure">
-				<anchored to="encumbranceheavyload" position="above" offset="0,17" height="20" />
-				<top parent="encumbranceframe"  offset="5"/>
-				<frame name="fieldlight" offset="7,5,7,5" />
-				<font>sheetlabel</font>
-				<readonly />
-				<invisible />
-			</simplenumber>
-
 		<!--Total Field-->
 			<simplenumber name="totalload" source="encumbrance.total">
 				<anchored to="encumbranceheavyload" position="above" offset="0,17" height="20" />
@@ -112,34 +102,18 @@
 
 		<!--Carried Coin of Coin Type 1-->
 			<number_dropadd name="coinamount1" >
-				<tooltip textres="char_tooltip_carriedcoin" />
-				<anchored to="coinframe" position="insidetopleft" offset="20,30" width="40" height="20" />
+				<anchored to="coinframe" position="insidetopleft" offset="20,30" width="55" height="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinamount1a" />
-			</number_dropadd>
-
-		<!--Non Carried Coin of Coin Type 1-->
-			<number_dropadd name="coinamount1a" source="coins.slot1.amountA">
-				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount1" position="righthigh" offset="10,0" width="40" height="20" />
-				<script>
-					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-					end
-				</script>
-				<frame name="fielddark" offset="7,5,7,5" />
-				<delaykeyupdate />
-				<tabtarget next="coinname1" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 1-->
 			<stringu name="coinname1" source="coins.slot1.name">
-				<anchored to="coinamount1" position="righthigh" offset="60,0" width="20" />
+				<anchored to="coinamount1" position="righthigh" offset="10,0" width="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -147,12 +121,10 @@
 				</script>
 				<default>pp</default>
 				<delaykeyupdate />
-				<tabtarget next="coinamount2" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 2-->
 			<number_dropadd name="coinamount2">
-				<tooltip textres="char_tooltip_carriedcoin" />
 				<anchored to="coinamount1" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
@@ -160,26 +132,11 @@
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinamount2a" />
-			</number_dropadd>
-
-		<!--Non Carried Coin of Coin Type 2-->
-			<number_dropadd name="coinamount2a" source="coins.slot2.amountA">
-				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount2" position="righthigh" offset="10,0" width="40" height="20" />
-				<script>
-					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-					end
-				</script>
-				<frame name="fielddark" offset="7,5,7,5" />
-				<delaykeyupdate />
-				<tabtarget next="coinname2" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 2-->
 			<stringu name="coinname2" source="coins.slot2.name">
-				<anchored to="coinamount2" position="righthigh" offset="60,0" width="20"/>
+				<anchored to="coinamount2" position="righthigh" offset="10,0" width="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -187,12 +144,10 @@
 				</script>
 				<default>gp</default>
 				<delaykeyupdate />
-				<tabtarget next="coinamount3" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 3-->
 			<number_dropadd name="coinamount3">
-				<tooltip textres="char_tooltip_carriedcoin" />
 				<anchored to="coinamount2" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
@@ -200,26 +155,11 @@
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinamount3a" />
-			</number_dropadd>
-
-		<!--Non Carried Coin of Coin Type 3-->
-			<number_dropadd name="coinamount3a" source="coins.slot3.amountA">
-				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount3" position="right" offset="10,0" width="40" />
-				<script>
-					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-					end
-				</script>
-				<frame name="fielddark" offset="7,5,7,5" />
-				<delaykeyupdate />
-				<tabtarget next="coinname3" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 3-->
 			<stringu name="coinname3" source="coins.slot3.name" merge="replace">
-				<anchored to="coinamount3" position="right" offset="60,0" width="20" />
+				<anchored to="coinamount3" position="right" offset="10,0" width="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -227,12 +167,10 @@
 				</script>
 				<default>sp</default>
 				<delaykeyupdate />
-				<tabtarget next="coinamount4" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 4-->
 			<number_dropadd name="coinamount4">
-				<tooltip textres="char_tooltip_carriedcoin" />
 				<anchored to="coinamount3" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
@@ -240,26 +178,11 @@
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinamount4a" />
-			</number_dropadd>
-
-		<!--Non Carried Coin of Coin Type 4-->
-			<number_dropadd name="coinamount4a" source="coins.slot4.amountA">
-				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount4" position="righthigh" offset="10,0" width="40" height="20" />
-				<script>
-					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-					end
-				</script>
-				<frame name="fielddark" offset="7,5,7,5" />
-				<delaykeyupdate />
-				<tabtarget next="coinname4" />
 			</number_dropadd>
 			
 		<!--Label of Coin Type 4-->
 			<stringu name="coinname4" source="coins.slot4.name">
-				<anchored to="coinamount4" position="righthigh" offset="60,0" width="20" />
+				<anchored to="coinamount4" position="righthigh" offset="10,0" width="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
@@ -267,12 +190,10 @@
 				</script>
 				<default>cp</default>
 				<delaykeyupdate />
-				<tabtarget next="coinamount5" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 5-->
 			<number_dropadd name="coinamount5">
-				<tooltip textres="char_tooltip_carriedcoin" />
 				<anchored to="coinamount4" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
@@ -280,38 +201,21 @@
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinamount5a" />
-			</number_dropadd>
-
-		<!--Non Carried Coin of Coin Type 5-->
-			<number_dropadd name="coinamount5a" source="coins.slot5.amountA">
-				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount5" position="righthigh" offset="10,0" width="40" height="20" />
-				<script>
-					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-					end
-				</script>
-				<frame name="fielddark" offset="7,5,7,5" />
-				<delaykeyupdate />
-				<tabtarget next="coinname5" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 5-->
 			<stringu name="coinname5" source="coins.slot5.name">
-				<anchored to="coinamount5" position="righthigh" offset="60,0" width="20" />
+				<anchored to="coinamount5" position="righthigh" offset="10,0" width="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinamount6" />
 			</stringu>
 
 		<!--Carried Coin of Coin Type 6-->
 			<number_dropadd name="coinamount6">
-				<tooltip textres="char_tooltip_carriedcoin" />
 				<anchored to="coinamount5" position="below" offset="0,6" height="20" />
 				<script>
 					function onValueChanged()
@@ -319,45 +223,18 @@
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinamount6a" />
-			</number_dropadd>
-
-		<!--Non Carried Coin of Coin Type 6-->
-			<number_dropadd name="coinamount6a" source="coins.slot6.amountA">
-				<tooltip textres="char_tooltip_noncarriedcoin" />
-				<anchored to="coinamount6" position="righthigh" offset="10,0" width="40" height="20" />
-				<script>
-					function onValueChanged()
-						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
-					end
-				</script>
-				<frame name="fielddark" offset="7,5,7,5" />
-				<delaykeyupdate />
-				<tabtarget next="coinname6" />
 			</number_dropadd>
 
 		<!--Label of Coin Type 6-->
 			<stringu name="coinname6" source="coins.slot6.name">
-				<anchored to="coinamount6" position="righthigh" offset="60,0" width="20" />
+				<anchored to="coinamount6" position="righthigh" offset="10,0" width="20" />
 				<script>
 					function onValueChanged()
 						CoinsWeight.onCoinsValueChanged(window.getDatabaseNode())
 					end
 				</script>
 				<delaykeyupdate />
-				<tabtarget next="coinother" />
 			</stringu>
-			
-		<!-- Coins 'Other' Text Box -->
-			<basicstring name="coinother">
-				<anchored>
-					<left parent="coinname1" anchor="right" offset="10" />
-					<right parent="coinframe" offset="-15" />
-					<top parent="coinamount1" />
-					<bottom parent="coinamount6" />
-				</anchored>
-				<multilinespacing>20</multilinespacing>
-			</basicstring>
 			
 		<!-- Wealth Total -->
 			<stringu name="wealthtotal" source="coins.wealthtotal">

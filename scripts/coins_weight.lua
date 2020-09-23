@@ -25,9 +25,17 @@ local function computeCoins(nodeChar)
 	local nTotalCoins = 0
 	local nWealth = 0
 
-	for _,coin in pairs(DB.getChildren(nodeChar, 'coins')) do
-		local sDenomination = string.lower(DB.getValue(coin, 'name', ''))
-		local nCoinAmount = DB.getValue(coin, 'amount', 0) + DB.getValue(coin, 'amountA', 0)
+	for _,nodeCoinSlot in pairs(DB.getChildren(nodeChar, 'coins')) do
+		local sDenomination = string.lower(DB.getValue(nodeCoinSlot, 'name', ''))
+		local nCoinAmount = DB.getValue(nodeCoinSlot, 'amount', 0)
+		
+		-- upgrade method to support removing second coins column
+		if DB.getValue(nodeCoinSlot, 'amountA') and DB.getValue(nodeCoinSlot, 'amountA', 0) ~= 0 then
+			nCoinAmount = nCoinAmount + DB.getValue(nodeCoinSlot, 'amountA', 0)
+			DB.setValue(nodeCoinSlot, 'amount', 'number', nCoinAmount)
+			if DB.getValue(nodeCoinSlot, 'amountA') then nodeCoinSlot.getChild('amountA').delete() end
+		end
+		
 		if sDenomination ~= '' then
 			for k,v in pairs(TEGlobals.tDenominations) do
 				if string.match(sDenomination, k) then
