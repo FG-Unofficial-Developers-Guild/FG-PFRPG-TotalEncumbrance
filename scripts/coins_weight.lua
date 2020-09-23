@@ -4,9 +4,6 @@
 
 --	This function facilitates imperial/metric options
 function recomputeTotalWeight(nodeChar)
-	local rActor = ActorManager.getActor('pc', nodeChar)
-	local nodeChar = DB.findNode(rActor['sCreatureNode'])
-
 	local nEqLoad = DB.getValue(nodeChar, 'encumbrance.load') * TEGlobals.getEncWeightUnit()
 
 	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg-full') then
@@ -72,7 +69,5 @@ end
 
 --	This function is called when a coin field is changed
 function onCoinsValueChanged(nodeChar)
-	local rActor = ActorManager.getActor('pc', nodeChar)
-	local nodeChar = DB.findNode(rActor['sCreatureNode'])
 	computeCoins(nodeChar)
 end
