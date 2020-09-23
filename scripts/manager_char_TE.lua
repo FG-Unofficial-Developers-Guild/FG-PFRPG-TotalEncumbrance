@@ -316,6 +316,17 @@ function updateEncumbrance(nodeChar)
 	
 	for _,t in pairs(aExtraplanarContainers) do
 		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotal'])
+		
+		local nItemCapacity = DB.getValue(t['nodeItem'], 'capacityweight', 0)
+		if nItemCapacity > 0 then
+			if not DB.getValue(t['nodeItem'], 'weightbak') then DB.setValue(t['nodeItem'], 'weightbak', 'number', DB.getValue(t['nodeItem'], 'weight', 0)) end
+			if (t['nTotal'] > nItemCapacity) and DB.getValue(t['nodeItem'], 'weightbak') then
+				local nHeavyWeight = t['nTotal'] - nItemCapacity + DB.getValue(t['nodeItem'], 'weightbak')
+				DB.setValue(t['nodeItem'], 'weight', 'number', nHeavyWeight)
+			elseif DB.getValue(t['nodeItem'], 'weightbak') then
+				DB.setValue(t['nodeItem'], 'weight', 'number', DB.getValue(t['nodeItem'], 'weightbak', 0))
+			end
+		end
 	end
 	
 	DB.setValue(nodeChar, 'encumbrance.load', 'number', nEncTotal)
