@@ -287,18 +287,15 @@ local function isWeightless(nodeItem, sItemLoc, nItemCarried)
 end
 
 function updateEncumbrance(nodeChar)
-	local aExtraplanarContainers = {} -- this is a table to contain all extraplanar storage containers
+	local aExtraplanarContainers = {} -- this creates an array keyed to the names of any detected extraplanar storage containers
 	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
 		local sItemName = string.lower(DB.getValue(nodeItem, 'name', ''))
-		if DB.getValue(nodeItem, 'extraplanarcontents', 0) ~= 0 then
-			nodeItem.getChild('extraplanarcontents').delete()
-		end
 		if string.find(sItemName, 'of holding') or string.find(sItemName, 'portable hole') or string.find(sItemName, 'efficient quiver') or string.find(sItemName, 'handy haversack') then
 			aExtraplanarContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
 		end
 	end
 
-	local nEncTotal = 0 -- this is the total of all items carried by the character
+	local nEncTotal = 0 -- this will cointain a running total of all items carried by the character
 	
 	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
 		local nItemCarried = DB.getValue(nodeItem, 'carried', 0)
