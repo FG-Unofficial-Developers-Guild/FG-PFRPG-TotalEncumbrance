@@ -2,6 +2,13 @@
 --	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
+local function onEncumbranceChanged(nodeChar)
+	if CharManagerTE then
+		CharManagerTE.updateEncumbrance(nodeChar)
+		CharManagerTE.calcItemArmorClass(nodeChar)
+	end
+end
+
 --	This function facilitates imperial/metric options
 function recomputeTotalWeight(nodeChar)
 	local nEqLoad = DB.getValue(nodeChar, 'encumbrance.load') * TEGlobals.getEncWeightUnit()
@@ -14,6 +21,7 @@ function recomputeTotalWeight(nodeChar)
 	local nTotalToSet =	nTotal + 0.5 - (nTotal + 0.5) % 1
 
 	DB.setValue(nodeChar, 'encumbrance.total', 'number', nTotalToSet)
+	onEncumbranceChanged(nodeChar)
 end
 
 ---	Calculate weight of all coins and total value (in gp).
