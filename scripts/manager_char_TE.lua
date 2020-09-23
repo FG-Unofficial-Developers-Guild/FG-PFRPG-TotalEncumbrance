@@ -280,29 +280,46 @@ function calcItemArmorClass(nodeChar)
 	DB.setValue(nodeChar, 'speed.total', 'number', nSpeedTotal)
 end
 
-local function isWeightless(nodeItem)
-	local sItemLoc = string.lower(DB.getValue(nodeItem, "location", ''))
-	local nItemCarried = DB.getValue(nodeItem, "carried", 0)
-	if (string.find(sItemLoc, 'holding') or string.find(sItemLoc, 'portable hole') or string.find(sItemLoc, 'efficient quiver') or string.find(sItemLoc, 'handy haversack')) and (nItemCarried ~= 2) then
+local function isWeightless(nodeItem, sItemLoc, nItemCarried)
+	if (string.find(sItemLoc, 'of holding') or string.find(sItemLoc, 'portable hole') or string.find(sItemLoc, 'efficient quiver') or string.find(sItemLoc, 'handy haversack')) and (nItemCarried ~= 2) then
 		return true
 	end
 end
 
 function updateEncumbrance(nodeChar)
-	local nEncTotal = 0;
-
-	local nCount, nWeight;
-	for _,vNode in pairs(DB.getChildren(nodeChar, "inventorylist")) do
-		if DB.getValue(vNode, "carried", 0) ~= 0 and not isWeightless(vNode) then
-			nCount = DB.getValue(vNode, "count", 0);
-			if nCount < 1 then
-				nCount = 1;
-			end
-			nWeight = DB.getValue(vNode, "weight", 0);
-			
-			nEncTotal = nEncTotal + (nCount * nWeight);
+	local aExtraplanarContainers = {} -- this is a table to contain all extraplanar storage containers
+	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
+		local sItemName = string.lower(DB.getValue(nodeItem, 'name', ''))
+		if DB.getValue(nodeItem, 'extraplanarcontents', 0) ~= 0 then
+			nodeItem.getChild('extraplanarcontents').delete()
+		end
+		if string.find(sItemName, 'of holding') or string.find(sItemName, 'portable hole') or string.find(sItemName, 'efficient quiver') or string.find(sItemName, 'handy haversack') then
+			aExtraplanarContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
 		end
 	end
 
-	DB.setValue(nodeChar, "encumbrance.load", "number", nEncTotal);
+	local nEncTotal = 0 -- this is the total of all items carried by the character
+	
+	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
+		local nItemCarried = DB.getValue(nodeItem, 'carried', 0)
+		if nItemCarried ~= 0 then
+			local nCount = DB.getValue(nodeItem, 'count', 0);
+			local nWeight = DB.getValue(nodeItem, 'weight', 0);
+			local sItemLoc = string.lower(DB.getValue(nodeItem, 'location', ''))
+			
+			if not isWeightless(nodeItem, sItemLoc, nItemCarried) then
+				nEncTotal = nEncTotal + (nCount * nWeight)
+			else
+				if aExtraplanarContainers[sItemLoc] then
+					aExtraplanarContainers[sItemLoc]['nTotal'] = aExtraplanarContainers[sItemLoc]['nTotal'] + (nCount * nWeight)
+				end
+			end
+		end
+	end
+	
+	for _,t in pairs(aExtraplanarContainers) do
+		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotal'])
+	end
+	
+	DB.setValue(nodeChar, 'encumbrance.load', 'number', nEncTotal)
 end
