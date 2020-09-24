@@ -96,9 +96,9 @@ function onCarriedChanged(nodeField)
 end
 
 function onEncumbranceChanged()
+	local nodeChar = window.getDatabaseNode()
 	if CharManagerTE then
-		CharManagerTE.updateEncumbrance(nodeChar)
-		CharManagerTE.calcItemArmorClass(nodeChar)
+		CoinsWeight.recomputeTotalWeight(nodeChar)
 	end
 end
 
