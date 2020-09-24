@@ -27,6 +27,19 @@ function getEncWeightUnit()
 	return nUnit
 end
 
+function isWeightless(sItemName, nItemCarried)
+	local tExtraPlanarContainers = {}
+	table.insert(tExtraPlanarContainers, 'of holding')
+	table.insert(tExtraPlanarContainers, 'portable hole')
+	table.insert(tExtraPlanarContainers, 'efficient quiver')
+	table.insert(tExtraPlanarContainers, 'handy haversack')
+	for _,v in pairs(tExtraPlanarContainers) do
+		if (not nItemCarried or (nItemCarried ~= 2)) and string.find(sItemName, v) then
+			return true
+		end
+	end
+end
+
 --	Set multipliers for different currency denominations. nValue = value multiplier. nWeight = per-coin weight (in pounds -- conversion is automatic)
 aDenominations =
 	{

@@ -280,24 +280,11 @@ function calcItemArmorClass(nodeChar)
 	DB.setValue(nodeChar, 'speed.total', 'number', nSpeedTotal)
 end
 
-function isWeightless(sItemName, nItemCarried)
-	local tExtraPlanarContainers = {}
-	table.insert(tExtraPlanarContainers, 'of holding')
-	table.insert(tExtraPlanarContainers, 'portable hole')
-	table.insert(tExtraPlanarContainers, 'efficient quiver')
-	table.insert(tExtraPlanarContainers, 'handy haversack')
-	for _,v in pairs(tExtraPlanarContainers) do
-		if (not nItemCarried or (nItemCarried ~= 2)) and string.find(sItemName, v) then
-			return true
-		end
-	end
-end
-
 function updateEncumbrance(nodeChar)
 	local aExtraplanarContainers = {} -- this creates an array keyed to the names of any detected extraplanar storage containers
 	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
 		local sItemName = string.lower(DB.getValue(nodeItem, 'name', ''))
-		if isWeightless(sItemName) then
+		if TEGlobals.isWeightless(sItemName) then
 			aExtraplanarContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
 		end
 	end
@@ -311,7 +298,7 @@ function updateEncumbrance(nodeChar)
 			local nWeight = DB.getValue(nodeItem, 'weight', 0);
 			local sItemLoc = string.lower(DB.getValue(nodeItem, 'location', ''))
 			
-			if not isWeightless(sItemLoc, nItemCarried) then
+			if not TEGlobals.isWeightless(sItemLoc, nItemCarried) then
 				nEncTotal = nEncTotal + (nCount * nWeight)
 			else
 				if aExtraplanarContainers[sItemLoc] then
