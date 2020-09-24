@@ -329,7 +329,9 @@ function updateEncumbrance(nodeChar)
 			if not DB.getValue(t['nodeItem'], 'weightbak') then DB.setValue(t['nodeItem'], 'weightbak', 'number', DB.getValue(t['nodeItem'], 'weight', 0)) end
 			if (t['nTotal'] > nItemCapacity) and DB.getValue(t['nodeItem'], 'weightbak') then
 				local nHeavyWeight = t['nTotal'] - nItemCapacity + DB.getValue(t['nodeItem'], 'weightbak')
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
 				DB.setValue(t['nodeItem'], 'weight', 'number', nHeavyWeight)
+				ChatManager.SystemMessage(DB.getValue(nodeChar, 'name', 'A player') .. "'s " .. sItemName .. ' is full.')
 			elseif DB.getValue(t['nodeItem'], 'weightbak') then
 				DB.setValue(t['nodeItem'], 'weight', 'number', DB.getValue(t['nodeItem'], 'weightbak', 0))
 			end
