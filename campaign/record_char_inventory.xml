@@ -241,7 +241,7 @@
 				<readonly />
 				<script>
 					function onInit()
-						local nNetWorth = LibTotalEncumbrance.round(window.inventorytotal.getValue() + window.coinstotal.getValue(), 2)
+						local nNetWorth = LibTotalEncumbrance.round(window.inventorytotal.getValue(), 2)
 						local sNetWorth = LibTotalEncumbrance.formatCurrency(nNetWorth)
 						setValue('Net Worth: ' .. sNetWorth .. ' gp')
 						onValueChanged()
@@ -254,17 +254,6 @@
 				</script>
 			</stringu>
 			<basicnumber name="inventorytotal" source="coins.invtotalval">
-				<anchored to="coinframe" position="insidetopright" offset="15,23" />
-				<default>0</default>
-				<readonly />
-				<invisible />
-				<script>
-					function onValueChanged()
-						window.wealthtotal.onInit()
-					end
-				</script>
-			</basicnumber>
-			<basicnumber name="coinstotal" source="coins.coinstotalval">
 				<anchored to="coinframe" position="insidetopright" offset="15,23" />
 				<default>0</default>
 				<readonly />

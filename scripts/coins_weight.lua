@@ -60,18 +60,19 @@ local function computeCoins(nodeChar)
 				nodeOtherCoins = nodeItem
 			end
 		end
-		if nTotalCoinWeightToSet > 0 and not nodeOtherCoins then nodeOtherCoins = DB.createChild(nodeChar.getChild('inventorylist')) end
+		if nTotalCoinWeightToSet > 0 and not nodeOtherCoins then
+			nodeOtherCoins = DB.createChild(nodeChar.getChild('inventorylist'))
+		end
 		if nTotalCoinWeightToSet == 0 and nodeOtherCoins then
 			nodeOtherCoins.delete()
 		elseif nodeOtherCoins then
 			DB.setValue(nodeOtherCoins, 'name', 'string', 'Coins')
 			DB.setValue(nodeOtherCoins, 'type', 'string', 'Wealth and Money')
+			DB.setValue(nodeOtherCoins, 'cost', 'string', nWealth .. ' gp')
 			DB.setValue(nodeOtherCoins, 'weight', 'number', nTotalCoinWeightToSet)
 			DB.setValue(nodeOtherCoins, 'description', 'formattedtext', '<p>The standard coin weighs about a third of an ounce (50 to the pound).</p>')
 		end
 	end
-
-	DB.setValue(nodeChar, 'coins.coinstotalval', 'number', nWealth)
 	
 	recomputeTotalWeight(nodeChar)
 end
