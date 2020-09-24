@@ -65,6 +65,7 @@ local function computeCoins(nodeChar)
 			nodeOtherCoins.delete()
 		elseif nodeOtherCoins then
 			DB.setValue(nodeOtherCoins, 'name', 'string', 'Coins')
+			DB.setValue(nodeOtherCoins, 'type', 'string', 'Wealth and Money')
 			DB.setValue(nodeOtherCoins, 'weight', 'number', nTotalCoinWeightToSet)
 			DB.setValue(nodeOtherCoins, 'description', 'formattedtext', '<p>The standard coin weighs about a third of an ounce (50 to the pound).</p>')
 		end
