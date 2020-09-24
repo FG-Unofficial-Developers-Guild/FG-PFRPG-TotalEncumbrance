@@ -318,9 +318,14 @@ function updateEncumbrance(nodeChar)
 				local nHeavyWeight = t['nTotal'] - nItemCapacity + DB.getValue(t['nodeItem'], 'weightbak')
 				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
 				DB.setValue(t['nodeItem'], 'weight', 'number', nHeavyWeight)
-				ChatManager.SystemMessage(DB.getValue(nodeChar, 'name', 'A player') .. "'s " .. sItemName .. ' is overfull.\nSelf destructing in 10.. 9.. 8.. 6.. just kidding!')
+
+				if not t['nodeItem'].getChild('announced') then
+					DB.setValue(t['nodeItem'], 'announced', 'number', 1)
+					ChatManager.SystemMessage(DB.getValue(nodeChar, 'name', 'A player') .. "'s " .. sItemName .. ' is overfull.\nSelf destructing in 10.. 9.. 8.. 6.. just kidding!')
+				end
 			elseif DB.getValue(t['nodeItem'], 'weightbak') then
 				DB.setValue(t['nodeItem'], 'weight', 'number', DB.getValue(t['nodeItem'], 'weightbak', 0))
+				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
 			end
 		end
 	end
