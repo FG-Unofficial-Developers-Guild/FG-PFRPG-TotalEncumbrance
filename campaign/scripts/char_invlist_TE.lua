@@ -97,7 +97,7 @@ end
 
 function onEncumbranceChanged()
 	local nodeChar = window.getDatabaseNode()
-	if CharManagerTE then
+	if CoinsWeight then
 		CoinsWeight.recomputeTotalWeight(nodeChar)
 	end
 end
