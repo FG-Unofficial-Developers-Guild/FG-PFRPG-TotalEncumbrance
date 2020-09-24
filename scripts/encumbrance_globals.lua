@@ -27,11 +27,14 @@ function getEncWeightUnit()
 	return nUnit
 end
 
---	Change coinsperunit to the number of coins that equals 1 pound (even if using kg, the conversion is automatic)
-nCoinsPerUnit = 50
-
---	Set multipliers for different currency denominations
-tDenominations = {['pp'] = 10, ['gp'] = 1, ['ep'] = 0.5, ['sp'] = 0.1, ['cp'] = 0.01}
+--	Set multipliers for different currency denominations. nValue = value multiplier. nWeight = per-coin weight (in pounds -- conversion is automatic)
+aDenominations =
+	{
+	['pp'] = {['nValue'] = 10, ['nWeight'] = .02},
+	['gp'] = {['nValue'] = 1, ['nWeight'] = .02},
+	['sp'] = {['nValue'] = .1, ['nWeight'] = .02},
+	['cp'] = {['nValue'] = .01, ['nWeight'] = .02},
+	}
 
 --	Change the encumbrance penalties
 nHeavyMaxStat = 1

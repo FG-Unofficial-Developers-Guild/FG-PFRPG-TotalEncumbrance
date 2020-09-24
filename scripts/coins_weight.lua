@@ -27,7 +27,7 @@ end
 ---	Calculate weight of all coins and total value (in gp).
 --	@param nodeChar databasenode of PC within charsheet
 local function computeCoins(nodeChar)
-	local nTotalCoins = 0
+	local nTotalCoinsWeight = 0
 	local nWealth = 0
 
 	for _,nodeCoinSlot in pairs(DB.getChildren(nodeChar, 'coins')) do
@@ -42,16 +42,16 @@ local function computeCoins(nodeChar)
 		end
 		
 		if sDenomination ~= '' then
-			for k,v in pairs(TEGlobals.tDenominations) do
-				if string.match(sDenomination, k) then
-					nWealth = nWealth + (nCoinAmount * v)
+			for sDenominationName,tDenominationData in pairs(TEGlobals.aDenominations) do
+				if string.match(sDenomination, sDenominationName) then
+					nWealth = nWealth + (nCoinAmount * tDenominationData['nValue'])
+					nTotalCoinsWeight = nTotalCoinsWeight + (nCoinAmount * tDenominationData['nWeight'])
 				end
 			end
 		end
-		nTotalCoins = nTotalCoins + nCoinAmount
 	end
 
-	local nTotalCoinWeightToSet = math.floor((nTotalCoins / TEGlobals.nCoinsPerUnit) * TEGlobals.getEncWeightUnit())
+	local nTotalCoinWeightToSet = math.floor(nTotalCoinsWeight * TEGlobals.getEncWeightUnit())
 	if nTotalCoinWeightToSet then
 		local nodeOtherCoins
 		for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
