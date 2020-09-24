@@ -30,8 +30,10 @@ end
 --	Set multipliers for different currency denominations. nValue = value multiplier. nWeight = per-coin weight (in pounds -- conversion is automatic)
 aDenominations =
 	{
+	-- ['mp'] = {['nValue'] = 500, ['nWeight'] = .3}, -- these are mithral pieces for for Asgurgolas (homebrew)
 	['pp'] = {['nValue'] = 10, ['nWeight'] = .02},
 	['gp'] = {['nValue'] = 1, ['nWeight'] = .02},
+	-- ['ep'] = {['nValue'] = .5, ['nWeight'] = .02}, -- electrum pieces (for homebrew)
 	['sp'] = {['nValue'] = .1, ['nWeight'] = .02},
 	['cp'] = {['nValue'] = .01, ['nWeight'] = .02},
 	}
