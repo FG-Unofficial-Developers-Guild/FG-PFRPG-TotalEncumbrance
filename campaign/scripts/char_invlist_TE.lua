@@ -96,11 +96,10 @@ function onCarriedChanged(nodeField)
 end
 
 function onEncumbranceChanged()
-	if CharManagerTE.updateEncumbrance then
-		CharManagerTE.updateEncumbrance(window.getDatabaseNode());
+	if CharManagerTE then
+		CharManagerTE.updateEncumbrance(nodeChar)
+		CharManagerTE.calcItemArmorClass(nodeChar)
 	end
-	
-	CharManagerTE.calcItemArmorClass(window.getDatabaseNode());
 end
 
 function onListChanged()
