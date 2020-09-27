@@ -27,11 +27,29 @@ function getEncWeightUnit()
 	return nUnit
 end
 
---	Change coinsperunit to the number of coins that equals 1 pound (even if using kg, the conversion is automatic)
-nCoinsPerUnit = 50
+function isWeightless(sItemName, nItemCarried)
+	local tExtraPlanarContainers = {}
+	table.insert(tExtraPlanarContainers, 'of holding')
+	table.insert(tExtraPlanarContainers, 'portable hole')
+	table.insert(tExtraPlanarContainers, 'efficient quiver')
+	table.insert(tExtraPlanarContainers, 'handy haversack')
+	for _,v in pairs(tExtraPlanarContainers) do
+		if (not nItemCarried or (nItemCarried ~= 2)) and string.find(sItemName, v) then
+			return true
+		end
+	end
+end
 
---	Set multipliers for different currency denominations
-tDenominations = {['pp'] = 10, ['gp'] = 1, ['ep'] = 0.5, ['sp'] = 0.1, ['cp'] = 0.01}
+--	Set multipliers for different currency denominations. nValue = value multiplier. nWeight = per-coin weight (in pounds -- conversion is automatic)
+aDenominations =
+	{
+	-- ['mp'] = {['nValue'] = 500, ['nWeight'] = .3}, -- these are mithral pieces for for Asgurgolas (homebrew)
+	['pp'] = {['nValue'] = 10, ['nWeight'] = .02},
+	['gp'] = {['nValue'] = 1, ['nWeight'] = .02},
+	-- ['ep'] = {['nValue'] = .5, ['nWeight'] = .02}, -- electrum pieces (for homebrew)
+	['sp'] = {['nValue'] = .1, ['nWeight'] = .02},
+	['cp'] = {['nValue'] = .01, ['nWeight'] = .02},
+	}
 
 --	Change the encumbrance penalties
 nHeavyMaxStat = 1

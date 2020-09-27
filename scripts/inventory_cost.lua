@@ -43,9 +43,9 @@ local function processItemCost(nodeChar, sItemCost, sItemName)
 	local sTrimmedItemCost = sItemCost:gsub('[^0-9.-]', '')
 	if sTrimmedItemCost then
 		nTrimmedItemCost = tonumber(sTrimmedItemCost)
-		for k,v in pairs(TEGlobals.tDenominations) do
-			if string.match(sItemCost, k) then
-				return nTrimmedItemCost * v
+		for sDenomination,tDenominationData in pairs(TEGlobals.aDenominations) do
+			if string.match(sItemCost, sDenomination) then
+				return nTrimmedItemCost * tDenominationData['nValue']
 			end
 		end
 	end

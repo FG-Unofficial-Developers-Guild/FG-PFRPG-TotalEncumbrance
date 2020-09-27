@@ -280,29 +280,55 @@ function calcItemArmorClass(nodeChar)
 	DB.setValue(nodeChar, 'speed.total', 'number', nSpeedTotal)
 end
 
-local function isWeightless(nodeItem)
-	local sItemLoc = string.lower(DB.getValue(nodeItem, "location", ''))
-	local nItemCarried = DB.getValue(nodeItem, "carried", 0)
-	if (string.find(sItemLoc, 'holding') or string.find(sItemLoc, 'portable hole') or string.find(sItemLoc, 'efficient quiver') or string.find(sItemLoc, 'handy haversack')) and (nItemCarried ~= 2) then
-		return true
-	end
-end
-
 function updateEncumbrance(nodeChar)
-	local nEncTotal = 0;
-
-	local nCount, nWeight;
-	for _,vNode in pairs(DB.getChildren(nodeChar, "inventorylist")) do
-		if DB.getValue(vNode, "carried", 0) ~= 0 and not isWeightless(vNode) then
-			nCount = DB.getValue(vNode, "count", 0);
-			if nCount < 1 then
-				nCount = 1;
-			end
-			nWeight = DB.getValue(vNode, "weight", 0);
-			
-			nEncTotal = nEncTotal + (nCount * nWeight);
+	local aExtraplanarContainers = {} -- this creates an array keyed to the names of any detected extraplanar storage containers
+	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
+		local sItemName = string.lower(DB.getValue(nodeItem, 'name', ''))
+		if TEGlobals.isWeightless(sItemName) then
+			aExtraplanarContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
 		end
 	end
 
-	DB.setValue(nodeChar, "encumbrance.load", "number", nEncTotal);
+	local nEncTotal = 0 -- this will cointain a running total of all items carried by the character
+	
+	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
+		local nItemCarried = DB.getValue(nodeItem, 'carried', 0)
+		if nItemCarried ~= 0 then
+			local nCount = DB.getValue(nodeItem, 'count', 0);
+			local nWeight = DB.getValue(nodeItem, 'weight', 0);
+			local sItemLoc = string.lower(DB.getValue(nodeItem, 'location', ''))
+			
+			if not TEGlobals.isWeightless(sItemLoc, nItemCarried) then
+				nEncTotal = nEncTotal + (nCount * nWeight)
+			else
+				if aExtraplanarContainers[sItemLoc] then
+					aExtraplanarContainers[sItemLoc]['nTotal'] = aExtraplanarContainers[sItemLoc]['nTotal'] + (nCount * nWeight)
+				end
+			end
+		end
+	end
+	
+	for _,t in pairs(aExtraplanarContainers) do
+		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotal'])
+		
+		local nItemCapacity = DB.getValue(t['nodeItem'], 'capacityweight', 0)
+		if nItemCapacity > 0 then
+			if not DB.getValue(t['nodeItem'], 'weightbak') then DB.setValue(t['nodeItem'], 'weightbak', 'number', DB.getValue(t['nodeItem'], 'weight', 0)) end
+			if (t['nTotal'] > nItemCapacity) and DB.getValue(t['nodeItem'], 'weightbak') then
+				local nHeavyWeight = t['nTotal'] - nItemCapacity + DB.getValue(t['nodeItem'], 'weightbak')
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+				DB.setValue(t['nodeItem'], 'weight', 'number', nHeavyWeight)
+
+				if not t['nodeItem'].getChild('announced') then
+					DB.setValue(t['nodeItem'], 'announced', 'number', 1)
+					ChatManager.SystemMessage(DB.getValue(nodeChar, 'name', 'A player') .. "'s " .. sItemName .. ' is overfull.\nSelf destructing in 10.. 9.. 8.. 6.. just kidding!')
+				end
+			elseif DB.getValue(t['nodeItem'], 'weightbak') then
+				DB.setValue(t['nodeItem'], 'weight', 'number', DB.getValue(t['nodeItem'], 'weightbak', 0))
+				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
+			end
+		end
+	end
+	
+	DB.setValue(nodeChar, 'encumbrance.load', 'number', nEncTotal)
 end

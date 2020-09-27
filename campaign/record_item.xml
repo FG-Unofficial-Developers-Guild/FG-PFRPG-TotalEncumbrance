@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- Please see the license.html file included with this distribution for attribution and copyright information. -->
+
+<root>
+	<windowclass name="item_main" merge="join">
+		<sheetdata>
+			<label_column name="capacityweight_label" insertbefore="divider4" >
+				<static textres="item_label_capacityweight" />
+			</label_column>
+			<number_columnh name="capacityweight" insertbefore="divider4" >
+				<delaykeyupdate />
+				<script>
+					function onValueChanged()
+						window.extraplanarcontents.onValueChanged()
+					end
+				</script>
+			</number_columnh>
+
+			<label_column name="extraplanarcontents_label" insertbefore="divider4" >
+				<static textres="item_label_extraplanarcontents" />
+			</label_column>
+			<number_columnh name="extraplanarcontents" insertbefore="divider4">
+				<readonly />
+				<delaykeyupdate />
+				<script>
+					function onInit()
+						local sItemName = string.lower(DB.getValue(window.getDatabaseNode(), 'name'))
+						if TEGlobals.isWeightless(sItemName) then
+							setVisible(true)
+							window.extraplanarcontents_label.setVisible(true)
+							window.capacityweight.setVisible(true)
+							window.capacityweight_label.setVisible(true)
+							onValueChanged()
+						else
+							setVisible(false)
+							window.extraplanarcontents_label.setVisible(false)
+							window.capacityweight.setVisible(false)
+							window.capacityweight_label.setVisible(false)
+						end
+					end
+					function onValueChanged()
+						if getValue() &lt; window.capacityweight.getValue() then
+							setColor('FF000000')
+						elseif getValue() == window.capacityweight.getValue() then
+							setColor('FFEB7B00')
+						elseif getValue() &gt; window.capacityweight.getValue() then
+							setColor('FFB22929')
+						end
+					end
+				</script>
+			</number_columnh>
+		</sheetdata>
+	</windowclass>
+</root>

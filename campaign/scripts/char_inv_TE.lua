@@ -26,7 +26,7 @@ function onInit()
 	local node = getDatabaseNode()
 
 	DB.setValue(node, 'coins.costerrorannouncer', 'number', 1)
-	onEncumbranceChanged()
+	onEncumbranceChanged() -- this is now handled by char_invlist_TE
 
 	local nodeCharCT = getNodeCharCT(node)
 
@@ -194,5 +194,4 @@ function onEncumbranceChanged()
 	
 	-- This helps with automatically changing the weight units when the option is toggled
 	CoinsWeight.onCoinsValueChanged(nodeChar)
-	CharManagerTE.calcItemArmorClass(nodeChar)
 end
