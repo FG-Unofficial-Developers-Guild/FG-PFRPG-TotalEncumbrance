@@ -2,28 +2,6 @@
 --	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
-local function onEncumbranceChanged(nodeChar)
-	if CharManagerTE then
-		CharManagerTE.updateEncumbrance(nodeChar)
-		CharManagerTE.calcItemArmorClass(nodeChar)
-	end
-end
-
---	This function facilitates imperial/metric options
-function recomputeTotalWeight(nodeChar)
-	local nEqLoad = DB.getValue(nodeChar, 'encumbrance.load') * TEGlobals.getEncWeightUnit()
-
-	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg-full') then
-		nEqLoad = DB.getValue(nodeChar, 'encumbrance.load')
-	end
-
-	local nTotal = nEqLoad
-	local nTotalToSet =	nTotal + 0.5 - (nTotal + 0.5) % 1
-
-	DB.setValue(nodeChar, 'encumbrance.total', 'number', nTotalToSet)
-	onEncumbranceChanged(nodeChar)
-end
-
 ---	Calculate weight of all coins and total value (in gp).
 --	@param nodeChar databasenode of PC within charsheet
 local function computeCoins(nodeChar)
@@ -69,12 +47,10 @@ local function computeCoins(nodeChar)
 			DB.setValue(nodeOtherCoins, 'name', 'string', 'Coins')
 			DB.setValue(nodeOtherCoins, 'type', 'string', 'Wealth and Money')
 			DB.setValue(nodeOtherCoins, 'cost', 'string', nWealth .. ' gp')
-			DB.setValue(nodeOtherCoins, 'weight', 'number', nTotalCoinWeightToSet)
 			DB.setValue(nodeOtherCoins, 'description', 'formattedtext', '<p>The standard coin weighs about a third of an ounce (50 to the pound).</p>')
+			DB.setValue(nodeOtherCoins, 'weight', 'number', nTotalCoinWeightToSet)
 		end
 	end
-	
-	recomputeTotalWeight(nodeChar)
 end
 
 --	This function is called when a coin field is changed

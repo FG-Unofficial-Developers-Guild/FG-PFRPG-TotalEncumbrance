@@ -68,30 +68,6 @@
 				<anchored offset="15,16" />
 				<static textres="char_label_totalweight" />
 			</label>
-			
-		<!--Equipment Total Field-->
-			<simplenumber name="encumbranceload" source="encumbrance.load">
-				<readonly />
-				<script>
-					function onValueChanged()
-						CoinsWeight.recomputeTotalWeight(window.getDatabaseNode())
-					end
-				</script>
-				<invisible />
-			</simplenumber>
-
-		<!--Total Field-->
-			<simplenumber name="totalload" source="encumbrance.total">
-				<anchored to="encumbranceheavyload" position="above" offset="0,17" height="20" />
-				<top parent="encumbranceframe"  offset="5"/>
-				<frame name="fieldlight" offset="7,5,7,5" />
-				<font>sheetlabel</font>
-				<readonly />
-			</simplenumber>
-			<label_fieldtop name="totalload_label">
-				<anchored to="totalload" />
-				<static textres="char_label_totalload" />
-			</label_fieldtop>
 
 	<!--Coin Frame-->
 			<label name="coin_label" merge="replace">

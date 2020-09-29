@@ -27,7 +27,7 @@ end
 local function encumbrancePenalties(nodeChar)
 	local light = DB.getValue(nodeChar, 'encumbrance.lightload', 0)
 	local medium = DB.getValue(nodeChar, 'encumbrance.mediumload', 0)
-	local total = DB.getValue(nodeChar, 'encumbrance.total', 0)
+	local total = DB.getValue(nodeChar, 'encumbrance.load', 0)
 
 	if total > medium then -- heavy load
 		DB.setValue(nodeChar, 'encumbrance.encumbrancelevel', 'number', 2)
@@ -330,5 +330,15 @@ function updateEncumbrance(nodeChar)
 		end
 	end
 	
-	DB.setValue(nodeChar, 'encumbrance.load', 'number', nEncTotal)
+	local nEqLoad = nEncTotal * TEGlobals.getEncWeightUnit()
+
+	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'kg-full') then
+		nEqLoad = nEncTotal
+	end
+
+	local nTotal = nEqLoad
+	local nTotalToSet =	nTotal + 0.5 - (nTotal + 0.5) % 1
+
+	DB.setValue(nodeChar, 'encumbrance.load', 'number', nTotalToSet)
+	CharManagerTE.calcItemArmorClass(nodeChar)
 end
