@@ -31,7 +31,6 @@ local function processItemCost(nodeChar, sItemCost, sItemName)
 	elseif string.match(sItemCost, '(%d%s%a+)%/') or string.match(sItemCost, '(%d%s%a+)%-') then
 		announceImproperCost(nodeChar, sItemName, true)
 		sItemCost = string.match(sItemCost, '%d+%s%a+') -- thanks to FeatherRin on FG Forums for the inspiration
-		Debug.chat(sItemCost)
 	elseif string.match(sItemCost, '%-+') then
 		announceImproperCost(nodeChar, sItemName)
 		return 0
