@@ -55,8 +55,8 @@ local function computeCoins(nodeChar)
 	if nTotalCoinWeightToSet then
 		local nodeOtherCoins
 		for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
-			local sItemName = string.lower(DB.getValue(nodeItem, 'name', ''))
-			if sItemName == 'coins' then
+			local sItemName = DB.getValue(nodeItem, 'name', '')
+			if sItemName == 'Coins' then
 				nodeOtherCoins = nodeItem
 			end
 		end
