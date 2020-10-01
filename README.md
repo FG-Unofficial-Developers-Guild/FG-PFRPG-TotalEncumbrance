@@ -1,4 +1,4 @@
-# TotalEncumbrance
+# PFRPG TotalEncumbrance
 This extension enhances functionality related to carrying capacity, coin weight, inventory value, and weight/armor encumbrance.
 The spell failure compenent previously included here is now available as [its own extension](https://github.com/bmos/FG-PFRPG-Spell-Failure).
 
