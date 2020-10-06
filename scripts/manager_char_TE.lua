@@ -42,7 +42,7 @@ local function encumbrancePenalties(nodeChar)
 end
 
 ---	This function checks for special abilities.
-local function hasSpecialAbility(nodeChar, sSpecAbil)
+function hasSpecialAbility(nodeChar, sSpecAbil)
 	if not sSpecAbil then
 		return false
 	end
