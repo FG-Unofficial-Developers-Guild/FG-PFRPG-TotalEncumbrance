@@ -194,4 +194,5 @@ function onEncumbranceChanged()
 	
 	-- This helps with automatically changing the weight units when the option is toggled
 	CoinsWeight.onCoinsValueChanged(nodeChar)
+	CharManagerTE.updateEncumbrance(nodeChar)
 end

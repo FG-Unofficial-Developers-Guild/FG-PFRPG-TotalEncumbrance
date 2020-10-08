@@ -340,5 +340,5 @@ function updateEncumbrance(nodeChar)
 	local nTotalToSet =	nTotal + 0.5 - (nTotal + 0.5) % 1
 
 	DB.setValue(nodeChar, 'encumbrance.load', 'number', nTotalToSet)
-	CharManagerTE.calcItemArmorClass(nodeChar)
+	calcItemArmorClass(nodeChar)
 end
