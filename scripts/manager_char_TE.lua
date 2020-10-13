@@ -43,14 +43,14 @@ end
 
 ---	This function checks for special abilities.
 function hasSpecialAbility(nodeChar, sSpecAbil)
-	if not sSpecAbil then
+	if not nodeChar or not sSpecAbil then
 		return false
 	end
 
 	local sLowerSpecAbil = string.lower(sSpecAbil)
-	
 	for _,vNode in pairs(DB.getChildren(nodeChar, 'specialabilitylist')) do
-		if string.match(StringManager.trim(DB.getValue(vNode, 'name', ''):lower()), sLowerSpecAbil .. ' %d', 1) then
+		local vLowerSpecAbilName = StringManager.trim(DB.getValue(vNode, 'name', ''):lower());
+		if vLowerSpecAbilName and string.match(vLowerSpecAbilName, sLowerSpecAbil .. ' %d+', 1) or string.match(vLowerSpecAbilName, sLowerSpecAbil, 1) then
 			return true
 		end
 	end
@@ -111,6 +111,11 @@ function calcItemArmorClass(nodeChar)
 			local bIsArmor, _, sSubtypeLower = ItemManager2.isArmor(vNode)
 			if bIsArmor then
 				local bID = LibraryData.getIDState('item', vNode, true)
+
+				local nFighterLevel = DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), 'level')
+				local bArmorTraining = (hasSpecialAbility(nodeChar, 'Armor Training') and nFighterLevel >= 3)
+				local bArmorTrainingH = (bArmorTraining and nFighterLevel >= 7)
+				local bAdvArmorTraining = (hasSpecialAbility(nodeChar, 'Advanced Armor Training'))
 				
 				local bIsShield = (sSubtypeLower == 'shield')
 				if bIsShield then
@@ -125,9 +130,14 @@ function calcItemArmorClass(nodeChar)
 					else
 						nMainArmorTotal = nMainArmorTotal + DB.getValue(vNode, 'ac', 0)
 					end
-							
+				
+					local bArmorLM = (sSubtypeLower == 'light' or sSubtypeLower == 'medium')
+					local bArmorH = (sSubtypeLower == 'heavy')
+					
 					local nItemSpeed30 = DB.getValue(vNode, 'speed30', 0)
 					if (nItemSpeed30 > 0) and (nItemSpeed30 < 30) then
+						if bArmorLM and bArmorTraining then nItemSpeed30 = 30 end
+						if bArmorH and bArmorTrainingH then nItemSpeed30 = 30 end
 						if nMainSpeed30 > 0 then
 							nMainSpeed30 = math.min(nMainSpeed30, nItemSpeed30)
 						else
@@ -136,6 +146,8 @@ function calcItemArmorClass(nodeChar)
 					end
 					local nItemSpeed20 = DB.getValue(vNode, 'speed20', 0)
 					if (nItemSpeed20 > 0) and (nItemSpeed20 < 30) then
+						if bArmorLM and bArmorTraining then nItemSpeed20 = 20 end
+						if bArmorH and bArmorTrainingH then nItemSpeed20 = 20 end
 						if nMainSpeed20 > 0 then
 							nMainSpeed20 = math.min(nMainSpeed20, nItemSpeed20)
 						else
@@ -146,21 +158,23 @@ function calcItemArmorClass(nodeChar)
 					
 				local nMaxStatBonus = DB.getValue(vNode, 'maxstatbonus', 0)
 				if nMaxStatBonus > 0 then
-					if not bIsShield and hasSpecialAbility(nodeChar, 'Armor Training') then
-
-						if DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 15 then
+					Debug.chat(nFighterLevel, bAdvArmorTraining)
+					if not bIsShield and bArmorTraining then
+						if nFighterLevel >= 15 and not bAdvArmorTraining then
 							nMaxStatBonus = nMaxStatBonus + 4
-						elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 11 then
+						elseif nFighterLevel >= 11 and not bAdvArmorTraining then
 							nMaxStatBonus = nMaxStatBonus + 3
-						elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 7 then
+						elseif bArmorTrainingH and not bAdvArmorTraining then
 							nMaxStatBonus = nMaxStatBonus + 2
-						elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 3 then
+						else
 							nMaxStatBonus = nMaxStatBonus + 1
 						end
 					end
 					
-					if nMaxStatBonus and nMainMaxStatBonus < 999 then nMainMaxStatBonus = math.min(nMainMaxStatBonus, nMaxStatBonus)
-					else nMainMaxStatBonus = nMaxStatBonus
+					if nMaxStatBonus and nMainMaxStatBonus < 999 then
+						nMainMaxStatBonus = math.min(nMainMaxStatBonus, nMaxStatBonus)
+					else
+						nMainMaxStatBonus = nMaxStatBonus
 					end
 				else
 					for _,v in pairs(TEGlobals.tClumsyArmorTypes) do
@@ -176,14 +190,14 @@ function calcItemArmorClass(nodeChar)
 					if not bIsShield and CharManager.hasTrait(nodeChar, 'Armor Expert') then
 						nCheckPenalty = nCheckPenalty + 1
 					end
-					if not bIsShield and hasSpecialAbility(nodeChar, 'Armor Training') then
-						if DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 15 then
+					if not bIsShield and bArmorTraining then
+						if nFighterLevel >= 15 and not bAdvArmorTraining then
 							nCheckPenalty = nCheckPenalty + 4
-						elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 11 then
+						elseif nFighterLevel >= 11 and not bAdvArmorTraining then
 							nCheckPenalty = nCheckPenalty + 3
-						elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 7 then
+						elseif bArmorTrainingH and not bAdvArmorTraining then
 							nCheckPenalty = nCheckPenalty + 2
-						elseif DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), "level") >= 3 then
+						else
 							nCheckPenalty = nCheckPenalty + 1
 						end
 					end
