@@ -158,7 +158,6 @@ function calcItemArmorClass(nodeChar)
 					
 				local nMaxStatBonus = DB.getValue(vNode, 'maxstatbonus', 0)
 				if nMaxStatBonus > 0 then
-					Debug.chat(nFighterLevel, bAdvArmorTraining)
 					if not bIsShield and bArmorTraining then
 						if nFighterLevel >= 15 and not bAdvArmorTraining then
 							nMaxStatBonus = nMaxStatBonus + 4
