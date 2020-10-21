@@ -15,11 +15,11 @@ end
 local function announceImproperCost(nodeChar, sItemName, bLowestUsed)
 	local nAnnounce = DB.getValue(nodeChar, 'coins.costerrorannouncer', 1)
 	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
-		local sHoldingPc = DB.getValue(nodeChar, 'name', 'unknown character')
+		local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
 		if bLowestUsed then
-			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has its cost entered as a range of values and the lowest listed value is being used.')
+			ChatManager.SystemMessage(sHoldingPc..': ' .. sItemName .. Interface.getString("item_cost_error_range"))
 		else
-			ChatManager.SystemMessage(sHoldingPc..': "' .. sItemName .. '" has its cost entered wrong and is being ignored.')
+			ChatManager.SystemMessage(sHoldingPc..': ' .. sItemName .. Interface.getString("item_cost_error_wrong"))
 		end
 	end
 end

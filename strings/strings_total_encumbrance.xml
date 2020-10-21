@@ -10,7 +10,12 @@
 	<string name="char_label_invarmor">Penalties</string>
 	<string name="char_label_encstr_fromeffects">Str Effects</string>
 	<string name="char_label_speedpenalty">Penalty</string>
+	<string name="char_name_unknown">Unknown Character</string>
 	<!-- Item Sheet -->
-	<string name="item_label_capacityweight">Capacity</string>
-	<string name="item_label_extraplanarcontents">Contents</string>
+	<string name="item_label_capacityweight">Capacity</string> <!-- Total weight the bag of holding can hold-->
+	<string name="item_label_extraplanarcontents">Contents</string> <!-- The weight of everything in the bag of holding -->
+	<!-- Chat Messages -->
+	<string name="item_self_destruct"> is overfull.\nSelf destructing in 10.. 9.. 8.. 6.. just kidding!</string> <!-- This follows format "Bob: Bag of Holding is overful... -->
+	<string name="item_cost_error_range"> has its cost entered as a range of values and the lowest listed value is being used.</string>
+	<string name="item_cost_error_wrong"> has its cost entered wrong and is being ignored.</string>
 </root>

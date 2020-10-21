@@ -334,7 +334,7 @@ function updateEncumbrance(nodeChar)
 
 				if not t['nodeItem'].getChild('announced') then
 					DB.setValue(t['nodeItem'], 'announced', 'number', 1)
-					ChatManager.SystemMessage(DB.getValue(nodeChar, 'name', 'A player') .. "'s " .. sItemName .. ' is overfull.\nSelf destructing in 10.. 9.. 8.. 6.. just kidding!')
+					ChatManager.SystemMessage(DB.getValue(nodeChar, 'name', '') .. ': ' .. sItemName .. Interface.getString("item_self_destruct"))
 				end
 			elseif DB.getValue(t['nodeItem'], 'weightbak') then
 				DB.setValue(t['nodeItem'], 'weight', 'number', DB.getValue(t['nodeItem'], 'weightbak', 0))
