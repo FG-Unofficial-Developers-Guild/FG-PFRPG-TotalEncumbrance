@@ -112,7 +112,7 @@ function calcItemArmorClass(nodeChar)
 			if bIsArmor then
 				local bID = LibraryData.getIDState('item', vNode, true)
 
-				local nFighterLevel = DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), 'level')
+				local nFighterLevel = DB.getValue(CharManager.getClassNode(nodeChar, 'Fighter'), 'level', 0)
 				local bArmorTraining = (hasSpecialAbility(nodeChar, 'Armor Training') and nFighterLevel >= 3)
 				local bArmorTrainingH = (bArmorTraining and nFighterLevel >= 7)
 				local bAdvArmorTraining = (hasSpecialAbility(nodeChar, 'Advanced Armor Training'))
