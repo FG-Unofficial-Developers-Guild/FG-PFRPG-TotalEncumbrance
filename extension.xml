@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<root release="3.3.10" version="3.3">
 
+<!-- Please see the LICENSE.md file included with this distribution for attribution and copyright information. -->
+
+<root version='3.3' release='3'>
 	<properties>
 		<name>Total Encumbrance</name>
 		<version>3.2</version>
 		<author>bmos (Wil Thieme)</author>
 		<description>rThis extension applies encumbrance penalties, weighs PC coins, calculates character wealth, offers metric unit conversion, and recalculates carrying capacity taking into account STR effects and Ant Haul.</description>
-		<ruleset>
-			<name>PFRPG</name>
-		</ruleset>
-		<ruleset>
-			<name>3.5E</name>
-		</ruleset>
+		<ruleset name="PFRPG" />
+		<ruleset name="3.5E" />
 	</properties>
 
 	<announcement text="https://github.com/bmos/FG-PFRPG-TotalEncumbrance\rPFRPG Total Encumbrance v3.2:\rThis extension applies encumbrance penalties, weighs PC coins, calculates character wealth, offers metric unit conversion, and recalculates carrying capacity taking into account STR effects and Ant Haul."  icon="EncumberedGuy" font="emotefont" />
