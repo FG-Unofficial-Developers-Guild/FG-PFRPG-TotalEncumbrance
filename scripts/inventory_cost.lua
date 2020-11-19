@@ -17,9 +17,9 @@ local function announceImproperCost(nodeChar, sItemName, bLowestUsed)
 	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
 		local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
 		if bLowestUsed then
-			ChatManager.SystemMessage(sHoldingPc..': ' .. sItemName .. Interface.getString("item_cost_error_range"))
+			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_range"), sHoldingPc, sItemName))
 		else
-			ChatManager.SystemMessage(sHoldingPc..': ' .. sItemName .. Interface.getString("item_cost_error_wrong"))
+			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_wrong"), sHoldingPc, sItemName))
 		end
 	end
 end
