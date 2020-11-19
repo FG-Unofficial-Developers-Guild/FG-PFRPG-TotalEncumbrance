@@ -25,6 +25,7 @@ end
 function onInit()
 	local node = getDatabaseNode()
 
+	DB.setValue(node, 'coins.costerrorannouncer', 'number', 1)
 	onEncumbranceChanged() -- this is now handled by char_invlist_TE
 
 	local nodeCharCT = getNodeCharCT(node)
