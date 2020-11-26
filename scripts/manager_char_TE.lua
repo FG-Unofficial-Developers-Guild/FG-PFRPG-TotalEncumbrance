@@ -4,9 +4,24 @@
 
 function onInit()
 	if User.isHost() then
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onEffectChanged)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onEffectChanged)
 		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', onHealthChanged)
 		DB.addHandler(DB.getPath('charsheet.*.wounds'), 'onChildUpdate', onHealthChanged)
 		DB.addHandler(DB.getPath('charsheet.*.speed.base'), 'onUpdate', onSpeedChanged)
+	end
+end
+
+function onEffectChanged(node)
+	local nodeCT = node.getParent()
+	if node.getName() ~= 'effects' then
+		nodeCT = node.getChild('....')
+	end
+	local rActor = ActorManager.getActor('ct', nodeCT)
+	local sActorType, nodeActor = ActorManager.getTypeAndNode(rActor);
+	if sActorType == 'pc' then
+		updateEncumbrance(nodeChar)
 	end
 end
 
