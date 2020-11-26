@@ -26,7 +26,7 @@
 				<script>
 					function onInit()
 						local sItemName = string.lower(DB.getValue(window.getDatabaseNode(), 'name'))
-						if TEGlobals.isWeightless(sItemName) then
+						if TEGlobals.isExtraplanarContainer(sItemName) or TEGlobals.isContainer(sItemName) then
 							setVisible(true)
 							window.extraplanarcontents_label.setVisible(true)
 							window.capacityweight.setVisible(true)

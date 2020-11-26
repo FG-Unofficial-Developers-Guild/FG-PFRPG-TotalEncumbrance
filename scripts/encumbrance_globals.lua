@@ -27,13 +27,26 @@ function getEncWeightUnit()
 	return nUnit
 end
 
-function isWeightless(sItemName, nItemCarried)
-	local tExtraPlanarContainers = {}
-	table.insert(tExtraPlanarContainers, 'of holding')
-	table.insert(tExtraPlanarContainers, 'portable hole')
-	table.insert(tExtraPlanarContainers, 'efficient quiver')
-	table.insert(tExtraPlanarContainers, 'handy haversack')
-	for _,v in pairs(tExtraPlanarContainers) do
+function isExtraplanarContainer(sItemName, nItemCarried)
+	local tExtraplanarContainers = {}
+	table.insert(tExtraplanarContainers, 'of holding')
+	table.insert(tExtraplanarContainers, 'portable hole')
+	table.insert(tExtraplanarContainers, 'efficient quiver')
+	table.insert(tExtraplanarContainers, 'handy haversack')
+	for _,v in pairs(tExtraplanarContainers) do
+		if (not nItemCarried or (nItemCarried ~= 2)) and string.find(sItemName, v) then
+			return true
+		end
+	end
+end
+
+function isContainer(sItemName, nItemCarried)
+	local tContainers = {}
+	table.insert(tContainers, 'backpack')
+	table.insert(tContainers, 'pouch')
+	table.insert(tContainers, 'quiver')
+	table.insert(tContainers, 'bag')
+	for _,v in pairs(tContainers) do
 		if (not nItemCarried or (nItemCarried ~= 2)) and string.find(sItemName, v) then
 			return true
 		end

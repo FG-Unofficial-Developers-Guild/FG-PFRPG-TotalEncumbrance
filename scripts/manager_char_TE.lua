@@ -294,11 +294,14 @@ function calcItemArmorClass(nodeChar)
 end
 
 function updateEncumbrance(nodeChar)
+	local aContainers = {} -- this creates an array keyed to the names of any detected mundane storage containers
 	local aExtraplanarContainers = {} -- this creates an array keyed to the names of any detected extraplanar storage containers
 	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
 		local sItemName = string.lower(DB.getValue(nodeItem, 'name', ''))
-		if TEGlobals.isWeightless(sItemName) then
+		if TEGlobals.isExtraplanarContainer(sItemName) then
 			aExtraplanarContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
+		elseif TEGlobals.isContainer(sItemName) then
+			aContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
 		end
 	end
 
@@ -311,16 +314,39 @@ function updateEncumbrance(nodeChar)
 			local nWeight = DB.getValue(nodeItem, 'weight', 0);
 			local sItemLoc = string.lower(DB.getValue(nodeItem, 'location', ''))
 			
-			if not TEGlobals.isWeightless(sItemLoc, nItemCarried) then
-				nEncTotal = nEncTotal + (nCount * nWeight)
-			else
+			if TEGlobals.isExtraplanarContainer(sItemLoc, nItemCarried) then
 				if aExtraplanarContainers[sItemLoc] then
 					aExtraplanarContainers[sItemLoc]['nTotal'] = aExtraplanarContainers[sItemLoc]['nTotal'] + (nCount * nWeight)
 				end
+			elseif TEGlobals.isContainer(sItemLoc, nItemCarried) then
+				if aContainers[sItemLoc] then
+					aContainers[sItemLoc]['nTotal'] = aContainers[sItemLoc]['nTotal'] + (nCount * nWeight)
+				end
+				nEncTotal = nEncTotal + (nCount * nWeight)
+			else
+				nEncTotal = nEncTotal + (nCount * nWeight)
 			end
 		end
 	end
 	
+	for _,t in pairs(aContainers) do
+		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotal'])
+		
+		local nItemCapacity = DB.getValue(t['nodeItem'], 'capacityweight', 0)
+		if nItemCapacity > 0 then
+			if (t['nTotal'] > nItemCapacity) then
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+
+				if not t['nodeItem'].getChild('announced') then
+					DB.setValue(t['nodeItem'], 'announced', 'number', 1)
+					local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
+					ChatManager.SystemMessage(string.format(Interface.getString("item_overfull"), sHoldingPc, sItemName))
+				end
+			else
+				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
+			end
+		end
+	end
 	for _,t in pairs(aExtraplanarContainers) do
 		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotal'])
 		
