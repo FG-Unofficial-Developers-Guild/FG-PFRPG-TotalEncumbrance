@@ -66,6 +66,7 @@
 							window.depth.setVisible(true)
 							window.volume.setVisible(true)
 						end
+						local sItemName = string.lower(DB.getValue(window.getDatabaseNode(), 'name'))
 						if OptionsManager.isOption('ITEM_VOLUME', 'on') and (TEGlobals.isExtraplanarContainer(sItemName) or TEGlobals.isContainer(sItemName)) then
 							window.contentsvolume.setVisible(true)
 							window.internal_dimensions_label.setVisible(true)

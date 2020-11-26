@@ -414,7 +414,6 @@ function updateEncumbrance(nodeChar)
 			end
 		end
 	end
-	
 	for _,t in pairs(aContainers) do
 		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotalWeight'])
 		DB.setValue(t['nodeItem'], 'contentsvolume', 'number', t['nTotalVolume'])
@@ -433,7 +432,7 @@ function updateEncumbrance(nodeChar)
 				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
 			end
 		end
-		if t['nMaxVolume'] > 0 then
+		if OptionsManager.isOption('ITEM_VOLUME', 'on') and t['nMaxVolume'] > 0 then
 			if t['bTooBig'] == 1 then
 				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
 				if not t['nodeItem'].getChild('announcedV') then
@@ -476,7 +475,7 @@ function updateEncumbrance(nodeChar)
 				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
 			end
 		end
-		if t['nMaxVolume'] > 0 then
+		if OptionsManager.isOption('ITEM_VOLUME', 'on') and t['nMaxVolume'] > 0 then
 			if t['bTooBig'] == 1 then
 				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
 				if not t['nodeItem'].getChild('announcedV') then

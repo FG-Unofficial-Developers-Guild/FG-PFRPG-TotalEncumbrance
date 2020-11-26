@@ -28,6 +28,7 @@ function getEncWeightUnit()
 end
 
 function isExtraplanarContainer(sItemName, nItemCarried)
+	if not sItemName then return nil; end
 	local tExtraplanarContainers = {}
 	table.insert(tExtraplanarContainers, 'of holding')
 	table.insert(tExtraplanarContainers, 'portable hole')
