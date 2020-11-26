@@ -308,15 +308,68 @@ function calcItemArmorClass(nodeChar)
 	DB.setValue(nodeChar, 'speed.total', 'number', nSpeedTotal)
 end
 
+function spairs(t, order)
+    -- collect the keys
+    local keys = {}
+    for k in pairs(t) do keys[#keys+1] = k end
+
+    -- if order function given, sort by it by passing the table and keys a, b,
+    -- otherwise just sort the keys 
+    if order then
+        table.sort(keys, function(a,b) return order(t, a, b) end)
+    else
+        table.sort(keys)
+    end
+
+    -- return the iterator function
+    local i = 0
+    return function()
+        i = i + 1
+        if keys[i] then
+            return keys[i], t[keys[i]]
+        end
+    end
+end
+
 function updateEncumbrance(nodeChar)
-	local aContainers = {} -- this creates an array keyed to the names of any detected mundane storage containers
-	local aExtraplanarContainers = {} -- this creates an array keyed to the names of any detected extraplanar storage containers
+	local aContainers = {}
+	local aExtraplanarContainers = {}
 	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
 		local sItemName = string.lower(DB.getValue(nodeItem, 'name', ''))
-		if TEGlobals.isExtraplanarContainer(sItemName) then
-			aExtraplanarContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
-		elseif TEGlobals.isContainer(sItemName) then
-			aContainers[sItemName] = {['nodeItem'] = nodeItem, ['nTotal'] = 0}
+		local nMaxWeight = DB.getValue(nodeItem, 'capacityweight', 0);
+		local tDimensions = {
+			['nLength'] =  DB.getValue(nodeItem, 'internal_length', 0),
+			['nWidth'] =  DB.getValue(nodeItem, 'internal_width', 0),
+			['nDepth'] =  DB.getValue(nodeItem, 'internal_depth', 0)
+				};
+		local nMaxVolume = 0;
+		for _,v in spairs(tDimensions, function(t,a,b) return t[b] < t[a] end) do -- prepare to automatically 'lay flat'/intelligently position items
+			nMaxVolume = nMaxVolume + v
+		end
+		
+		if TEGlobals.isExtraplanarContainer(sItemName) then -- this creates an array keyed to the names of any detected extraplanar storage containers
+			aExtraplanarContainers[sItemName] = {
+				['nodeItem'] = nodeItem,
+				['nTotalWeight'] = 0,
+				['nMaxWeight'] = nMaxWeight,
+				['nTotalVolume'] = 0,
+				['nMaxVolume'] = nMaxVolume,
+				['nMaxLength'] = tDimensions['nLength'],
+				['nMaxWidth'] = tDimensions['nWidth'],
+				['nMaxDepth'] = tDimensions['nDepth'],
+				['bTooBig'] = 0
+					};
+		elseif TEGlobals.isContainer(sItemName) then -- this creates an array keyed to the names of any detected mundane storage containers
+			aContainers[sItemName] = {
+				['nodeItem'] = nodeItem,
+				['nTotalWeight'] = 0,
+				['nMaxWeight'] = nMaxWeight,
+				['nTotalVolume'] = nVolume,
+				['nMaxLength'] = tDimensions['nLength'],
+				['nMaxWidth'] = tDimensions['nWidth'],
+				['nMaxDepth'] = tDimensions['nDepth'],
+				['bTooBig'] = 0
+					};
 		end
 	end
 
@@ -326,60 +379,120 @@ function updateEncumbrance(nodeChar)
 		local nItemCarried = DB.getValue(nodeItem, 'carried', 0)
 		if nItemCarried ~= 0 then
 			local nCount = DB.getValue(nodeItem, 'count', 0);
-			local nWeight = DB.getValue(nodeItem, 'weight', 0);
+			local nItemWeight = DB.getValue(nodeItem, 'weight', 0);
 			local sItemLoc = string.lower(DB.getValue(nodeItem, 'location', ''))
+
+			local tItemDimensions = {
+				['nLength'] =  DB.getValue(nodeItem, 'length', 0),
+				['nWidth'] =  DB.getValue(nodeItem, 'width', 0),
+				['nDepth'] =  DB.getValue(nodeItem, 'depth', 0)
+					};
+			local nItemVolume = 0;
+			for _,v in spairs(tItemDimensions, function(t,a,b) return t[b] < t[a] end) do -- prepare to automatically 'lay flat'/intelligently position items
+				nItemVolume = nItemVolume + v
+			end
 			
 			if TEGlobals.isExtraplanarContainer(sItemLoc, nItemCarried) then
 				if aExtraplanarContainers[sItemLoc] then
-					aExtraplanarContainers[sItemLoc]['nTotal'] = aExtraplanarContainers[sItemLoc]['nTotal'] + (nCount * nWeight)
+					aExtraplanarContainers[sItemLoc]['nTotalWeight'] = aExtraplanarContainers[sItemLoc]['nTotalWeight'] + (nCount * nItemWeight)
+					aExtraplanarContainers[sItemLoc]['nTotalVolume'] = aExtraplanarContainers[sItemLoc]['nTotalVolume'] + (nCount * nItemVolume)
+					if aExtraplanarContainers[sItemLoc]['nMaxLength'] < tItemDimensions['nLength'] then aExtraplanarContainers[sItemLoc]['bTooBig'] = 1 end
+					if aExtraplanarContainers[sItemLoc]['nMaxWidth'] < tItemDimensions['nWidth'] then aExtraplanarContainers[sItemLoc]['bTooBig'] = 1 end
+					if aExtraplanarContainers[sItemLoc]['nMaxDepth'] < tItemDimensions['nDepth'] then aExtraplanarContainers[sItemLoc]['bTooBig'] = 1 end
 				end
 			elseif TEGlobals.isContainer(sItemLoc, nItemCarried) then
 				if aContainers[sItemLoc] then
-					aContainers[sItemLoc]['nTotal'] = aContainers[sItemLoc]['nTotal'] + (nCount * nWeight)
+					aContainers[sItemLoc]['nTotalWeight'] = aContainers[sItemLoc]['nTotalWeight'] + (nCount * nItemWeight)
+					aContainers[sItemLoc]['nTotalVolume'] = aContainers[sItemLoc]['nTotalVolume'] + (nCount * nItemVolume)
+					if aContainers[sItemLoc]['nMaxLength'] < tItemDimensions['nLength'] then aContainers[sItemLoc]['bTooBig'] = 1 end
+					if aContainers[sItemLoc]['nMaxWidth'] < tItemDimensions['nWidth'] then aContainers[sItemLoc]['bTooBig'] = 1 end
+					if aContainers[sItemLoc]['nMaxDepth'] < tItemDimensions['nDepth'] then aContainers[sItemLoc]['bTooBig'] = 1 end
 				end
-				nEncTotal = nEncTotal + (nCount * nWeight)
+				nEncTotal = nEncTotal + (nCount * nItemWeight)
 			else
-				nEncTotal = nEncTotal + (nCount * nWeight)
+				nEncTotal = nEncTotal + (nCount * nItemWeight)
 			end
 		end
 	end
 	
 	for _,t in pairs(aContainers) do
-		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotal'])
+		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotalWeight'])
+		DB.setValue(t['nodeItem'], 'contentsvolume', 'number', t['nTotalVolume'])
 		
-		local nItemCapacity = DB.getValue(t['nodeItem'], 'capacityweight', 0)
-		if nItemCapacity > 0 then
-			if (t['nTotal'] > nItemCapacity) then
+		if t['nMaxWeight'] > 0 then
+			if (t['nTotalWeight'] > t['nMaxWeight']) then
 				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
 
-				if not t['nodeItem'].getChild('announced') then
-					DB.setValue(t['nodeItem'], 'announced', 'number', 1)
+				if not t['nodeItem'].getChild('announcedW') then
+					DB.setValue(t['nodeItem'], 'announcedW', 'number', 1)
 					local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
-					ChatManager.SystemMessage(string.format(Interface.getString("item_overfull"), sHoldingPc, sItemName))
+					ChatManager.SystemMessage(string.format(Interface.getString("item_overfull"), sHoldingPc, sItemName, 'weight'))
 				end
 			else
+				if t['nodeItem'].getChild('announcedW') then t['nodeItem'].getChild('announcedW').delete() end
+				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
+			end
+		end
+		if t['nMaxVolume'] > 0 then
+			if t['bTooBig'] == 1 then
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+				if not t['nodeItem'].getChild('announcedV') then
+					DB.setValue(t['nodeItem'], 'announcedV', 'number', 1)
+					local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
+					ChatManager.SystemMessage(string.format(Interface.getString("item_overfull"), sHoldingPc, sItemName, 'maximum dimension'))
+				end
+			elseif t['nTotalVolume'] > t['nMaxVolume'] then
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+				if not t['nodeItem'].getChild('announcedV') then
+					DB.setValue(t['nodeItem'], 'announcedV', 'number', 1)
+					local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
+					ChatManager.SystemMessage(string.format(Interface.getString("item_overfull"), sHoldingPc, sItemName), 'volume')
+				end
+			else
+				if t['nodeItem'].getChild('announcedV') then t['nodeItem'].getChild('announcedV').delete() end
 				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
 			end
 		end
 	end
 	for _,t in pairs(aExtraplanarContainers) do
-		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotal'])
+		DB.setValue(t['nodeItem'], 'extraplanarcontents', 'number', t['nTotalWeight'])
+		DB.setValue(t['nodeItem'], 'contentsvolume', 'number', t['nTotalVolume'])
 		
-		local nItemCapacity = DB.getValue(t['nodeItem'], 'capacityweight', 0)
-		if nItemCapacity > 0 then
+		if t['nMaxWeight'] > 0 then
 			if not DB.getValue(t['nodeItem'], 'weightbak') then DB.setValue(t['nodeItem'], 'weightbak', 'number', DB.getValue(t['nodeItem'], 'weight', 0)) end
-			if (t['nTotal'] > nItemCapacity) and DB.getValue(t['nodeItem'], 'weightbak') then
-				local nHeavyWeight = t['nTotal'] - nItemCapacity + DB.getValue(t['nodeItem'], 'weightbak')
-				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+			if (t['nTotalWeight'] > t['nMaxWeight']) and DB.getValue(t['nodeItem'], 'weightbak') then
+				local nHeavyWeight = t['nTotalWeight'] - t['nMaxWeight'] + DB.getValue(t['nodeItem'], 'weightbak')
 				DB.setValue(t['nodeItem'], 'weight', 'number', nHeavyWeight)
 
-				if not t['nodeItem'].getChild('announced') then
-					DB.setValue(t['nodeItem'], 'announced', 'number', 1)
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+				if not t['nodeItem'].getChild('announcedW') then
+					DB.setValue(t['nodeItem'], 'announcedW', 'number', 1)
 					local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
-					ChatManager.SystemMessage(string.format(Interface.getString("item_self_destruct"), sHoldingPc, sItemName))
+					ChatManager.SystemMessage(string.format(Interface.getString("item_self_destruct"), sHoldingPc, sItemName, 'weight'))
 				end
 			elseif DB.getValue(t['nodeItem'], 'weightbak') then
 				DB.setValue(t['nodeItem'], 'weight', 'number', DB.getValue(t['nodeItem'], 'weightbak', 0))
+				if t['nodeItem'].getChild('announcedW') then t['nodeItem'].getChild('announcedW').delete() end
+				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
+			end
+		end
+		if t['nMaxVolume'] > 0 then
+			if t['bTooBig'] == 1 then
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+				if not t['nodeItem'].getChild('announcedV') then
+					DB.setValue(t['nodeItem'], 'announcedV', 'number', 1)
+					local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
+					ChatManager.SystemMessage(string.format(Interface.getString("item_self_destruct"), sHoldingPc, sItemName, 'maximum dimension'))
+				end
+			elseif t['nTotalVolume'] > t['nMaxVolume'] then
+				local sItemName = DB.getValue(t['nodeItem'], 'name', 'extraplanar container')
+				if not t['nodeItem'].getChild('announcedV') then
+					DB.setValue(t['nodeItem'], 'announcedV', 'number', 1)
+					local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
+					ChatManager.SystemMessage(string.format(Interface.getString("item_self_destruct"), sHoldingPc, sItemName, 'volume'))
+				end
+			else
+				if t['nodeItem'].getChild('announcedV') then t['nodeItem'].getChild('announcedV').delete() end
 				if t['nodeItem'].getChild('announced') then t['nodeItem'].getChild('announced').delete() end
 			end
 		end

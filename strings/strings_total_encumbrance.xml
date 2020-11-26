@@ -4,19 +4,29 @@
 
 <root>
 	<!-- Character Sheet -->
+	<string name="char_label_totalweight">Total Encumbrance</string>
 	<string name="char_label_encumbrancespeed">Speed</string>
 	<string name="char_label_totalload">Total</string>
-	<string name="char_label_totalweight">Total Encumbrance</string>
 	<string name="char_label_invarmor">Penalties</string>
 	<string name="char_label_encstr_fromeffects">Str Effects</string>
 	<string name="char_label_speedpenalty">Penalty</string>
 	<string name="char_name_unknown">Unknown Character</string>
 	<!-- Item Sheet -->
-	<string name="item_label_capacityweight">Capacity</string> <!-- Total weight the bag of holding can hold-->
-	<string name="item_label_extraplanarcontents">Contents</string> <!-- The weight of everything in the bag of holding -->
+	<string name="item_label_external_dimensions">Exterior Size</string>
+	<string name="item_label_internal_dimensions">Interior Space</string>
+	<!-- Tooltip -->
+	<string name="item_tooltip_itemweight">Weight of Item</string> <!-- Total weight the bag of holding can hold-->
+	<string name="item_tooltip_capacityweight">Maximum Weight Capacity</string> <!-- Total weight the bag of holding can hold-->
+	<string name="item_tooltip_extraplanarcontents">Weight of Contents</string> <!-- The weight of everything in the bag of holding -->
+	<string name="item_tooltip_contentsvolume">Volume of Contents</string> <!-- The volume of everything in the container -->
+	<string name="item_tooltip_length">Length</string>
+	<string name="item_tooltip_width">Width</string>
+	<string name="item_tooltip_depth">Depth</string>
+	<string name="item_tooltip_exterior_volume">Total Exterior Volume</string>
+	<string name="item_tooltip_interior_volume">Total Interior Volume</string>
 	<!-- Chat Messages -->
-	<string name="item_self_destruct">%s's "%s" is overfull. Self destructing in 10.. 9.. 8.. 6.. just kidding!</string>
-	<string name="item_overfull">%s's "%s" is overfull.</string>
+	<string name="item_self_destruct">%s's "%s" is overfull (%s). Self destructing in 10.. 9.. 8.. 6.. just kidding!</string>
+	<string name="item_overfull">%s's "%s" is overfull (%s).</string>
 	<string name="item_cost_error_range">%s's "%s" has its cost entered as a range of values and the lowest listed value is being used.</string>
 	<string name="item_cost_error_wrong">%s's "%s" has its cost entered wrong and is being ignored.</string>
 </root>
