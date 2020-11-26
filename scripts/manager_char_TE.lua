@@ -2,6 +2,9 @@
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
+local calcItemArmorClass_old = nil
+local updateEncumbrance_old = nil
+
 function onInit()
 	if User.isHost() then
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
@@ -11,6 +14,16 @@ function onInit()
 		DB.addHandler(DB.getPath('charsheet.*.wounds'), 'onChildUpdate', onHealthChanged)
 		DB.addHandler(DB.getPath('charsheet.*.speed.base'), 'onUpdate', onSpeedChanged)
 	end
+	
+	calcItemArmorClass_old = CharManager.calcItemArmorClass;
+	CharManager.calcItemArmorClass = calcItemArmorClass_new;
+	updateEncumbrance_old = CharManager.updateEncumbrance;
+	CharManager.updateEncumbrance = updateEncumbrance_new;
+end
+
+function onClose()
+	CharManager.calcItemArmorClass = calcItemArmorClass_old;
+	CharManager.updateEncumbrance = updateEncumbrance_old;
 end
 
 function onEffectChanged(node)
@@ -26,11 +39,11 @@ function onEffectChanged(node)
 end
 
 function onHealthChanged(node)
-	calcItemArmorClass(node.getParent())
+	calcItemArmorClass_new(node.getParent())
 end
 
 function onSpeedChanged(node)
-	calcItemArmorClass(node.getChild('...'))
+	calcItemArmorClass_new(node.getChild('...'))
 end
 
 --	Summary: Finds the max stat and check penalty penalties based on medium and heavy encumbrance thresholds based on current total encumbrance
@@ -112,7 +125,7 @@ local function getSpeedEffects(nodeChar)
 	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
 
-function calcItemArmorClass(nodeChar)
+function calcItemArmorClass_new(nodeChar)
 	local nMainArmorTotal = 0
 	local nMainShieldTotal = 0
 	local nMainMaxStatBonus = 999
@@ -331,7 +344,7 @@ function spairs(t, order)
     end
 end
 
-function updateEncumbrance(nodeChar)
+function updateEncumbrance_new(nodeChar)
 	local aContainers = {}
 	local aExtraplanarContainers = {}
 	for _,nodeItem in pairs(DB.getChildren(nodeChar, 'inventorylist')) do
@@ -507,5 +520,5 @@ function updateEncumbrance(nodeChar)
 	local nTotalToSet =	nTotal + 0.5 - (nTotal + 0.5) % 1
 
 	DB.setValue(nodeChar, 'encumbrance.load', 'number', nTotalToSet)
-	calcItemArmorClass(nodeChar)
+	calcItemArmorClass_new(nodeChar)
 end

@@ -55,21 +55,21 @@ end
 function onIDChanged(nodeField)
 	local nodeItem = DB.getChild(nodeField, "..");
 	if (DB.getValue(nodeItem, "carried", 0) == 2) and ItemManager2.isArmor(nodeItem) then
-		CharManagerTE.calcItemArmorClass(DB.getChild(nodeItem, "..."));
+		CharManager.calcItemArmorClass(DB.getChild(nodeItem, "..."));
 	end
 end
 
 function onBonusChanged(nodeField)
 	local nodeItem = DB.getChild(nodeField, "..");
 	if (DB.getValue(nodeItem, "carried", 0) == 2) and ItemManager2.isArmor(nodeItem) then
-		CharManagerTE.calcItemArmorClass(DB.getChild(nodeItem, "..."));
+		CharManager.calcItemArmorClass(DB.getChild(nodeItem, "..."));
 	end
 end
 
 function onArmorChanged(nodeField)
 	local nodeItem = DB.getChild(nodeField, "..");
 	if (DB.getValue(nodeItem, "carried", 0) == 2) and ItemManager2.isArmor(nodeItem) then
-		CharManagerTE.calcItemArmorClass(DB.getChild(nodeItem, "..."));
+		CharManager.calcItemArmorClass(DB.getChild(nodeItem, "..."));
 	end
 end
 
@@ -97,8 +97,8 @@ end
 
 function onEncumbranceChanged()
 	local nodeChar = window.getDatabaseNode()
-	if CharManagerTE then
-		CharManagerTE.updateEncumbrance(nodeChar)
+	if CharManager then
+		CharManager.updateEncumbrance(nodeChar)
 	end
 end
 

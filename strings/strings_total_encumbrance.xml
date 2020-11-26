@@ -11,6 +11,7 @@
 	<string name="char_label_encstr_fromeffects">Str Effects</string>
 	<string name="char_label_speedpenalty">Penalty</string>
 	<string name="char_name_unknown">Unknown Character</string>
+	<string name="char_string_networth">Net Worth</string>
 	<!-- Item Sheet -->
 	<string name="item_label_external_dimensions">Exterior Size</string>
 	<string name="item_label_internal_dimensions">Interior Space</string>
