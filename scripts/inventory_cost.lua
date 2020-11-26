@@ -12,9 +12,9 @@ function onInit()
 end
 
 ---  This function posts a message in the chat window if the item cost contains a hyphen or a slash.
+local nAnnounce = 1
 local function announceImproperCost(nodeChar, sItemName, bLowestUsed)
-	local nAnnounce = DB.getValue(nodeChar, 'coins.costerrorannouncer', 1)
-	if (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) and nAnnounce == 1 then
+	if nAnnounce == 1 and (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) then
 		local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
 		if bLowestUsed then
 			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_range"), sHoldingPc, sItemName))
@@ -31,6 +31,9 @@ local function processItemCost(nodeChar, sItemCost, sItemName)
 	elseif string.match(sItemCost, '(%d%s%a+)%/') or string.match(sItemCost, '(%d%s%a+)%-') then
 		announceImproperCost(nodeChar, sItemName, true)
 		sItemCost = string.match(sItemCost, '%d+%s%a+') -- thanks to FeatherRin on FG Forums for the inspiration
+	elseif string.match(sItemCost, '(%d%a+)%/') or string.match(sItemCost, '(%d%s%a+)%-') then
+		announceImproperCost(nodeChar, sItemName, true)
+		sItemCost = string.match(sItemCost, '%d+%a+') -- thanks to FeatherRin on FG Forums for the inspiration
 	elseif string.match(sItemCost, '%-+') then
 		announceImproperCost(nodeChar, sItemName)
 		return 0
@@ -71,7 +74,7 @@ function calculateInvCost(node)
 		end
 	end
 	
-	if OptionsManager.isOption('WARN_COST', 'subtle') then DB.setValue(nodeChar, 'coins.costerrorannouncer', 'number', 0) end	
+	if OptionsManager.isOption('WARN_COST', 'subtle') then nAnnounce = 0 end	
 
 	DB.setValue(nodeChar, 'coins.invtotalval', 'number', nTotalInvVal)
 end
