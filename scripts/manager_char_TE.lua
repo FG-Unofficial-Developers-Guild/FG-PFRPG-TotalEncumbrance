@@ -34,7 +34,7 @@ function onEffectChanged(node)
 	local rActor = ActorManager.getActor('ct', nodeCT)
 	local sActorType, nodeActor = ActorManager.getTypeAndNode(rActor);
 	if sActorType == 'pc' then
-		updateEncumbrance(nodeChar)
+		updateEncumbrance_new(nodeChar)
 	end
 end
 
