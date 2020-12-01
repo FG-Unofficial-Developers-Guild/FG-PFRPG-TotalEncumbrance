@@ -8,7 +8,7 @@
 			<number_columnh name="weight">
 				<tooltip textres="item_tooltip_itemweight" />
 			</number_columnh>
-			<basicnumber name="capacityweight" insertbefore="divider4" >
+			<basicnumber name="capacityweight" insertbefore="divider3" >
 				<anchored to="weight" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_capacityweight" />
 				<delaykeyupdate />
@@ -18,7 +18,7 @@
 					end
 				</script>
 			</basicnumber>
-			<basicnumber name="extraplanarcontents" insertbefore="divider4">
+			<basicnumber name="extraplanarcontents" insertbefore="divider3">
 				<anchored to="capacityweight" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_extraplanarcontents" />
 				<readonly />
@@ -47,7 +47,7 @@
 					end
 				</script>
 			</basicnumber>
-			<basicnumber name="contentsvolume" insertbefore="divider4" >
+			<basicnumber name="contentsvolume" insertbefore="divider3" >
 				<anchored to="extraplanarcontents" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_contentsvolume" />
 				<readonly />
@@ -98,10 +98,10 @@
 				</script>
 			</basicnumber>
 			
-			<label_column name="external_dimensions_label" insertbefore="divider4" >
+			<label_column name="external_dimensions_label" insertbefore="divider3" >
 				<static textres="item_label_external_dimensions" />
 			</label_column>
-			<number_columnh name="length" insertbefore="divider4" >
+			<number_columnh name="length" insertbefore="divider3" >
 				<delaykeyupdate />
 				<tooltip textres="item_tooltip_length" />
 				<script>
@@ -110,7 +110,7 @@
 					end
 				</script>
 			</number_columnh>
-			<basicnumber name="width" insertbefore="divider4" >
+			<basicnumber name="width" insertbefore="divider3" >
 				<anchored to="length" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_width" />
 				<delaykeyupdate />
@@ -120,7 +120,7 @@
 					end
 				</script>
 			</basicnumber>
-			<basicnumber name="depth" insertbefore="divider4" >
+			<basicnumber name="depth" insertbefore="divider3" >
 				<anchored to="width" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_depth" />
 				<delaykeyupdate />
@@ -130,7 +130,7 @@
 					end
 				</script>
 			</basicnumber>
-			<basicnumber name="volume" insertbefore="divider4" >
+			<basicnumber name="volume" insertbefore="divider3" >
 				<anchored to="depth" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_exterior_volume" />
 				<readonly />
@@ -149,10 +149,10 @@
 				</script>
 			</basicnumber>
 			
-			<label_column name="internal_dimensions_label" insertbefore="divider4" >
+			<label_column name="internal_dimensions_label" insertbefore="divider3" >
 				<static textres="item_label_internal_dimensions" />
 			</label_column>
-			<number_columnh name="internal_length" insertbefore="divider4" >
+			<number_columnh name="internal_length" insertbefore="divider3" >
 				<tooltip textres="item_tooltip_length" />
 				<delaykeyupdate />
 				<script>
@@ -161,7 +161,7 @@
 					end
 				</script>
 			</number_columnh>
-			<basicnumber name="internal_width" insertbefore="divider4" >
+			<basicnumber name="internal_width" insertbefore="divider3" >
 				<anchored to="internal_length" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_width" />
 				<delaykeyupdate />
@@ -171,7 +171,7 @@
 					end
 				</script>
 			</basicnumber>
-			<basicnumber name="internal_depth" insertbefore="divider4" >
+			<basicnumber name="internal_depth" insertbefore="divider3" >
 				<anchored to="internal_width" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_depth" />
 				<delaykeyupdate />
@@ -181,7 +181,7 @@
 					end
 				</script>
 			</basicnumber>
-			<basicnumber name="internal_volume" insertbefore="divider4" >
+			<basicnumber name="internal_volume" insertbefore="divider3" >
 				<anchored to="internal_depth" position="righthigh" offset="10,0" width="35" height="20" />
 				<tooltip textres="item_tooltip_interior_volume" />
 				<readonly />
