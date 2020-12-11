@@ -2,31 +2,7 @@
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
-local calcItemArmorClass_old = nil
-local updateEncumbrance_old = nil
-
-function onInit()
-	if User.isHost() then
-		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
-		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onEffectChanged)
-		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onEffectChanged)
-		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', onHealthChanged)
-		DB.addHandler(DB.getPath('charsheet.*.wounds'), 'onChildUpdate', onHealthChanged)
-		DB.addHandler(DB.getPath('charsheet.*.speed.base'), 'onUpdate', onSpeedChanged)
-	end
-
-	calcItemArmorClass_old = CharManager.calcItemArmorClass;
-	CharManager.calcItemArmorClass = calcItemArmorClass_new;
-	updateEncumbrance_old = CharManager.updateEncumbrance;
-	CharManager.updateEncumbrance = updateEncumbrance_new;
-end
-
-function onClose()
-	CharManager.calcItemArmorClass = calcItemArmorClass_old;
-	CharManager.updateEncumbrance = updateEncumbrance_old;
-end
-
-function onEffectChanged(node)
+local function onEffectChanged(node)
 	local nodeCT = node.getParent()
 	if node.getName() ~= 'effects' then
 		nodeCT = node.getChild('....')
@@ -34,15 +10,15 @@ function onEffectChanged(node)
 	local rActor = ActorManager.getActor('ct', nodeCT)
 	local sActorType, nodeActor = ActorManager.getTypeAndNode(rActor);
 	if sActorType == 'pc' then
-		updateEncumbrance_new(nodeChar)
+		updateEncumbrance_new(nodeActor)
 	end
 end
 
-function onHealthChanged(node)
+local function onHealthChanged(node)
 	calcItemArmorClass_new(node.getParent())
 end
 
-function onSpeedChanged(node)
+local function onSpeedChanged(node)
 	calcItemArmorClass_new(node.getChild('...'))
 end
 
@@ -70,7 +46,7 @@ local function encumbrancePenalties(nodeChar)
 end
 
 ---	This function checks for special abilities.
-function hasSpecialAbility(nodeChar, sSpecAbil)
+local function hasSpecialAbility(nodeChar, sSpecAbil)
 	if not nodeChar or not sSpecAbil then
 		return false
 	end
@@ -269,7 +245,7 @@ function calcItemArmorClass_new(nodeChar)
 
 	local bApplySpeedPenalty = true
 	if CharManager.hasTrait(nodeChar, 'Slow and Steady') then
-		bApplySpeedPenalty = false
+		bApplySpeedPenalty = nil
 	end
 
 	local nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero = getSpeedEffects(nodeChar)
@@ -288,15 +264,9 @@ function calcItemArmorClass_new(nodeChar)
 		nSpeedPenaltyFromEnc = tEncumbranceSpeed[nSpeedTableIndex] - nSpeedBase
 	end
 
-	local bApplySpeedPenalty = true
-
-	if CharManager.hasTrait(nodeChar, 'Slow and Steady') then
-		bApplySpeedPenalty = false
-	end
-
 	local nSpeedArmor = 0
 
-	if bApplySpeedPenalty then
+	if bApplySpeedPenalty == true then
 		if (nSpeedBase >= 30) and (nMainSpeed30 > 0) then
 			nSpeedArmor = nMainSpeed30 - 30
 		elseif (nSpeedBase < 30) and (nMainSpeed20 > 0) then
@@ -321,7 +291,7 @@ function calcItemArmorClass_new(nodeChar)
 	DB.setValue(nodeChar, 'speed.total', 'number', nSpeedTotal)
 end
 
-function spairs(t, order)
+local function spairs(t, order)
     -- collect the keys
     local keys = {}
     for k in pairs(t) do keys[#keys+1] = k end
@@ -530,4 +500,28 @@ function updateEncumbrance_new(nodeChar)
 
 	DB.setValue(nodeChar, 'encumbrance.load', 'number', nTotalToSet)
 	calcItemArmorClass_new(nodeChar)
+end
+
+local calcItemArmorClass_old = nil
+local updateEncumbrance_old = nil
+
+function onInit()
+	if User.isHost() then
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onEffectChanged)
+		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onEffectChanged)
+		DB.addHandler(DB.getPath('charsheet.*.hp'), 'onChildUpdate', onHealthChanged)
+		DB.addHandler(DB.getPath('charsheet.*.wounds'), 'onChildUpdate', onHealthChanged)
+		DB.addHandler(DB.getPath('charsheet.*.speed.base'), 'onUpdate', onSpeedChanged)
+	end
+
+	calcItemArmorClass_old = CharManager.calcItemArmorClass;
+	CharManager.calcItemArmorClass = calcItemArmorClass_new;
+	updateEncumbrance_old = CharManager.updateEncumbrance;
+	CharManager.updateEncumbrance = updateEncumbrance_new;
+end
+
+function onClose()
+	CharManager.calcItemArmorClass = calcItemArmorClass_old;
+	CharManager.updateEncumbrance = updateEncumbrance_old;
 end

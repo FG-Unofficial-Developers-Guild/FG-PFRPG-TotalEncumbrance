@@ -3,43 +3,40 @@
 --
 
 ---  This function posts a message in the chat window if the item cost contains a hyphen or a slash.
-local nAnnounce = 1
-local function announceImproperCost(nodeChar, sItemName, bLowestUsed)
-	if nAnnounce == 1 and not OptionsManager.isOption('WARN_COST', 'off') then
-		local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
-		if bLowestUsed then
-			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_range"), sHoldingPc, sItemName))
+local chat_announce_state = 1
+local function chat_message_cost_error(node_pc, string_item_name, is_using_lowest_cost)
+	if chat_announce_state == 1 and not OptionsManager.isOption('WARN_COST', 'off') then
+		local string_pc_name = DB.getValue(node_pc, 'name', Interface.getString("char_name_unknown"))
+		if is_using_lowest_cost then
+			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_range"), string_pc_name, string_item_name))
 		else
-			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_wrong"), sHoldingPc, sItemName))
+			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_wrong"), string_pc_name, string_item_name))
 		end
 	end
 end
 
 ---	Convert to gp, dropping non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
-local function processItemCost(nodeChar, sItemCost, sItemName)
-	if not string.match(sItemCost, '%d+') then
+local function convert_denominations(node_pc, string_item_cost, string_item_name)
+	if not string.match(string_item_cost, '%d+') then
 		return 0
-	elseif string.match(sItemCost, '(%d%s%a+)%/') or string.match(sItemCost, '(%d%s%a+)%-') then
-		announceImproperCost(nodeChar, sItemName, true)
-		sItemCost = string.match(sItemCost, '%d+%s%a+') -- thanks to FeatherRin on FG Forums for the inspiration
-	elseif string.match(sItemCost, '(%d%a+)%/') or string.match(sItemCost, '(%d%s%a+)%-') then
-		announceImproperCost(nodeChar, sItemName, true)
-		sItemCost = string.match(sItemCost, '%d+%a+') -- thanks to FeatherRin on FG Forums for the inspiration
-	elseif string.match(sItemCost, '%-+') then
-		announceImproperCost(nodeChar, sItemName)
+	elseif string.match(string_item_cost, '(%d%s%a+)%/') or string.match(string_item_cost, '(%d%s%a+)%-') then
+		chat_message_cost_error(node_pc, string_item_name, true)
+		string_item_cost = string.match(string_item_cost, '%d+%s%a+') -- thanks to FeatherRin on FG Forums for the inspiration
+	elseif string.match(string_item_cost, '(%d%a+)%/') or string.match(string_item_cost, '(%d%s%a+)%-') then
+		chat_message_cost_error(node_pc, string_item_name, true)
+		string_item_cost = string.match(string_item_cost, '%d+%a+') -- thanks to FeatherRin on FG Forums for the inspiration
+	elseif string.match(string_item_cost, '%-+') then
+		chat_message_cost_error(node_pc, string_item_name)
 		return 0
-	elseif string.match(sItemCost, '%/+') then
-		announceImproperCost(nodeChar, sItemName)
+	elseif string.match(string_item_cost, '%/+') then
+		chat_message_cost_error(node_pc, string_item_name)
 		return 0
 	end
 
-	local sTrimmedItemCost = sItemCost:gsub('[^0-9.-]', '')
-	if sTrimmedItemCost then
-		local nTrimmedItemCost = tonumber(sTrimmedItemCost)
-		for sDenomination,tDenominationData in pairs(TEGlobals.aDenominations) do
-			if string.match(sItemCost, sDenomination) then
-				return nTrimmedItemCost * tDenominationData['nValue']
-			end
+	local number_item_cost = tonumber(string_item_cost:gsub('[^0-9.-]', '') or '')
+	for string_denomination,table_denomination_info in pairs(TEGlobals.aDenominations) do
+		if string.match(string_item_cost, string_denomination) then
+			return number_item_cost * table_denomination_info['nValue']
 		end
 	end
 
@@ -60,7 +57,7 @@ local function calculateInvCost(node)
 		local nItemCount = DB.getValue(v, 'count', 1)
 
 		if sItemCost and nItemIDed ~= 0 then
-			local nItemCost = processItemCost(nodeChar, string.lower(sItemCost), string.lower(sItemName))
+			local nItemCost = convert_denominations(nodeChar, string.lower(sItemCost), string.lower(sItemName))
 			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
 		end
 	end
