@@ -2,19 +2,10 @@
 --	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
-function onInit()
-	if User.isHost() then
-		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', calculateInvCost)
-		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.count'), 'onUpdate', calculateInvCost)
-		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.isidentified'), 'onUpdate', calculateInvCost)
-		DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', calculateInvCost)
-	end
-end
-
 ---  This function posts a message in the chat window if the item cost contains a hyphen or a slash.
 local nAnnounce = 1
 local function announceImproperCost(nodeChar, sItemName, bLowestUsed)
-	if nAnnounce == 1 and (OptionsManager.isOption('WARN_COST', 'subtle') or OptionsManager.isOption('WARN_COST', 'on')) then
+	if nAnnounce == 1 and not OptionsManager.isOption('WARN_COST', 'off') then
 		local sHoldingPc = DB.getValue(nodeChar, 'name', Interface.getString("char_name_unknown"))
 		if bLowestUsed then
 			ChatManager.SystemMessage(string.format(Interface.getString("item_cost_error_range"), sHoldingPc, sItemName))
@@ -24,7 +15,7 @@ local function announceImproperCost(nodeChar, sItemName, bLowestUsed)
 	end
 end
 
----	Convert everything to main currency and drop any non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
+---	Convert to gp, dropping non-numerical characters. ('300gp' -> 300) ('30pp' -> 300) ('3sp' -> .3).
 local function processItemCost(nodeChar, sItemCost, sItemName)
 	if not string.match(sItemCost, '%d+') then
 		return 0
@@ -44,7 +35,7 @@ local function processItemCost(nodeChar, sItemCost, sItemName)
 
 	local sTrimmedItemCost = sItemCost:gsub('[^0-9.-]', '')
 	if sTrimmedItemCost then
-		nTrimmedItemCost = tonumber(sTrimmedItemCost)
+		local nTrimmedItemCost = tonumber(sTrimmedItemCost)
 		for sDenomination,tDenominationData in pairs(TEGlobals.aDenominations) do
 			if string.match(sItemCost, sDenomination) then
 				return nTrimmedItemCost * tDenominationData['nValue']
@@ -57,7 +48,7 @@ end
 
 ---	This function calculates the total value of every identified item in the player's inventory.
 --	It then writes it to the DB for use during net worth calculation.
-function calculateInvCost(node)
+local function calculateInvCost(node)
 	local nodeChar = node.getChild('....')
 	if node.getParent().getName() == 'charsheet' then nodeChar = node
 	elseif node.getName() == 'inventorylist' then nodeChar = node.getParent() end
@@ -73,8 +64,17 @@ function calculateInvCost(node)
 			nTotalInvVal = nTotalInvVal + (nItemCount * nItemCost)
 		end
 	end
-	
-	if OptionsManager.isOption('WARN_COST', 'subtle') then nAnnounce = 0 end	
+
+	if OptionsManager.isOption('WARN_COST', 'subtle') then nAnnounce = 0 end
 
 	DB.setValue(nodeChar, 'coins.invtotalval', 'number', nTotalInvVal)
+end
+
+function onInit()
+	if User.isHost() then
+		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', calculateInvCost)
+		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.count'), 'onUpdate', calculateInvCost)
+		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.isidentified'), 'onUpdate', calculateInvCost)
+		DB.addHandler(DB.getPath('charsheet.*.inventorylist'), 'onChildDeleted', calculateInvCost)
+	end
 end

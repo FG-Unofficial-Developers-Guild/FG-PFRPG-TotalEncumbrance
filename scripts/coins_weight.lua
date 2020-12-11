@@ -11,14 +11,14 @@ local function computeCoins(nodeChar)
 	for _,nodeCoinSlot in pairs(DB.getChildren(nodeChar, 'coins')) do
 		local sDenomination = string.lower(DB.getValue(nodeCoinSlot, 'name', ''))
 		local nCoinAmount = DB.getValue(nodeCoinSlot, 'amount', 0)
-		
+
 		-- upgrade method to support removing second coins column
 		if DB.getValue(nodeCoinSlot, 'amountA') and DB.getValue(nodeCoinSlot, 'amountA', 0) ~= 0 then
 			nCoinAmount = nCoinAmount + DB.getValue(nodeCoinSlot, 'amountA', 0)
 			DB.setValue(nodeCoinSlot, 'amount', 'number', nCoinAmount)
 			if DB.getValue(nodeCoinSlot, 'amountA') then nodeCoinSlot.getChild('amountA').delete() end
 		end
-		
+
 		if sDenomination ~= '' then
 			for sDenominationName,tDenominationData in pairs(TEGlobals.aDenominations) do
 				if string.match(sDenomination, sDenominationName) then
@@ -47,7 +47,7 @@ local function computeCoins(nodeChar)
 			DB.setValue(nodeOtherCoins, 'name', 'string', 'Coins')
 			DB.setValue(nodeOtherCoins, 'type', 'string', 'Wealth and Money')
 			DB.setValue(nodeOtherCoins, 'cost', 'string', nWealth .. ' gp')
-			DB.setValue(nodeOtherCoins, 'description', 'formattedtext', '<p>The standard coin weighs about a third of an ounce (50 to the pound).</p>')
+			DB.setValue(nodeOtherCoins, 'description', 'formattedtext', Interface.getString("item_description_coins"))
 			DB.setValue(nodeOtherCoins, 'weight', 'number', nTotalCoinWeightToSet)
 		end
 	end

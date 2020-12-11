@@ -23,7 +23,7 @@ function getEncWeightUnit()
 	if OptionsManager.isOption('ENCUMBRANCE_UNIT', 'lb') then
 		nUnit = 1
 	end
-	
+
 	return nUnit
 end
 
@@ -57,10 +57,10 @@ end
 --	Set multipliers for different currency denominations. nValue = value multiplier. nWeight = per-coin weight (in pounds -- conversion is automatic)
 aDenominations =
 	{
-	-- ['mp'] = {['nValue'] = 500, ['nWeight'] = .3}, -- Asgurgolas (homebrew)
+	-- ['mp'] = {['nValue'] = 500, ['nWeight'] = .3}, -- Asgurgolas' mithral pieces (homebrew)
 	['pp'] = {['nValue'] = 10, ['nWeight'] = .02},
 	['gp'] = {['nValue'] = 1, ['nWeight'] = .02},
-	-- ['ep'] = {['nValue'] = .5, ['nWeight'] = .02}, -- electrum pieces (for homebrew)
+	-- ['ep'] = {['nValue'] = .5, ['nWeight'] = .02}, -- electrum pieces (for Forgotten Realms homebrews)
 	['sp'] = {['nValue'] = .1, ['nWeight'] = .02},
 	['cp'] = {['nValue'] = .01, ['nWeight'] = .02},
 	-- ['op'] = {['nValue'] = 0, ['nWeight'] = .02}, -- Zygmunt Molotch (homebrew)

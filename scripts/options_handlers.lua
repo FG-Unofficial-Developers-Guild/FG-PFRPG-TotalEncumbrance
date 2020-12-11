@@ -2,16 +2,10 @@
 --	Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
----	Watches for changes at the listed database nodes.
-function onInit()
-	if User.isHost() then
-		DB.addHandler(DB.getPath('options.ENCUMBRANCE_UNIT'), 'onUpdate', onEncOptionChanged)
-	end
-end
-
 --- Finds nodeChar for each player character in partyinformation and recalculates their carrying capacities.
---	Carrying capacity recalculation is triggered by reducing stradj by 1 and then returning it back to its original value.
-function onEncOptionChanged()
+--	Carrying capacity recalculation is triggered by:
+--	reducing stradj by 1 and then returning it back to its original value.
+local function onEncOptionChanged()
 	if User.isHost() then
 		for _,v in pairs(DB.getChildren('partysheet.partyinformation')) do
 			local sClass, sRecord = DB.getValue(v, 'link')
@@ -24,5 +18,12 @@ function onEncOptionChanged()
 				end
 			end
 		end
+	end
+end
+
+---	Watches for changes at the listed database nodes.
+function onInit()
+	if User.isHost() then
+		DB.addHandler(DB.getPath('options.ENCUMBRANCE_UNIT'), 'onUpdate', onEncOptionChanged)
 	end
 end

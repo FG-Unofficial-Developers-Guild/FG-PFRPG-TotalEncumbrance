@@ -12,6 +12,8 @@
 	<string name="char_label_speedpenalty">Penalty</string>
 	<string name="char_name_unknown">Unknown Character</string>
 	<string name="char_string_networth">Net Worth</string>
+	<!-- Item Descriptions -->
+	<string name="item_description_coins"><p>The standard coin weighs about a third of an ounce (50 to the pound).</p></string>
 	<!-- Item Sheet -->
 	<string name="item_label_external_dimensions">Exterior Size</string>
 	<string name="item_label_internal_dimensions">Interior Space</string>
