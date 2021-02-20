@@ -6,7 +6,7 @@
 --	Carrying capacity recalculation is triggered by:
 --	reducing stradj by 1 and then returning it back to its original value.
 local function onEncOptionChanged()
-	if User.isHost() then
+	if Session.IsHost then
 		for _,v in pairs(DB.getChildren('partysheet.partyinformation')) do
 			local sClass, sRecord = DB.getValue(v, 'link')
 			if sClass == 'charsheet' and sRecord then
@@ -23,7 +23,7 @@ end
 
 ---	Watches for changes at the listed database nodes.
 function onInit()
-	if User.isHost() then
+	if Session.IsHost then
 		DB.addHandler(DB.getPath('options.ENCUMBRANCE_UNIT'), 'onUpdate', onEncOptionChanged)
 	end
 end

@@ -68,7 +68,7 @@ local function calculateInvCost(node)
 end
 
 function onInit()
-	if User.isHost() then
+	if Session.IsHost then
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.cost'), 'onUpdate', calculateInvCost)
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.count'), 'onUpdate', calculateInvCost)
 		DB.addHandler(DB.getPath('charsheet.*.inventorylist.*.isidentified'), 'onUpdate', calculateInvCost)

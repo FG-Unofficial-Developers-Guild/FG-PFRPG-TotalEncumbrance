@@ -506,7 +506,7 @@ local calcItemArmorClass_old = nil
 local updateEncumbrance_old = nil
 
 function onInit()
-	if User.isHost() then
+	if Session.IsHost then
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.label'), 'onUpdate', onEffectChanged)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects.*.isactive'), 'onUpdate', onEffectChanged)
 		DB.addHandler(DB.getPath('combattracker.list.*.effects'), 'onChildDeleted', onEffectChanged)

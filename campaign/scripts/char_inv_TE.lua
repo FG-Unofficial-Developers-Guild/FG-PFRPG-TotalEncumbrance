@@ -154,7 +154,7 @@ function onEncumbranceChanged()
 	local nLiftOff = nHeavy * 2
 	local nPushDrag = nHeavy * 5
 
-	local nSize = ActorManager2.getSize(ActorManager.getActor('pc', nodeChar))
+	local nSize = ActorManager35E.getSize(ActorManager.getActor('pc', nodeChar))
 	if (nSize < 0) then
 		local nMult = 0
 		if (nSize == -1) then
