@@ -80,7 +80,10 @@ local function getStrEffectBonus(rActor)
 	end
 
 	local nStrEffects = EffectManager35EDS.getEffectsBonus(rActor, 'STR', true)
+--	include STR effects in calculating carrying capacity (only if CARRY_CAPACITY_FROM_EFFECTS is enabled in options)
+--	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
 	if nStrEffects and not DataCommon.isPFRPG() then nStrEffectMod = nStrEffectMod + nStrEffects end
+--	end
 
 	local nCarryBonus = EffectManager35EDS.getEffectsBonus(rActor, 'CARRY', true)
 	if nCarryBonus then
@@ -105,16 +108,18 @@ function onEncumbranceChanged()
 		nodeChar = getDatabaseNode()
 		rActor = ActorManager.resolveActor(nodeChar)
 	elseif getDatabaseNode().getName() == 'effects' then
-		local rActor = ActorManager.resolveActor(getDatabaseNode())
+		rActor = ActorManager.resolveActor(getDatabaseNode())
 		if ActorManager.isPC(rActor) then
 			nodeChar = ActorManager.getCreatureNode(rActor)
 		end
+	--else
+	--	return
 	end
 
 	local nHeavy = 0
 	local nStrength = DB.getValue(nodeChar, 'abilities.strength.score', 10)
 	local nStrengthDamage = DB.getValue(nodeChar, 'abilities.strength.damage', 0)
-	if nStrengthDamage and DataCommon.isPFRPG() then nStrengthDamage = 0 end
+	if DataCommon.isPFRPG() then nStrengthDamage = 0 end
 
 	if DB.getValue(nodeChar, 'encumbrance.stradj', 0) == 0 and CharManager.hasTrait(nodeChar, 'Muscle of the Society') then
 		DB.setValue(nodeChar, 'encumbrance.stradj', 2)
@@ -127,10 +132,7 @@ function onEncumbranceChanged()
 	local nStrEffectMod = getStrEffectBonus(rActor)
 	DB.setValue(nodeChar, 'encumbrance.strbonusfromeffects', 'number', nStrEffectMod)
 
---	modify onEncumbranceChanged to include STR effects in calculating carrying capacity (only if CARRY_CAPACITY_FROM_EFFECTS is enabled in options)
---	if OptionsManager.isOption('CARRY_CAPACITY_FROM_EFFECTS', 'on') then
-		nStrength = nStrength + nStrEffectMod - nStrengthDamage
---	end
+	nStrength = nStrength + nStrEffectMod - nStrengthDamage
 	
 	if nStrength > 0 then
 		if nStrength <= 10 then
