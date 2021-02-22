@@ -71,20 +71,20 @@ local function getStrEffectBonus(rActor)
 
 	local nStrEffectMod = 0
 	
-	if EffectManagerTE.hasEffectCondition(rActor, 'Exhausted') then
+	if EffectManager35EDS.hasEffectCondition(rActor, 'Exhausted') then
 		nStrEffectMod = nStrEffectMod - 6
-	elseif EffectManagerTE.hasEffectCondition(rActor, 'Fatigued') then
+	elseif EffectManager35EDS.hasEffectCondition(rActor, 'Fatigued') then
 		nStrEffectMod = nStrEffectMod - 2
 	end
 
-	if EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed') then
+	if EffectManager35EDS.hasEffectCondition(rActor, 'Paralyzed') then
 		nStrEffectMod = -1 * nStrEffectMod
 	end
 
-	local nStrEffects = EffectManagerTE.getEffectsBonus(rActor, 'STR', true)
+	local nStrEffects = EffectManager35EDS.getEffectsBonus(rActor, 'STR', true)
 	if nStrEffects and not DataCommon.isPFRPG() then nStrEffectMod = nStrEffectMod + nStrEffects end
 
-	local nCarryBonus = EffectManagerTE.getEffectsBonus(rActor, 'CARRY', true)
+	local nCarryBonus = EffectManager35EDS.getEffectsBonus(rActor, 'CARRY', true)
 	if nCarryBonus then
 		nStrEffectMod = nStrEffectMod + nCarryBonus
 	end
@@ -144,7 +144,7 @@ function onEncumbranceChanged()
 	nHeavy = math.floor(nHeavy * DB.getValue(nodeChar, 'encumbrance.carrymult', 1) * TEGlobals.getEncWeightUnit())
 
 	-- Check for ant haul spell attached to PC on combat tracker. If found, triple their carrying capacity.
-	if EffectManagerTE.hasEffectCondition(rActor, 'Ant Haul') then
+	if EffectManager35EDS.hasEffectCondition(rActor, 'Ant Haul') then
 		nHeavy = nHeavy * 3
 	end
 	

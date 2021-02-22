@@ -38,7 +38,7 @@
 		<script name="EncumbranceOptions" file="scripts/encumbrance_options.lua" />
 		<script name="OptionsHandlers" file="scripts/options_handlers.lua" />
 		<script name="TEGlobals" file="scripts/encumbrance_globals.lua" />
-		<script name="EffectManagerTE" file="scripts/manager_effect_TE.lua" />
+		<script name="EffectManager35EDS" file="scripts/manager_effect_35E_DS.lua" />
 		<script name="InventoryCost" file="scripts/inventory_cost.lua" />
 	</base>
 </root>

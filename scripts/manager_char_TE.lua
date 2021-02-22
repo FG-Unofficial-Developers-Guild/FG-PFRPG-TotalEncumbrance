@@ -7,10 +7,9 @@ local function onEffectChanged(node)
 	if node.getName() ~= 'effects' then
 		nodeCT = node.getChild('....')
 	end
-	local rActor = ActorManager.getActor('ct', nodeCT)
-	local sActorType, nodeActor = ActorManager.getTypeAndNode(rActor);
-	if sActorType == 'pc' then
-		updateEncumbrance_new(nodeActor)
+	local rActor = ActorManager.resolveActor(nodeCT)
+	if ActorManager.isPC(rActor) then
+		updateEncumbrance_new(ActorManager.getCreatureNode(rActor))
 	end
 end
 
@@ -66,8 +65,7 @@ end
 --	Argument: rActor containing the PC's charsheet and combattracker nodes
 --	Return: total bonus to speed from effects formatted as 'SPEED: n' in the combat tracker
 local function getSpeedEffects(nodeChar)
-	local rActor = ActorManager.getActor('pc', nodeChar)
-
+	local rActor = ActorManager.resolveActor(nodeChar)
 	if not rActor then
 		return 0, false
 	end
@@ -75,18 +73,15 @@ local function getSpeedEffects(nodeChar)
 	local bSpeedHalved = false
 	local bSpeedZero = false
 
-	if
-		EffectManagerTE.hasEffectCondition(rActor, 'Exhausted')
-		or EffectManagerTE.hasEffectCondition(rActor, 'Entangled')
-	then
+	if EffectManager35EDS.hasEffectCondition(rActor, 'Exhausted') or EffectManager35EDS.hasEffectCondition(rActor, 'Entangled') then
 		bSpeedHalved = true
 	end
 
 	if
-		EffectManagerTE.hasEffectCondition(rActor, 'Grappled')
-		or EffectManagerTE.hasEffectCondition(rActor, 'Paralyzed')
-		or EffectManagerTE.hasEffectCondition(rActor, 'Petrified')
-		or EffectManagerTE.hasEffectCondition(rActor, 'Pinned')
+		EffectManager35EDS.hasEffectCondition(rActor, 'Grappled')
+		or EffectManager35EDS.hasEffectCondition(rActor, 'Paralyzed')
+		or EffectManager35EDS.hasEffectCondition(rActor, 'Petrified')
+		or EffectManager35EDS.hasEffectCondition(rActor, 'Pinned')
 	then
 		bSpeedZero = true
 	end
@@ -96,7 +91,7 @@ local function getSpeedEffects(nodeChar)
 		bSpeedHalved = true
 	end
 
-	local nSpeedAdjFromEffects = EffectManagerTE.getEffectsBonus(rActor, 'SPEED', true)
+	local nSpeedAdjFromEffects = EffectManager35EDS.getEffectsBonus(rActor, 'SPEED', true)
 
 	return nSpeedAdjFromEffects, bSpeedHalved, bSpeedZero
 end
