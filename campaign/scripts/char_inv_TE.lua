@@ -9,15 +9,13 @@ local function getNodeCharCT(node)
 	local rActor
 	local nodeCharCT
 	if node.getParent().getName() == 'charsheet' then
-		rActor = ActorManager.getActor('pc', node)
-		nodeCharCT = DB.findNode(rActor['sCTNode'])
+		rActor = ActorManager.resolveActor(node)
 	elseif node.getChild('...').getName() == 'charsheet' then
-		rActor = ActorManager.getActor('pc', node.getParent())
-		nodeCharCT = DB.findNode(rActor['sCTNode'])
+		rActor = ActorManager.resolveActor(node.getParent())
 	elseif node.getChild('....').getName() == 'charsheet' then -- this might not be necessary
-		rActor = ActorManager.getActor('ct', node.getChild('...'))
-		nodeCharCT = DB.findNode(rActor['sCTNode'])
+		rActor = ActorManager.resolveActor(node.getChild('...'))
 	end
+		nodeCharCT = ActorManager.getCTNode(rActor)
 
 	return nodeCharCT
 end
@@ -101,15 +99,16 @@ function onSizeChanged()
 end
 
 function onEncumbranceChanged()
-	local nodeChar
-	local rActor
+	local rActor, nodeChar
 
 	if getDatabaseNode().getParent().getName() == 'charsheet' then
 		nodeChar = getDatabaseNode()
-		rActor = ActorManager.getActor('pc', nodeChar)
+		rActor = ActorManager.resolveActor(nodeChar)
 	elseif getDatabaseNode().getName() == 'effects' then
-		rActor = ActorManager.getActor('ct', getDatabaseNode())
-		nodeChar = DB.findNode(rActor['sCreatureNode'])
+		local rActor = ActorManager.resolveActor(getDatabaseNode())
+		if ActorManager.isPC(rActor) then
+			nodeChar = ActorManager.getCreatureNode(rActor)
+		end
 	end
 
 	local nHeavy = 0
@@ -154,7 +153,7 @@ function onEncumbranceChanged()
 	local nLiftOff = nHeavy * 2
 	local nPushDrag = nHeavy * 5
 
-	local nSize = ActorManager35E.getSize(ActorManager.getActor('pc', nodeChar))
+	local nSize = ActorManager35E.getSize(rActor)
 	if (nSize < 0) then
 		local nMult = 0
 		if (nSize == -1) then
