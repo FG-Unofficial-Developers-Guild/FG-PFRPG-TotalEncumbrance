@@ -1,4 +1,4 @@
-# NOW DEPRECATED
+!!# NOW DEPRECATED!!
 
 # PFRPG Total Encumbrance
 This extension enhances functionality related to carrying capacity, coin weight, inventory value, and weight/armor encumbrance.
