@@ -5,7 +5,7 @@ See the following:
 * https://github.com/bmos/FG-CoreRPG-Extraplanar-Containers
 * https://github.com/bmos/FG-CoreRPG-Coins-Weight
 * https://github.com/bmos/FG-PFRPG-Spell-Failure
-* https://github.com/bmos/FG-PFRPG-Encumbrance-Penalties
+* https://www.fantasygrounds.com/forums/showthread.php?68093-PFRPG-Net-Worth
 
 # PFRPG Total Encumbrance
 This extension enhances functionality related to carrying capacity, coin weight, inventory value, and weight/armor encumbrance.
